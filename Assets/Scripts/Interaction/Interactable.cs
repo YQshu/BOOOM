@@ -8,14 +8,23 @@ using UnityEngine;
 public class Interactable : MonoBehaviour
 {
     [Header("交互配置")]
+    [Tooltip("交互唯一ID，用于日志或线索系统定位对象")]
     [SerializeField] private string _interactionId = "CLUE_DEMO_01";
+    [Tooltip("交互名称，用于提示和日志展示")]
     [SerializeField] private string _interactionName = "演示线索";
+    [Tooltip("触发交互的按键")]
     [SerializeField] private KeyCode _interactKey = KeyCode.F;
 
     [Header("显示与行为")]
+    [Tooltip("是否允许重复交互")]
     [SerializeField] private bool _allowRepeatInteraction;
+    [Tooltip("交互后是否作为线索写入线索系统")]
+    [SerializeField] private bool _collectAsClue = true;
+    [Tooltip("交互成功后是否隐藏当前对象")]
+    [SerializeField] private bool _hideAfterInteraction;
 
     [Header("调试输出")]
+    [Tooltip("是否输出交互日志")]
     [SerializeField] private bool _enableLog = true;
 
     private bool _isPlayerInRange;
@@ -85,9 +94,26 @@ public class Interactable : MonoBehaviour
     {
         _isInteracted = true;
 
+        if (_collectAsClue)
+        {
+            if (ClueManager.Instance != null)
+            {
+                ClueManager.Instance.CollectClue(_interactionId, _interactionName);
+            }
+            else if (_enableLog)
+            {
+                Debug.LogWarning("[Interactable] 未找到 ClueManager，线索不会被记录。", this);
+            }
+        }
+
         if (_enableLog)
         {
             Debug.Log($"[Interactable] 获得线索：{_interactionId} - {_interactionName}", this);
+        }
+
+        if (_hideAfterInteraction)
+        {
+            gameObject.SetActive(false);
         }
     }
 }
