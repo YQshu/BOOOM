@@ -1,0 +1,2780 @@
+fileFormatVersion: 2
+guid: 6c0df2d115efc494f9db969ef1529afb
+TextureImporter:
+  internalIDToNameTable: []
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 0
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 32
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 3
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Lenore-Sheet_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 874
+        width: 36
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a1d604c8e1e0e11429b7cceed69e1465
+      internalID: 527419035
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lenore-Sheet_1
+      rect:
+        serializedVersion: 2
+        x: 36
+        y: 874
+        width: 36
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cc712cc64db370d4292e6bca61a348be
+      internalID: 1326191396
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lenore-Sheet_2
+      rect:
+        serializedVersion: 2
+        x: 72
+        y: 874
+        width: 36
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f28480de3150496418556c2b804f2de4
+      internalID: -1420331403
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lenore-Sheet_3
+      rect:
+        serializedVersion: 2
+        x: 108
+        y: 874
+        width: 36
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 108448f3a10de7744923fc758dde2ede
+      internalID: 1257942251
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lenore-Sheet_4
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 828
+        width: 36
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 39414c25b0ebcd94a91f01566f1f2211
+      internalID: -1075755352
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lenore-Sheet_5
+      rect:
+        serializedVersion: 2
+        x: 36
+        y: 828
+        width: 36
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8d77ad2727de08d49b491afa816caea7
+      internalID: -770313753
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lenore-Sheet_6
+      rect:
+        serializedVersion: 2
+        x: 72
+        y: 828
+        width: 36
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 030db3c47ae22314ab09d510b9cd3e24
+      internalID: -543904378
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lenore-Sheet_7
+      rect:
+        serializedVersion: 2
+        x: 108
+        y: 828
+        width: 36
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 15ccae51681cbe7429555416e8e05c15
+      internalID: 365762023
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lenore-Sheet_8
+      rect:
+        serializedVersion: 2
+        x: 144
+        y: 828
+        width: 36
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cd3047ed59e40f34aa74db7c68aedf55
+      internalID: 865761029
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lenore-Sheet_9
+      rect:
+        serializedVersion: 2
+        x: 180
+        y: 828
+        width: 36
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8be590783d785274fafc167622dd9fd9
+      internalID: 1218828418
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lenore-Sheet_10
+      rect:
+        serializedVersion: 2
+        x: 216
+        y: 828
+        width: 36
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b80b15629b6571746972aa3f7f707184
+      internalID: 143191807
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lenore-Sheet_11
+      rect:
+        serializedVersion: 2
+        x: 252
+        y: 828
+        width: 36
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 808a98085110bee45bef06b9d655dba0
+      internalID: 1543288337
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lenore-Sheet_12
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 782
+        width: 36
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e2a848c581a799143893f4f26a2740ca
+      internalID: 1267433943
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lenore-Sheet_13
+      rect:
+        serializedVersion: 2
+        x: 36
+        y: 782
+        width: 36
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 64f01d3af87e1634490c59ba6bac6a56
+      internalID: -1068158605
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lenore-Sheet_14
+      rect:
+        serializedVersion: 2
+        x: 72
+        y: 782
+        width: 36
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c91fb7980edcfee4bb464e10a550e218
+      internalID: -853176287
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lenore-Sheet_15
+      rect:
+        serializedVersion: 2
+        x: 108
+        y: 782
+        width: 36
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c585f1d1addef3c439f4a53439a1c885
+      internalID: -1883827814
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lenore-Sheet_16
+      rect:
+        serializedVersion: 2
+        x: 144
+        y: 782
+        width: 36
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5639210fc96df6b428ea99654443f1cc
+      internalID: 1016976027
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lenore-Sheet_17
+      rect:
+        serializedVersion: 2
+        x: 180
+        y: 782
+        width: 36
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 05d671752e5787941991dda383aa0f91
+      internalID: -464301145
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lenore-Sheet_18
+      rect:
+        serializedVersion: 2
+        x: 216
+        y: 782
+        width: 36
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 64e6e6415a2fe6a44bff10c5fe509820
+      internalID: -743319760
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lenore-Sheet_19
+      rect:
+        serializedVersion: 2
+        x: 252
+        y: 782
+        width: 36
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d04552a70e969c6479bd8bbd2639dde7
+      internalID: 352339160
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lenore-Sheet_20
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 736
+        width: 36
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1e380f6515ef34947ae428324f686501
+      internalID: 499763803
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lenore-Sheet_21
+      rect:
+        serializedVersion: 2
+        x: 36
+        y: 736
+        width: 36
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ee59884d16786be4594ae61169467244
+      internalID: 1474921232
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lenore-Sheet_22
+      rect:
+        serializedVersion: 2
+        x: 72
+        y: 736
+        width: 36
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5052ad190722f134181c06457853fcf7
+      internalID: -1874714037
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lenore-Sheet_23
+      rect:
+        serializedVersion: 2
+        x: 108
+        y: 736
+        width: 36
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 85fc10cd7d33db3448983c52bf5f19a2
+      internalID: 1243711936
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lenore-Sheet_24
+      rect:
+        serializedVersion: 2
+        x: 144
+        y: 736
+        width: 36
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 507b8c75e3100a94193ec594bb619c4f
+      internalID: 375561665
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lenore-Sheet_25
+      rect:
+        serializedVersion: 2
+        x: 180
+        y: 736
+        width: 36
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9dc5b481c42d418469a2ceca80ab88b2
+      internalID: 666471247
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lenore-Sheet_26
+      rect:
+        serializedVersion: 2
+        x: 216
+        y: 736
+        width: 36
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 23c18451ab0848a42898d4f816795af0
+      internalID: 743961131
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lenore-Sheet_27
+      rect:
+        serializedVersion: 2
+        x: 252
+        y: 736
+        width: 36
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fab71f3d6497a644fa2ae236f3d16aad
+      internalID: 631287881
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lenore-Sheet_28
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 690
+        width: 36
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: faa221d9fceb8a94bb4f399a7bf59b96
+      internalID: 2019307628
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lenore-Sheet_29
+      rect:
+        serializedVersion: 2
+        x: 36
+        y: 690
+        width: 36
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: abf43088a1381624a9f8977c78478f19
+      internalID: -1546072275
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lenore-Sheet_30
+      rect:
+        serializedVersion: 2
+        x: 72
+        y: 690
+        width: 36
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 20453716c0738b94181ce8bdee414a86
+      internalID: 1392933245
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lenore-Sheet_31
+      rect:
+        serializedVersion: 2
+        x: 108
+        y: 690
+        width: 36
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 35a7cfced75c33847a480dbd5395bc41
+      internalID: 543750676
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lenore-Sheet_32
+      rect:
+        serializedVersion: 2
+        x: 144
+        y: 690
+        width: 36
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ef08b308119271549a26714e346f3d6a
+      internalID: 1121264249
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lenore-Sheet_33
+      rect:
+        serializedVersion: 2
+        x: 180
+        y: 690
+        width: 36
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6197549a398bf6e4ebff5024015478a2
+      internalID: -537532229
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lenore-Sheet_34
+      rect:
+        serializedVersion: 2
+        x: 216
+        y: 690
+        width: 36
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ce4308a33d8c4f44b92c541c9cde893b
+      internalID: -1068625711
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lenore-Sheet_35
+      rect:
+        serializedVersion: 2
+        x: 252
+        y: 690
+        width: 36
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b12573245c0e8cf418bcb7a6573188d0
+      internalID: 896612418
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lenore-Sheet_36
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 644
+        width: 36
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f2fd0f05d5cf7bf4e99ce1be4a8e9e7f
+      internalID: -1822214532
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lenore-Sheet_37
+      rect:
+        serializedVersion: 2
+        x: 36
+        y: 644
+        width: 36
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 14a86611d2ec09f4ab2ee662fdfff8c3
+      internalID: -1179508531
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lenore-Sheet_38
+      rect:
+        serializedVersion: 2
+        x: 72
+        y: 644
+        width: 36
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a9821a2ba1158e14892c16f205a6d013
+      internalID: -608793184
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lenore-Sheet_39
+      rect:
+        serializedVersion: 2
+        x: 108
+        y: 644
+        width: 36
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f2ea5efebf087584684190af3e2c0906
+      internalID: -1710875835
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lenore-Sheet_40
+      rect:
+        serializedVersion: 2
+        x: 144
+        y: 644
+        width: 36
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 42a82d498452f024e8ea940fde8e98f7
+      internalID: 1282311703
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lenore-Sheet_41
+      rect:
+        serializedVersion: 2
+        x: 180
+        y: 644
+        width: 36
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bbf7f5e35cb3c2a4d9b701c62e023ec4
+      internalID: -164370495
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lenore-Sheet_42
+      rect:
+        serializedVersion: 2
+        x: 216
+        y: 644
+        width: 36
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6af4ec90fd8819e469a0b289064a9832
+      internalID: 914252815
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lenore-Sheet_43
+      rect:
+        serializedVersion: 2
+        x: 252
+        y: 644
+        width: 36
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cd4ebc042beb6824eab977a6fa3b167c
+      internalID: -2059309017
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lenore-Sheet_44
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 598
+        width: 36
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ea9de68f53bd9ee418478a351c917b4d
+      internalID: -1754618609
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lenore-Sheet_45
+      rect:
+        serializedVersion: 2
+        x: 36
+        y: 598
+        width: 36
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8a52f37cb93167a4bb7e9468d7c8df9b
+      internalID: 270959649
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lenore-Sheet_46
+      rect:
+        serializedVersion: 2
+        x: 72
+        y: 598
+        width: 36
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d96bd35c1a4a1f948a576cdf9e45105e
+      internalID: -953824519
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lenore-Sheet_47
+      rect:
+        serializedVersion: 2
+        x: 108
+        y: 598
+        width: 36
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c1732f1894259414ea09de7d98e1a8a6
+      internalID: -1296456566
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lenore-Sheet_48
+      rect:
+        serializedVersion: 2
+        x: 144
+        y: 598
+        width: 36
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d4f26b134f529d044a017ea2f0b9ee43
+      internalID: -1491841098
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lenore-Sheet_49
+      rect:
+        serializedVersion: 2
+        x: 180
+        y: 598
+        width: 36
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2d55d5761cc906c4caf2d5363b3b198a
+      internalID: -130941868
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lenore-Sheet_50
+      rect:
+        serializedVersion: 2
+        x: 216
+        y: 598
+        width: 36
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 88a689093064b934ca43c83c7fc25d19
+      internalID: 120939664
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lenore-Sheet_51
+      rect:
+        serializedVersion: 2
+        x: 252
+        y: 598
+        width: 36
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2475d76284bc2f64ab53cc4f99d5b1c0
+      internalID: -70768247
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lenore-Sheet_52
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 552
+        width: 36
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3859f2af73561fd4fb248b14e9fc955a
+      internalID: 2094010557
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lenore-Sheet_53
+      rect:
+        serializedVersion: 2
+        x: 36
+        y: 552
+        width: 36
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1263ae2842f59f04cae420641ea860bb
+      internalID: 100489700
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lenore-Sheet_54
+      rect:
+        serializedVersion: 2
+        x: 72
+        y: 552
+        width: 36
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 4824bcd5cd0a96e4295e50fc81a9d809
+      internalID: -532099574
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lenore-Sheet_55
+      rect:
+        serializedVersion: 2
+        x: 108
+        y: 552
+        width: 36
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7febca332471f6b419caa6e0417663a7
+      internalID: 787713600
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lenore-Sheet_56
+      rect:
+        serializedVersion: 2
+        x: 144
+        y: 552
+        width: 36
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5116234aaad45fc46b7e3ed986c9cd6e
+      internalID: 1604100061
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lenore-Sheet_57
+      rect:
+        serializedVersion: 2
+        x: 180
+        y: 552
+        width: 36
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3ae8b3e4389d49c41822a967c4caf552
+      internalID: -1016823363
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lenore-Sheet_58
+      rect:
+        serializedVersion: 2
+        x: 216
+        y: 552
+        width: 36
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1220cffc912bd87449a119c0679e3176
+      internalID: -1255725562
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lenore-Sheet_59
+      rect:
+        serializedVersion: 2
+        x: 252
+        y: 552
+        width: 36
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2f682056805856d40bde3eb99e5d1031
+      internalID: -228398069
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lenore-Sheet_60
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 506
+        width: 36
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3778c04edc1930042abf385cfa173444
+      internalID: -1559712993
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lenore-Sheet_61
+      rect:
+        serializedVersion: 2
+        x: 36
+        y: 506
+        width: 36
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: db34d996edce6c045944a230bab57d5e
+      internalID: 105119261
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lenore-Sheet_62
+      rect:
+        serializedVersion: 2
+        x: 72
+        y: 506
+        width: 36
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ba60d42369b586b4f8d8694d71bd81fb
+      internalID: -244239243
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lenore-Sheet_63
+      rect:
+        serializedVersion: 2
+        x: 108
+        y: 506
+        width: 36
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b098bc1d2a547cd479a994b1722925d1
+      internalID: -742506655
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lenore-Sheet_64
+      rect:
+        serializedVersion: 2
+        x: 144
+        y: 506
+        width: 36
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 47efdc1ba6789bd4db781d40335e8c03
+      internalID: 1934302652
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lenore-Sheet_65
+      rect:
+        serializedVersion: 2
+        x: 180
+        y: 506
+        width: 36
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 662a5a33ee23bf041aa5344456909ba6
+      internalID: 275462664
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lenore-Sheet_66
+      rect:
+        serializedVersion: 2
+        x: 216
+        y: 506
+        width: 36
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7da8705835b1a934c9af94db11af2875
+      internalID: 1837020005
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lenore-Sheet_67
+      rect:
+        serializedVersion: 2
+        x: 252
+        y: 506
+        width: 36
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 872abe0137cf3ae488388f80d6951e2b
+      internalID: -1708159786
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lenore-Sheet_68
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 460
+        width: 36
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a1f6f10a7f33d3e4aa8c6d1c5d6a0359
+      internalID: 1018290586
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lenore-Sheet_69
+      rect:
+        serializedVersion: 2
+        x: 36
+        y: 460
+        width: 36
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d218e6c90ff0ebb4f8b2dbd5dd83480f
+      internalID: 2047796287
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lenore-Sheet_70
+      rect:
+        serializedVersion: 2
+        x: 72
+        y: 460
+        width: 36
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ac93da0a00c219f48b426a391bed6f65
+      internalID: 433749195
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lenore-Sheet_71
+      rect:
+        serializedVersion: 2
+        x: 108
+        y: 460
+        width: 36
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9b05993a90befef4b9db0469e6e92982
+      internalID: -1324169003
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lenore-Sheet_72
+      rect:
+        serializedVersion: 2
+        x: 144
+        y: 460
+        width: 36
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bfaff56aef766b840a5dee67b14db4c2
+      internalID: 1149260178
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lenore-Sheet_73
+      rect:
+        serializedVersion: 2
+        x: 180
+        y: 460
+        width: 36
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 549efe20e83b6574cb953269b2f064d2
+      internalID: 613532376
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lenore-Sheet_74
+      rect:
+        serializedVersion: 2
+        x: 216
+        y: 460
+        width: 36
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 15a903b9d13c15a4bbf1afb473c2ef5c
+      internalID: -1979213752
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lenore-Sheet_75
+      rect:
+        serializedVersion: 2
+        x: 252
+        y: 460
+        width: 36
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f6d773891a9cac94f899e90e0c6146b4
+      internalID: -2059126191
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lenore-Sheet_76
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 414
+        width: 36
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 50872e4eb489e514fbd78f8791a6e454
+      internalID: -492999936
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lenore-Sheet_77
+      rect:
+        serializedVersion: 2
+        x: 36
+        y: 414
+        width: 36
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9691e51c54275714eb87c69e70e539f9
+      internalID: -600996079
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lenore-Sheet_78
+      rect:
+        serializedVersion: 2
+        x: 72
+        y: 414
+        width: 36
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7f20c44bac740a246888c304755239e0
+      internalID: -419988840
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lenore-Sheet_79
+      rect:
+        serializedVersion: 2
+        x: 108
+        y: 414
+        width: 36
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6b69aa83ec5131b4ba7db3f48e6d7cd9
+      internalID: 1397523639
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lenore-Sheet_80
+      rect:
+        serializedVersion: 2
+        x: 144
+        y: 414
+        width: 36
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c798d64dafdf3364d9c21799c958b038
+      internalID: 1646466907
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lenore-Sheet_81
+      rect:
+        serializedVersion: 2
+        x: 180
+        y: 414
+        width: 36
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 85019d6b24d86b1429786b7599684e6d
+      internalID: 608099193
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lenore-Sheet_82
+      rect:
+        serializedVersion: 2
+        x: 216
+        y: 414
+        width: 36
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8c74eaf1da3662b41aac1c135ada1d6e
+      internalID: -2026477371
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lenore-Sheet_83
+      rect:
+        serializedVersion: 2
+        x: 252
+        y: 414
+        width: 36
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 647e45e6d7d949d4c96fcbc47202c21d
+      internalID: -156811160
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lenore-Sheet_84
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 368
+        width: 36
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9d2103c674612344c93db5c06e2738d8
+      internalID: 552212840
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lenore-Sheet_85
+      rect:
+        serializedVersion: 2
+        x: 36
+        y: 368
+        width: 36
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: eba82fdd06c73fc4281d52b00a30c8a3
+      internalID: 736511164
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lenore-Sheet_86
+      rect:
+        serializedVersion: 2
+        x: 72
+        y: 368
+        width: 36
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0837e223dac8a9b46babc4ea6e2fc814
+      internalID: 16551445
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lenore-Sheet_87
+      rect:
+        serializedVersion: 2
+        x: 108
+        y: 368
+        width: 36
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ceaca644e0364184aae51fb5c1e03342
+      internalID: 1335036540
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lenore-Sheet_88
+      rect:
+        serializedVersion: 2
+        x: 144
+        y: 368
+        width: 36
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 57995cbb19aa90c4789377283a1cefc6
+      internalID: -688041576
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lenore-Sheet_89
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 322
+        width: 36
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fd5aa9858b1cc7c4e9c1937de7cd8505
+      internalID: -574186685
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lenore-Sheet_90
+      rect:
+        serializedVersion: 2
+        x: 36
+        y: 322
+        width: 36
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b0bf966e3a844494db49ffe6d2e0fc55
+      internalID: 1556992416
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lenore-Sheet_91
+      rect:
+        serializedVersion: 2
+        x: 72
+        y: 322
+        width: 36
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cd87635ab6222e946afde47ee4abb58f
+      internalID: 1898496343
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lenore-Sheet_92
+      rect:
+        serializedVersion: 2
+        x: 108
+        y: 322
+        width: 36
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d21364aeccfc3ff45a2453d97eecbff1
+      internalID: -2098058253
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lenore-Sheet_93
+      rect:
+        serializedVersion: 2
+        x: 144
+        y: 322
+        width: 36
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 197b54b8a82b66c44a83ac9813ff19d5
+      internalID: 427765426
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lenore-Sheet_94
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 276
+        width: 36
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 74810a97d1f1ade408086a93f00b930a
+      internalID: 1869571449
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lenore-Sheet_95
+      rect:
+        serializedVersion: 2
+        x: 36
+        y: 276
+        width: 36
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 00d4a09726b243c4697848d8ce50731f
+      internalID: -1414422384
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lenore-Sheet_96
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 230
+        width: 36
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 978f07a31ebde9f4f8a453afc70a76bc
+      internalID: -71973821
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lenore-Sheet_97
+      rect:
+        serializedVersion: 2
+        x: 36
+        y: 230
+        width: 36
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6215646d11f0905408b9889266ca3cfa
+      internalID: -94167887
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lenore-Sheet_98
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 184
+        width: 36
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9d7f0f0b477ad0b4c96c8002db25d54f
+      internalID: 1186716816
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lenore-Sheet_99
+      rect:
+        serializedVersion: 2
+        x: 36
+        y: 184
+        width: 36
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 98248325f8779184d94a140523001040
+      internalID: 1931314385
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lenore-Sheet_100
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 138
+        width: 36
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2ee62eefb58d1e34d9d044b3f8b7cf4c
+      internalID: 85553535
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lenore-Sheet_101
+      rect:
+        serializedVersion: 2
+        x: 36
+        y: 138
+        width: 36
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 56612dc30ecf4304ca812209264c1af8
+      internalID: -1107772401
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lenore-Sheet_102
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 92
+        width: 36
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b1d6cc905a447814ea6328ce7453b6f9
+      internalID: -1367756885
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lenore-Sheet_103
+      rect:
+        serializedVersion: 2
+        x: 36
+        y: 92
+        width: 36
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 30ae950d8e24c0c40933a621609ded1f
+      internalID: 1861594993
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lenore-Sheet_104
+      rect:
+        serializedVersion: 2
+        x: 72
+        y: 92
+        width: 36
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 57dabf802895c1341a783fc959f21ef2
+      internalID: 654718315
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lenore-Sheet_105
+      rect:
+        serializedVersion: 2
+        x: 108
+        y: 92
+        width: 36
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 604a200d60a1a44409e4cbb12deb32fd
+      internalID: -500698102
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lenore-Sheet_106
+      rect:
+        serializedVersion: 2
+        x: 144
+        y: 92
+        width: 36
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e44d545301de6874f8024d0d77072512
+      internalID: 1748537434
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lenore-Sheet_107
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 46
+        width: 36
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: acbe05f6aa4e64b41a95e8187d34f0da
+      internalID: -1538279678
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lenore-Sheet_108
+      rect:
+        serializedVersion: 2
+        x: 36
+        y: 46
+        width: 36
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8076a3bd624aa4c4b9e7fc169566e899
+      internalID: 173920336
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lenore-Sheet_109
+      rect:
+        serializedVersion: 2
+        x: 72
+        y: 46
+        width: 36
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8830ad834b4746449ade41b8451195c7
+      internalID: 1344768149
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lenore-Sheet_110
+      rect:
+        serializedVersion: 2
+        x: 108
+        y: 46
+        width: 36
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e368ad69a42ab0f43b4694e74ab54059
+      internalID: 851142567
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lenore-Sheet_111
+      rect:
+        serializedVersion: 2
+        x: 144
+        y: 46
+        width: 36
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 02165cf0f862ea14aadddbe3883321bc
+      internalID: 300382653
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lenore-Sheet_112
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 36
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c59fb02cc7f7ad84aa5f4c37a35cd091
+      internalID: -79458872
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lenore-Sheet_113
+      rect:
+        serializedVersion: 2
+        x: 36
+        y: 0
+        width: 36
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 30370304c4c28874abef2d671a4848c1
+      internalID: -1577010192
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lenore-Sheet_114
+      rect:
+        serializedVersion: 2
+        x: 72
+        y: 0
+        width: 36
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3409113b989f31b438208ad320f91748
+      internalID: -1238448749
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lenore-Sheet_115
+      rect:
+        serializedVersion: 2
+        x: 108
+        y: 0
+        width: 36
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b4fca096bb027c042a961b721efffda3
+      internalID: -287100689
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lenore-Sheet_116
+      rect:
+        serializedVersion: 2
+        x: 144
+        y: 0
+        width: 36
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5cc77beaffb856b4ca4fc41bffbffa1e
+      internalID: 1006834109
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lenore-Sheet_117
+      rect:
+        serializedVersion: 2
+        x: 180
+        y: 0
+        width: 36
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c6b46ac5fdea70145a976996f41f1aa1
+      internalID: 25244085
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lenore-Sheet_118
+      rect:
+        serializedVersion: 2
+        x: 216
+        y: 0
+        width: 36
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 34e0fe6223764a145ace9403f2d7a9df
+      internalID: 291288907
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Lenore-Sheet_119
+      rect:
+        serializedVersion: 2
+        x: 252
+        y: 0
+        width: 36
+        height: 46
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1eda95b48472832419ac308f8eb1e49b
+      internalID: -1184202920
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    physicsShape: []
+    bones: []
+    spriteID: 5e97eb03825dee720800000000000000
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    nameFileIdTable:
+      Lenore-Sheet_0: 527419035
+      Lenore-Sheet_1: 1326191396
+      Lenore-Sheet_10: 143191807
+      Lenore-Sheet_100: 85553535
+      Lenore-Sheet_101: -1107772401
+      Lenore-Sheet_102: -1367756885
+      Lenore-Sheet_103: 1861594993
+      Lenore-Sheet_104: 654718315
+      Lenore-Sheet_105: -500698102
+      Lenore-Sheet_106: 1748537434
+      Lenore-Sheet_107: -1538279678
+      Lenore-Sheet_108: 173920336
+      Lenore-Sheet_109: 1344768149
+      Lenore-Sheet_11: 1543288337
+      Lenore-Sheet_110: 851142567
+      Lenore-Sheet_111: 300382653
+      Lenore-Sheet_112: -79458872
+      Lenore-Sheet_113: -1577010192
+      Lenore-Sheet_114: -1238448749
+      Lenore-Sheet_115: -287100689
+      Lenore-Sheet_116: 1006834109
+      Lenore-Sheet_117: 25244085
+      Lenore-Sheet_118: 291288907
+      Lenore-Sheet_119: -1184202920
+      Lenore-Sheet_12: 1267433943
+      Lenore-Sheet_13: -1068158605
+      Lenore-Sheet_14: -853176287
+      Lenore-Sheet_15: -1883827814
+      Lenore-Sheet_16: 1016976027
+      Lenore-Sheet_17: -464301145
+      Lenore-Sheet_18: -743319760
+      Lenore-Sheet_19: 352339160
+      Lenore-Sheet_2: -1420331403
+      Lenore-Sheet_20: 499763803
+      Lenore-Sheet_21: 1474921232
+      Lenore-Sheet_22: -1874714037
+      Lenore-Sheet_23: 1243711936
+      Lenore-Sheet_24: 375561665
+      Lenore-Sheet_25: 666471247
+      Lenore-Sheet_26: 743961131
+      Lenore-Sheet_27: 631287881
+      Lenore-Sheet_28: 2019307628
+      Lenore-Sheet_29: -1546072275
+      Lenore-Sheet_3: 1257942251
+      Lenore-Sheet_30: 1392933245
+      Lenore-Sheet_31: 543750676
+      Lenore-Sheet_32: 1121264249
+      Lenore-Sheet_33: -537532229
+      Lenore-Sheet_34: -1068625711
+      Lenore-Sheet_35: 896612418
+      Lenore-Sheet_36: -1822214532
+      Lenore-Sheet_37: -1179508531
+      Lenore-Sheet_38: -608793184
+      Lenore-Sheet_39: -1710875835
+      Lenore-Sheet_4: -1075755352
+      Lenore-Sheet_40: 1282311703
+      Lenore-Sheet_41: -164370495
+      Lenore-Sheet_42: 914252815
+      Lenore-Sheet_43: -2059309017
+      Lenore-Sheet_44: -1754618609
+      Lenore-Sheet_45: 270959649
+      Lenore-Sheet_46: -953824519
+      Lenore-Sheet_47: -1296456566
+      Lenore-Sheet_48: -1491841098
+      Lenore-Sheet_49: -130941868
+      Lenore-Sheet_5: -770313753
+      Lenore-Sheet_50: 120939664
+      Lenore-Sheet_51: -70768247
+      Lenore-Sheet_52: 2094010557
+      Lenore-Sheet_53: 100489700
+      Lenore-Sheet_54: -532099574
+      Lenore-Sheet_55: 787713600
+      Lenore-Sheet_56: 1604100061
+      Lenore-Sheet_57: -1016823363
+      Lenore-Sheet_58: -1255725562
+      Lenore-Sheet_59: -228398069
+      Lenore-Sheet_6: -543904378
+      Lenore-Sheet_60: -1559712993
+      Lenore-Sheet_61: 105119261
+      Lenore-Sheet_62: -244239243
+      Lenore-Sheet_63: -742506655
+      Lenore-Sheet_64: 1934302652
+      Lenore-Sheet_65: 275462664
+      Lenore-Sheet_66: 1837020005
+      Lenore-Sheet_67: -1708159786
+      Lenore-Sheet_68: 1018290586
+      Lenore-Sheet_69: 2047796287
+      Lenore-Sheet_7: 365762023
+      Lenore-Sheet_70: 433749195
+      Lenore-Sheet_71: -1324169003
+      Lenore-Sheet_72: 1149260178
+      Lenore-Sheet_73: 613532376
+      Lenore-Sheet_74: -1979213752
+      Lenore-Sheet_75: -2059126191
+      Lenore-Sheet_76: -492999936
+      Lenore-Sheet_77: -600996079
+      Lenore-Sheet_78: -419988840
+      Lenore-Sheet_79: 1397523639
+      Lenore-Sheet_8: 865761029
+      Lenore-Sheet_80: 1646466907
+      Lenore-Sheet_81: 608099193
+      Lenore-Sheet_82: -2026477371
+      Lenore-Sheet_83: -156811160
+      Lenore-Sheet_84: 552212840
+      Lenore-Sheet_85: 736511164
+      Lenore-Sheet_86: 16551445
+      Lenore-Sheet_87: 1335036540
+      Lenore-Sheet_88: -688041576
+      Lenore-Sheet_89: -574186685
+      Lenore-Sheet_9: 1218828418
+      Lenore-Sheet_90: 1556992416
+      Lenore-Sheet_91: 1898496343
+      Lenore-Sheet_92: -2098058253
+      Lenore-Sheet_93: 427765426
+      Lenore-Sheet_94: 1869571449
+      Lenore-Sheet_95: -1414422384
+      Lenore-Sheet_96: -71973821
+      Lenore-Sheet_97: -94167887
+      Lenore-Sheet_98: 1186716816
+      Lenore-Sheet_99: 1931314385
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
