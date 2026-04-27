@@ -2,19 +2,32 @@ using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
 
+/// <summary>
+/// 可回溯对象组件，负责记录历史快照并在回溯时还原状态。
+/// </summary>
 [RequireComponent(typeof(Rigidbody2D))]
-public class RewindableObject : MonoBehaviour, RewindTimeManager.IRewindable
+public class RewindableObject : MonoBehaviour, IRewindable
 {
+    /// <summary>
+    /// 对象状态快照，用于回溯时恢复位置、旋转与运动信息。
+    /// </summary>
     [System.Serializable]
     public class Snapshot
     {
-        public float timestamp;      // 记录时间
-        public Vector2 position;     // 位置
-        public float rotation;       // 旋转
-        public Vector2 velocity;     // 速度
-        public float angularVelocity;// 角速度
-        public float remainingTime;  // TestMove剩余移动时间
+        public float timestamp;
+        public Vector2 position;
+        public float rotation;
+        public Vector2 velocity;
+        public float angularVelocity;
+        public float remainingTime;
 
+        /// <summary>
+        /// 构造快照并记录当前对象状态。
+        /// </summary>
+        /// <param name="time">记录时间戳。</param>
+        /// <param name="transform">目标 Transform。</param>
+        /// <param name="rb">目标 Rigidbody2D。</param>
+        /// <param name="mover">可选移动脚本。</param>
         public Snapshot(float time, Transform transform, Rigidbody2D rb, TestMove mover = null)
         {
             timestamp = time;
@@ -33,6 +46,12 @@ public class RewindableObject : MonoBehaviour, RewindTimeManager.IRewindable
             }
         }
 
+        /// <summary>
+        /// 将快照状态应用到目标对象。
+        /// </summary>
+        /// <param name="transform">目标 Transform。</param>
+        /// <param name="rb">目标 Rigidbody2D。</param>
+        /// <param name="mover">可选移动脚本。</param>
         public void Apply(Transform transform, Rigidbody2D rb, TestMove mover = null)
         {
             transform.position = position;
@@ -54,25 +73,34 @@ public class RewindableObject : MonoBehaviour, RewindTimeManager.IRewindable
     }
 
     [Header("记录设置")]
-    [SerializeField] private float _maxRecordTime = 5f;  // 最多记录5秒
-    [SerializeField] private float _recordInterval = 0.02f;  // 50次/秒
+    [Tooltip("最多保留的历史记录时长（秒）")]
+    [SerializeField] private float _maxRecordTime = 5f;
+    [Tooltip("记录快照的时间间隔（秒）")]
+    [SerializeField] private float _recordInterval = 0.02f;
 
     [Header("组件引用")]
+    [Tooltip("目标刚体组件，为空时自动获取")]
     [SerializeField] private Rigidbody2D _rb;
 
     [Header("调试")]
+    [Tooltip("是否启用调试输出与轨迹显示")]
     [SerializeField] private bool _showDebug = true;
+    [Tooltip("轨迹 Gizmos 颜色")]
     [SerializeField] private Color _debugColor = Color.cyan;
+    [Tooltip("轨迹点尺寸")]
     [SerializeField] private float _pointSize = 0.1f;
 
-    private LinkedList<Snapshot> _snapshots = new LinkedList<Snapshot>();
+    private readonly LinkedList<Snapshot> _snapshots = new LinkedList<Snapshot>();
     private float _recordTimer = 0f;
-    private RewindTimeManager.RewindState _currentState = RewindTimeManager.RewindState.Normal;
+    private RewindState _currentState = RewindState.Normal;
     private TestMove _mover;
-    private Vector2[] _debugPositions = new Vector2[0];
     private float _lastRecordTime = 0f;
     private float _timeInCurrentState = 0f;
 
+    /// <summary>
+    /// 获取当前可回溯时长。
+    /// </summary>
+    /// <returns>可回溯秒数。</returns>
     public float GetMaxRewindTime()
     {
         if (_snapshots.Count == 0) return 0f;
@@ -87,7 +115,6 @@ public class RewindableObject : MonoBehaviour, RewindTimeManager.IRewindable
 
     private void Start()
     {
-        // 记录初始状态
         RecordSnapshot();
         _lastRecordTime = Time.unscaledTime;
     }
@@ -98,27 +125,32 @@ public class RewindableObject : MonoBehaviour, RewindTimeManager.IRewindable
         UpdateDebugInfo();
     }
 
+    /// <summary>
+    /// 更新当前状态对应的逻辑。
+    /// </summary>
     private void UpdateState()
     {
         switch (_currentState)
         {
-            case RewindTimeManager.RewindState.Normal:
+            case RewindState.Normal:
                 HandleNormalState();
                 break;
 
-            case RewindTimeManager.RewindState.Rewinding:
+            case RewindState.Rewinding:
                 HandleRewindingState();
                 break;
 
-            case RewindTimeManager.RewindState.Paused:
+            case RewindState.Paused:
                 HandlePausedState();
                 break;
         }
     }
 
+    /// <summary>
+    /// 正常状态：按间隔记录快照并启用运动。
+    /// </summary>
     private void HandleNormalState()
     {
-        // 正常状态：记录快照
         _recordTimer += Time.unscaledDeltaTime;
         if (_recordTimer >= _recordInterval)
         {
@@ -126,29 +158,28 @@ public class RewindableObject : MonoBehaviour, RewindTimeManager.IRewindable
             _recordTimer = 0f;
         }
 
-        // 启用物理
         if (_rb != null)
         {
             _rb.simulated = true;
         }
 
-        // 启用移动
         if (_mover != null)
         {
             _mover.enabled = true;
         }
     }
 
+    /// <summary>
+    /// 回溯状态：按历史快照倒退并禁用运动。
+    /// </summary>
     private void HandleRewindingState()
     {
-        // 回溯状态：应用历史快照
         if (_snapshots.Count <= 1)
         {
             Debug.LogWarning($"[RewindableObject] {name} 没有足够的历史数据");
             return;
         }
 
-        // 移除最新快照，应用前一个
         _snapshots.RemoveLast();
 
         if (_snapshots.Count > 0)
@@ -157,22 +188,22 @@ public class RewindableObject : MonoBehaviour, RewindTimeManager.IRewindable
             snapshot.Apply(transform, _rb, _mover);
         }
 
-        // 禁用物理（完全由我们控制）
         if (_rb != null)
         {
             _rb.simulated = false;
         }
 
-        // 禁用移动脚本
         if (_mover != null)
         {
             _mover.enabled = false;
         }
     }
 
+    /// <summary>
+    /// 暂停状态：冻结当前位置与运动。
+    /// </summary>
     private void HandlePausedState()
     {
-        // 暂停状态：保持当前位置，什么都不做
         if (_rb != null)
         {
             _rb.velocity = Vector2.zero;
@@ -186,6 +217,9 @@ public class RewindableObject : MonoBehaviour, RewindTimeManager.IRewindable
         }
     }
 
+    /// <summary>
+    /// 记录当前对象快照，并按最大时长裁剪历史。
+    /// </summary>
     private void RecordSnapshot()
     {
         Snapshot snapshot = new Snapshot(
@@ -198,7 +232,6 @@ public class RewindableObject : MonoBehaviour, RewindTimeManager.IRewindable
         _snapshots.AddLast(snapshot);
         _lastRecordTime = Time.unscaledTime;
 
-        // 限制历史长度
         while (_snapshots.Count > 0 &&
                _snapshots.Last.Value.timestamp - _snapshots.First.Value.timestamp > _maxRecordTime)
         {
@@ -206,23 +239,33 @@ public class RewindableObject : MonoBehaviour, RewindTimeManager.IRewindable
         }
     }
 
-    public void SetRewindState(RewindTimeManager.RewindState newState)
+    /// <summary>
+    /// 设置回溯状态。
+    /// </summary>
+    /// <param name="newState">新的回溯状态。</param>
+    public void SetRewindState(RewindState newState)
     {
         if (_currentState == newState) return;
 
-        RewindTimeManager.RewindState oldState = _currentState;
+        RewindState oldState = _currentState;
         _currentState = newState;
         _timeInCurrentState = 0f;
 
         Debug.Log($"[RewindableObject] {name} 状态变更: {oldState} -> {newState}");
     }
 
+    /// <summary>
+    /// 清空历史并记录当前状态作为新起点。
+    /// </summary>
     public void ClearHistory()
     {
         _snapshots.Clear();
-        RecordSnapshot(); // 记录当前状态
+        RecordSnapshot();
     }
 
+    /// <summary>
+    /// 输出调试信息。
+    /// </summary>
     private void UpdateDebugInfo()
     {
         if (!_showDebug) return;
@@ -244,19 +287,20 @@ public class RewindableObject : MonoBehaviour, RewindTimeManager.IRewindable
         }
     }
 
+    /// <summary>
+    /// 绘制快照轨迹调试 Gizmos。
+    /// </summary>
     private void OnDrawGizmos()
     {
         if (!_showDebug || _snapshots == null || _snapshots.Count == 0) return;
 
         Gizmos.color = _debugColor;
 
-        // 绘制轨迹点
         foreach (var snapshot in _snapshots)
         {
             Gizmos.DrawWireSphere(snapshot.position, _pointSize);
         }
 
-        // 绘制轨迹线
         Vector2[] positions = _snapshots.Select(s => s.position).ToArray();
         for (int i = 1; i < positions.Length; i++)
         {

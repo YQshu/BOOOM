@@ -2,12 +2,11 @@ using UnityEngine;
 
 /// <summary>
 /// 玩家二维俯视移动控制器，强绑定Rigidbody2D组件。
-/// 负责读取输入、驱动 Rigidbody2D 移动，并处理角色旋转。
-/// 完全支持时间回溯系统。
 /// 负责读取输入、驱动 Rigidbody2D 移动，并同步动画参数。
+/// 支持时间回溯系统。
 /// </summary>
 [RequireComponent(typeof(Rigidbody2D))]
-public class PlayerController2D : MonoBehaviour, RewindTimeManager.IRewindable
+public class PlayerController2D : MonoBehaviour, IRewindable
 {
     [Header("移动参数")]
     [Tooltip("角色移动速度，单位为单位/秒")]
@@ -36,12 +35,11 @@ public class PlayerController2D : MonoBehaviour, RewindTimeManager.IRewindable
 
     // 状态
     private Vector2 _moveInput;
-    private RewindTimeManager.RewindState _currentState = RewindTimeManager.RewindState.Normal;
+    private RewindState _currentState = RewindState.Normal;
     private float _stateChangeTime = 0f;
     private float _lastDebugTime = 0f;
-    private const float DEBUG_INTERVAL = 1f;
+    private const float DebugInterval = 1f;
     private Vector2 _rawInput;
-    private Vector2 _moveInput;
     private Vector2 _lastMoveDirection = Vector2.down;
 
     private static readonly int HorizontalHash = Animator.StringToHash("Horizontal");
@@ -53,6 +51,10 @@ public class PlayerController2D : MonoBehaviour, RewindTimeManager.IRewindable
     {
         _rigidbody2D = GetComponent<Rigidbody2D>();
         _spriteRenderer = GetComponent<SpriteRenderer>();
+        if (_animator == null)
+        {
+            _animator = GetComponentInChildren<Animator>();
+        }
 
         if (_spriteRenderer != null)
         {
@@ -73,13 +75,9 @@ public class PlayerController2D : MonoBehaviour, RewindTimeManager.IRewindable
 
     private void OnDestroy()
     {
-        // 注销回溯管理器
         if (RewindTimeManager.Instance != null)
         {
             RewindTimeManager.Instance.UnregisterRewindable(this);
-        if (_animator == null)
-        {
-            _animator = GetComponentInChildren<Animator>();
         }
     }
 
@@ -93,7 +91,7 @@ public class PlayerController2D : MonoBehaviour, RewindTimeManager.IRewindable
         {
             ShowStateDebug();
         }
-        ReadMovementInput();
+
         UpdateAnimatorParameters();
     }
 
@@ -109,15 +107,15 @@ public class PlayerController2D : MonoBehaviour, RewindTimeManager.IRewindable
     {
         switch (_currentState)
         {
-            case RewindTimeManager.RewindState.Normal:
+            case RewindState.Normal:
                 HandleNormalState();
                 break;
 
-            case RewindTimeManager.RewindState.Rewinding:
+            case RewindState.Rewinding:
                 HandleRewindingState();
                 break;
 
-            case RewindTimeManager.RewindState.Paused:
+            case RewindState.Paused:
                 HandlePausedState();
                 break;
         }
@@ -135,35 +133,19 @@ public class PlayerController2D : MonoBehaviour, RewindTimeManager.IRewindable
             return;
         }
 
-        // 读取移动输入
         float horizontal = Input.GetAxisRaw("Horizontal");
         float vertical = Input.GetAxisRaw("Vertical");
-        _moveInput = new Vector2(horizontal, vertical).normalized;
-
-        // 处理旋转
-        if (_enableRotation)
-        {
-            if (Input.GetKey(_rotateLeftKey))
-            {
-                transform.Rotate(0f, 0f, _rotateSpeed * Time.deltaTime);
-            }
-
-            if (Input.GetKey(_rotateRightKey))
-            {
-                transform.Rotate(0f, 0f, -_rotateSpeed * Time.deltaTime);
-            }
-        }
-
-        // 恢复正常颜色
-        if (_spriteRenderer != null && _showRewindEffect)
-        {
-            _spriteRenderer.color = _originalColor;
         _rawInput = new Vector2(horizontal, vertical);
         _moveInput = _rawInput.sqrMagnitude > 1f ? _rawInput.normalized : _rawInput;
 
         if (_rawInput.sqrMagnitude > 0f)
         {
             _lastMoveDirection = _rawInput;
+        }
+
+        if (_spriteRenderer != null && _showRewindEffect)
+        {
+            _spriteRenderer.color = _originalColor;
         }
     }
 
@@ -173,19 +155,9 @@ public class PlayerController2D : MonoBehaviour, RewindTimeManager.IRewindable
     private void HandleRewindingState()
     {
         if (_disableControlDuringRewind)
-    /// 同步动画控制器参数。
-    /// </summary>
-    private void UpdateAnimatorParameters()
-    {
-        if (_animator == null)
         {
+            _rawInput = Vector2.zero;
             _moveInput = Vector2.zero;
-
-            // 禁用旋转输入
-            if (_enableRotation)
-            {
-                // 不处理旋转输入
-            }
         }
 
         // 应用回溯颜色
@@ -193,6 +165,7 @@ public class PlayerController2D : MonoBehaviour, RewindTimeManager.IRewindable
         {
             _spriteRenderer.color = _rewindColor;
         }
+
     }
 
     /// <summary>
@@ -200,19 +173,30 @@ public class PlayerController2D : MonoBehaviour, RewindTimeManager.IRewindable
     /// </summary>
     private void HandlePausedState()
     {
-        // 完全停止
+        _rawInput = Vector2.zero;
         _moveInput = Vector2.zero;
 
         if (_spriteRenderer != null && _showRewindEffect)
         {
             _spriteRenderer.color = _rewindColor;
         }
+    }
+
+    /// <summary>
+    /// 同步动画控制器参数。
+    /// </summary>
+    private void UpdateAnimatorParameters()
+    {
+        if (_animator == null)
+        {
+            return;
+        }
+
         _animator.SetFloat(HorizontalHash, _rawInput.x);
         _animator.SetFloat(VerticalHash, _rawInput.y);
         _animator.SetFloat(LastHorizontalHash, _lastMoveDirection.x);
         _animator.SetFloat(LastVerticalHash, _lastMoveDirection.y);
     }
-
     /// <summary>
     /// 将输入向量转换为刚体速度
     /// </summary>
@@ -220,8 +204,8 @@ public class PlayerController2D : MonoBehaviour, RewindTimeManager.IRewindable
     {
         // 如果在回溯状态且禁用了控制，强制停止
         if (_disableControlDuringRewind &&
-            (_currentState == RewindTimeManager.RewindState.Rewinding ||
-             _currentState == RewindTimeManager.RewindState.Paused))
+            (_currentState == RewindState.Rewinding ||
+             _currentState == RewindState.Paused))
         {
             _rigidbody2D.velocity = Vector2.zero;
             _rigidbody2D.angularVelocity = 0f;
@@ -235,11 +219,11 @@ public class PlayerController2D : MonoBehaviour, RewindTimeManager.IRewindable
     /// <summary>
     /// 设置回溯状态（实现IRewindable接口）
     /// </summary>
-    public void SetRewindState(RewindTimeManager.RewindState newState)
+    public void SetRewindState(RewindState newState)
     {
         if (_currentState == newState) return;
 
-        RewindTimeManager.RewindState oldState = _currentState;
+        RewindState oldState = _currentState;
         _currentState = newState;
         _stateChangeTime = Time.time;
 
@@ -247,8 +231,8 @@ public class PlayerController2D : MonoBehaviour, RewindTimeManager.IRewindable
 
         // 状态变更时立即停止移动
         if (_disableControlDuringRewind &&
-            (newState == RewindTimeManager.RewindState.Rewinding ||
-             newState == RewindTimeManager.RewindState.Paused))
+            (newState == RewindState.Rewinding ||
+             newState == RewindState.Paused))
         {
             _moveInput = Vector2.zero;
             _rigidbody2D.velocity = Vector2.zero;
@@ -271,7 +255,7 @@ public class PlayerController2D : MonoBehaviour, RewindTimeManager.IRewindable
     private void ShowStateDebug()
     {
         float currentTime = Time.time;
-        if (currentTime - _lastDebugTime >= DEBUG_INTERVAL)
+        if (currentTime - _lastDebugTime >= DebugInterval)
         {
             _lastDebugTime = currentTime;
 
@@ -295,7 +279,7 @@ public class PlayerController2D : MonoBehaviour, RewindTimeManager.IRewindable
     /// <summary>
     /// 临时方法：获取当前状态
     /// </summary>
-    public RewindTimeManager.RewindState GetCurrentState()
+    public RewindState GetCurrentState()
     {
         return _currentState;
     }

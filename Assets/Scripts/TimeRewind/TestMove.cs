@@ -1,13 +1,20 @@
 using UnityEngine;
 
+/// <summary>
+/// 测试移动脚本，按固定方向和时长移动物体，供回溯系统验证使用。
+/// </summary>
 public class TestMove : MonoBehaviour
 {
     [Header("移动设置")]
+    [Tooltip("移动方向")]
     [SerializeField] private Vector2 _direction = Vector2.right;
+    [Tooltip("移动速度")]
     [SerializeField] private float _speed = 2f;
-    [SerializeField] private float _moveDuration = 5f;  // 移动总时长
+    [Tooltip("移动总时长（秒）")]
+    [SerializeField] private float _moveDuration = 5f;
 
     [Header("调试")]
+    [Tooltip("是否输出调试日志")]
     [SerializeField] private bool _showDebug = true;
 
     private float _elapsedTime = 0f;
@@ -15,15 +22,24 @@ public class TestMove : MonoBehaviour
     private bool _isMoving = true;
     private Vector3 _startPosition;
 
+    /// <summary>
+    /// 获取剩余移动时间。
+    /// </summary>
+    /// <returns>剩余秒数。</returns>
     public float GetRemainingTime()
     {
-        return Mathf.Max(0, _moveDuration - _elapsedTime);
+        return Mathf.Max(0f, _moveDuration - _elapsedTime);
     }
 
+    /// <summary>
+    /// 设置剩余移动时间并同步内部计时。
+    /// </summary>
+    /// <param name="time">剩余时间（秒）。</param>
     public void SetRemainingTime(float time)
     {
-        _elapsedTime = _moveDuration - Mathf.Clamp(time, 0, _moveDuration);
-        _remainingTime = time;
+        float clampedTime = Mathf.Clamp(time, 0f, _moveDuration);
+        _elapsedTime = _moveDuration - clampedTime;
+        _remainingTime = clampedTime;
     }
 
     private void Start()
@@ -42,15 +58,12 @@ public class TestMove : MonoBehaviour
         if (!_isMoving) return;
         if (_remainingTime <= 0) return;
 
-        // 计算帧移动量
         float moveAmount = _speed * Time.deltaTime;
         transform.Translate(_direction * moveAmount);
 
-        // 更新时间
         _elapsedTime += Time.deltaTime;
-        _remainingTime = Mathf.Max(0, _moveDuration - _elapsedTime);
+        _remainingTime = Mathf.Max(0f, _moveDuration - _elapsedTime);
 
-        // 移动结束
         if (_remainingTime <= 0)
         {
             _isMoving = false;
@@ -61,6 +74,9 @@ public class TestMove : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// 重置移动状态并回到初始位置。
+    /// </summary>
     public void ResetMovement()
     {
         transform.position = _startPosition;
