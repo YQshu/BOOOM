@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -7,6 +8,12 @@ using UnityEngine;
 /// </summary>
 public class ClueManager : Singleton<ClueManager>
 {
+    /// <summary>
+    /// 线索首次收集事件。
+    /// 参数：线索ID、线索名称。
+    /// </summary>
+    public event Action<string, string> OnClueCollected;
+
     [Header("调试选项")]
     [Tooltip("是否在收集和查询时输出调试日志")]
     [SerializeField] private bool _enableLog = true;
@@ -56,6 +63,7 @@ public class ClueManager : Singleton<ClueManager>
             Debug.Log($"[Clue] 已收集：{clueId} - {clueName}", this);
         }
 
+        OnClueCollected?.Invoke(clueId, clueName);
         return true;
     }
 

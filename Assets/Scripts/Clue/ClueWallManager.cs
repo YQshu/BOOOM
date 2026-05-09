@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.U2D.Animation;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -9,65 +8,59 @@ using TMPro;
 public class ClueWallManager : MonoBehaviour
 {
     [Header("界面引用")]
-    public GameObject mainScreen;           // 主游戏界面
-    public GameObject clueWallRoot;         // 线索墙根对象
-    public GameObject characterDetailPanel; // 角色详情面板
+    public GameObject mainScreen;
+    public GameObject clueWallRoot;
+    public GameObject characterDetailPanel;
 
     [Header("角色卡片")]
-    public Button[] characterCardButtons;   // 4个角色卡片按钮
+    public Button[] characterCardButtons;
 
     [Header("角色详情界面元素")]
-    public Image characterDetailAvatar;     // 详情界面角色头像
-    public TMP_Text characterDetailName;        // 详情界面角色名
-    public TMP_Text characterDetailDescription; // 详情界面描述
-    public Button backButton;               // 返回按钮
+    public Image characterDetailAvatar;
+    public TMP_Text characterDetailName;
+    public TMP_Text characterDetailDescription;
+    public Button backButton;
 
     [Header("线索列表")]
-    public GameObject clueItemPrefab;       // 线索条目预制体
-    public Transform clueContentParent;     // 线索条目的父对象（ScrollView的Content）
-    public ScrollRect clueScrollView;       // 线索滚动视图
+    public GameObject clueItemPrefab;
+    public Transform clueContentParent;
+    public ScrollRect clueScrollView;
 
     [Header("角色数据")]
-    public CharacterData[] characters;      // 角色数据数组
-    public ClueData[] clueDatabase;        // 线索数据库
+    public CharacterData[] characters;
+    public ClueData[] clueDatabase;
 
     [Header("退出按钮")]
     public Button exitClueWallButton;
 
-    // 当前选中的角色索引
     private int currentCharacterIndex = -1;
-
-    // 存储每个线索的解锁时间
     private Dictionary<string, float> clueUnlockTimes = new Dictionary<string, float>();
-
-    // 新线索感叹号持续时间（秒）
     private const float NEW_CLUE_DURATION = 5f;
 
     void Start()
     {
-        // 初始化界面状态
         if (mainScreen != null) mainScreen.SetActive(true);
         if (clueWallRoot != null) clueWallRoot.SetActive(false);
         if (characterDetailPanel != null) characterDetailPanel.SetActive(false);
 
-        // 绑定角色卡片点击事件
         for (int i = 0; i < characterCardButtons.Length; i++)
         {
-            int index = i; // 闭包问题，需要局部变量
+            int index = i;
             characterCardButtons[i].onClick.AddListener(() => OnSelectCharacter(index));
         }
 
-        // 绑定返回按钮事件
         if (backButton != null)
         {
             backButton.onClick.AddListener(OnBackToCharacterList);
         }
 
-        // 加载已保存的线索解锁时间
         LoadClueUnlockTimes();
-
-        // 检查是否有新线索
         StartCoroutine(CheckNewCluesPeriodically());
+
+        if (ClueManager.Instance != null)
+        {
+            ClueManager.Instance.OnClueCollected += HandleClueCollected;
+        }
     }
 
     /// <summary>
@@ -79,7 +72,7 @@ public class ClueWallManager : MonoBehaviour
         if (clueWallRoot != null) clueWallRoot.SetActive(true);
         if (characterDetailPanel != null) characterDetailPanel.SetActive(false);
 
-        Debug.Log("进入线索墙界面");
+        Debug.Log("[ClueWall] 进入线索墙界面");
     }
 
     /// <summary>
@@ -89,7 +82,7 @@ public class ClueWallManager : MonoBehaviour
     {
         if (clueWallRoot != null) clueWallRoot.SetActive(false);
 
-        Debug.Log("退出线索墙界面");
+        Debug.Log("[ClueWall] 退出线索墙界面");
     }
 
     /// <summary>
@@ -99,32 +92,31 @@ public class ClueWallManager : MonoBehaviour
     {
         if (characterIndex < 0 || characterIndex >= characters.Length)
         {
-            Debug.LogError("无效的角色索引: " + characterIndex);
+            Debug.LogError("[ClueWall] 无效的角色索引: " + characterIndex);
             return;
         }
 
         currentCharacterIndex = characterIndex;
 
-        // 切换面板：隐藏列表，显示详情
         if (clueWallRoot != null)
         {
-            clueWallRoot.SetActive(false);  // ← 关键：隐藏角色列表
+            clueWallRoot.SetActive(false);
         }
 
         if (exitClueWallButton != null)
         {
+            exitClueWallButton.onClick.RemoveAllListeners();
             exitClueWallButton.onClick.AddListener(OnExitClueWall);
         }
 
         if (characterDetailPanel != null)
         {
-            characterDetailPanel.SetActive(true);  // 显示详情
+            characterDetailPanel.SetActive(true);
         }
 
-        // 加载角色详情
         LoadCharacterDetail(characterIndex);
 
-        Debug.Log($"选择角色: {characters[characterIndex].characterName}");
+        Debug.Log($"[ClueWall] 选择角色: {characters[characterIndex].characterName}");
     }
 
     /// <summary>
@@ -132,7 +124,6 @@ public class ClueWallManager : MonoBehaviour
     /// </summary>
     public void OnBackToCharacterList()
     {
-        // 切换面板：隐藏详情，显示列表
         if (characterDetailPanel != null)
         {
             characterDetailPanel.SetActive(false);
@@ -140,10 +131,57 @@ public class ClueWallManager : MonoBehaviour
 
         if (clueWallRoot != null)
         {
-            clueWallRoot.SetActive(true);  // ← 关键：重新显示角色列表
+            clueWallRoot.SetActive(true);
         }
 
-        Debug.Log("返回角色选择列表");
+        Debug.Log("[ClueWall] 返回角色选择列表");
+    }
+
+    /// <summary>
+    /// 根据线索ID获取所属角色索引。
+    /// </summary>
+    /// <param name="clueId">线索ID。</param>
+    /// <returns>返回角色索引，未找到返回 -1。</returns>
+    public int GetCharacterIndexByClueId(string clueId)
+    {
+        if (string.IsNullOrWhiteSpace(clueId) || clueDatabase == null)
+        {
+            return -1;
+        }
+
+        for (int i = 0; i < clueDatabase.Length; i++)
+        {
+            ClueData clue = clueDatabase[i];
+            string resolvedClueId = ResolveClueId(clue, clue.characterIndex);
+            if (resolvedClueId == clueId)
+            {
+                return clue.characterIndex;
+            }
+        }
+
+        return -1;
+    }
+
+    /// <summary>
+    /// 处理线索收集事件，记录解锁时间并按需刷新当前详情界面。
+    /// </summary>
+    private void HandleClueCollected(string clueId, string clueName)
+    {
+        if (string.IsNullOrWhiteSpace(clueId))
+        {
+            return;
+        }
+
+        clueUnlockTimes[clueId] = Time.time;
+        SaveClueUnlockTimes();
+
+        int characterIndex = GetCharacterIndexByClueId(clueId);
+        if (characterIndex >= 0 && currentCharacterIndex == characterIndex && characterDetailPanel != null && characterDetailPanel.activeSelf)
+        {
+            LoadClueListForCharacter(characterIndex);
+        }
+
+        Debug.Log($"[ClueWall] 收到新线索：{clueId} - {clueName}");
     }
 
     /// <summary>
@@ -153,7 +191,6 @@ public class ClueWallManager : MonoBehaviour
     {
         CharacterData character = characters[characterIndex];
 
-        // 更新UI元素
         if (characterDetailAvatar != null && character.avatar != null)
         {
             characterDetailAvatar.sprite = character.avatar;
@@ -169,71 +206,67 @@ public class ClueWallManager : MonoBehaviour
             characterDetailDescription.text = character.description;
         }
 
-        // 加载该角色的线索列表
         LoadClueListForCharacter(characterIndex);
     }
 
     /// <summary>
-    /// 加载指定角色的线索列表
+    /// 加载指定角色的线索列表，仅展示当前已收集线索。
     /// </summary>
     private void LoadClueListForCharacter(int characterIndex)
     {
         if (clueItemPrefab == null || clueContentParent == null)
         {
-            Debug.LogError("线索预制体或父对象未设置");
+            Debug.LogError("[ClueWall] 线索预制体或父对象未设置");
             return;
         }
 
-        // 清空旧的线索条目
         foreach (Transform child in clueContentParent)
         {
             Destroy(child.gameObject);
         }
 
-        // 获取该角色的所有线索
         List<ClueData> characterClues = GetCluesForCharacter(characterIndex);
-
-        // 按时间排序（假设时间格式为"00:05"这样的字符串）
         characterClues.Sort((a, b) =>
         {
             if (a.time == null || b.time == null) return 0;
             return a.time.CompareTo(b.time);
         });
 
-        // 生成线索条目
+        int visibleCount = 0;
         foreach (ClueData clue in characterClues)
         {
+            string clueId = ResolveClueId(clue, characterIndex);
+            if (!IsClueCollected(clueId))
+            {
+                continue;
+            }
+
             GameObject clueItemObj = Instantiate(clueItemPrefab, clueContentParent);
             ClueItemUI clueItem = clueItemObj.GetComponent<ClueItemUI>();
 
             if (clueItem != null)
             {
-                // 生成唯一的线索ID
-                string clueId = $"Character{characterIndex}_Clue{clue.time}";
-
-                // 检查是否是新线索
                 float unlockTime = GetClueUnlockTime(clueId);
                 bool isNew = (Time.time - unlockTime) <= NEW_CLUE_DURATION;
-
-                // 设置线索UI
                 clueItem.Setup(clue.time, clue.clueText, clue.icon, isNew);
 
-                // 可选：添加点击事件
                 Button clueButton = clueItemObj.GetComponent<Button>();
                 if (clueButton != null)
                 {
+                    clueButton.onClick.RemoveAllListeners();
                     clueButton.onClick.AddListener(() => OnClueClicked(clueId, clue));
                 }
             }
+
+            visibleCount++;
         }
 
-        // 确保滚动到顶部
         if (clueScrollView != null)
         {
             clueScrollView.verticalNormalizedPosition = 1f;
         }
 
-        Debug.Log($"为角色 {characters[characterIndex].characterName} 加载了 {characterClues.Count} 条线索");
+        Debug.Log($"[ClueWall] 为角色 {characters[characterIndex].characterName} 显示了 {visibleCount} 条已收集线索");
     }
 
     /// <summary>
@@ -243,8 +276,18 @@ public class ClueWallManager : MonoBehaviour
     {
         List<ClueData> result = new List<ClueData>();
 
+        if (clueDatabase == null || clueDatabase.Length == 0)
+        {
+            return result;
+        }
+
         foreach (ClueData clue in clueDatabase)
         {
+            if (clue == null)
+            {
+                continue;
+            }
+
             if (clue.characterIndex == characterIndex)
             {
                 result.Add(clue);
@@ -259,11 +302,7 @@ public class ClueWallManager : MonoBehaviour
     /// </summary>
     private void OnClueClicked(string clueId, ClueData clue)
     {
-        Debug.Log($"点击线索: {clue.clueText}");
-
-        // 可以在这里添加更多逻辑，比如显示线索详情、播放音效等
-
-        // 标记线索为已查看（清除新线索状态）
+        Debug.Log($"[ClueWall] 点击线索: {clue.clueText}");
         MarkClueAsViewed(clueId);
     }
 
@@ -274,48 +313,38 @@ public class ClueWallManager : MonoBehaviour
     {
         if (clueUnlockTimes.ContainsKey(clueId))
         {
-            // 设置为很早的时间，使其不再是新线索
             clueUnlockTimes[clueId] = Time.time - (NEW_CLUE_DURATION + 1f);
             SaveClueUnlockTimes();
         }
     }
 
     /// <summary>
-    /// 添加新线索
+    /// 添加新线索（测试功能）。
     /// </summary>
     public void AddNewClue(int characterIndex, string time, string clueText, Sprite icon = null)
     {
-        // 创建新线索数据
         ClueData newClue = new ClueData
         {
+            clueId = $"TEST_{characterIndex}_{time}",
             characterIndex = characterIndex,
             time = time,
             clueText = clueText,
             icon = icon
         };
 
-        // 添加到数据库
         Array.Resize(ref clueDatabase, clueDatabase.Length + 1);
         clueDatabase[clueDatabase.Length - 1] = newClue;
 
-        // 生成线索ID
-        string clueId = $"Character{characterIndex}_Clue{time}";
-
-        // 记录解锁时间
-        clueUnlockTimes[clueId] = Time.time;
-        SaveClueUnlockTimes();
-
-        Debug.Log($"添加新线索: {clueText}");
-
-        // 如果当前正在查看这个角色的详情，刷新列表
-        if (currentCharacterIndex == characterIndex && characterDetailPanel.activeSelf)
+        if (ClueManager.Instance != null)
         {
-            LoadClueListForCharacter(characterIndex);
+            ClueManager.Instance.CollectClue(newClue.clueId, clueText);
         }
+
+        Debug.Log($"[ClueWall] 添加新线索: {clueText}");
     }
 
     /// <summary>
-    /// 获取线索的解锁时间
+    /// 获取线索的解锁时间，不存在时默认返回很早时间。
     /// </summary>
     private float GetClueUnlockTime(string clueId)
     {
@@ -323,13 +352,34 @@ public class ClueWallManager : MonoBehaviour
         {
             return clueUnlockTimes[clueId];
         }
-        else
+
+        return -9999f;
+    }
+
+    /// <summary>
+    /// 判断线索是否已收集。
+    /// </summary>
+    private bool IsClueCollected(string clueId)
+    {
+        if (ClueManager.Instance == null)
         {
-            // 如果不存在，设置为当前时间（新线索）
-            clueUnlockTimes[clueId] = Time.time;
-            SaveClueUnlockTimes();
-            return Time.time;
+            return false;
         }
+
+        return ClueManager.Instance.HasClue(clueId);
+    }
+
+    /// <summary>
+    /// 解析线索ID。优先使用配置ID，缺失时使用回退规则。
+    /// </summary>
+    private string ResolveClueId(ClueData clue, int characterIndex)
+    {
+        if (!string.IsNullOrWhiteSpace(clue.clueId))
+        {
+            return clue.clueId;
+        }
+
+        return $"Character{characterIndex}_Clue{clue.time}";
     }
 
     /// <summary>
@@ -351,13 +401,17 @@ public class ClueWallManager : MonoBehaviour
     {
         clueUnlockTimes.Clear();
 
-        // 遍历所有线索数据，加载已保存的时间
+        if (characters == null || characters.Length == 0)
+        {
+            return;
+        }
+
         for (int i = 0; i < characters.Length; i++)
         {
             List<ClueData> clues = GetCluesForCharacter(i);
             foreach (ClueData clue in clues)
             {
-                string clueId = $"Character{i}_Clue{clue.time}";
+                string clueId = ResolveClueId(clue, i);
                 if (PlayerPrefs.HasKey("ClueTime_" + clueId))
                 {
                     float time = PlayerPrefs.GetFloat("ClueTime_" + clueId);
@@ -376,7 +430,6 @@ public class ClueWallManager : MonoBehaviour
         {
             yield return new WaitForSeconds(1f);
 
-            // 如果正在查看角色详情，刷新感叹号状态
             if (characterDetailPanel != null && characterDetailPanel.activeSelf && currentCharacterIndex >= 0)
             {
                 RefreshClueItemsExclamation();
@@ -404,12 +457,10 @@ public class ClueWallManager : MonoBehaviour
     /// </summary>
     public void AddTestClues()
     {
-        // 为角色0添加测试线索
         AddNewClue(0, "00:03", "杰斯听到走廊有奇怪的脚步声", null);
         AddNewClue(0, "00:10", "杰斯在书房发现一本奇怪的笔记", null);
         AddNewClue(0, "00:15", "杰斯注意到墙上的画像位置移动了", null);
 
-        // 为角色1添加测试线索
         AddNewClue(1, "00:05", "凯在花园看到可疑的脚印", null);
         AddNewClue(1, "00:12", "凯发现后门的锁被撬开了", null);
     }
@@ -419,25 +470,29 @@ public class ClueWallManager : MonoBehaviour
     /// </summary>
     public void ClearAllClues()
     {
-        // 清空数据库
         clueDatabase = new ClueData[0];
-
-        // 清空解锁时间
         clueUnlockTimes.Clear();
-        PlayerPrefs.DeleteAll();
 
-        // 清空UI
+        if (ClueManager.Instance != null)
+        {
+            ClueManager.Instance.ClearAllClues();
+        }
+
         foreach (Transform child in clueContentParent)
         {
             Destroy(child.gameObject);
         }
 
-        Debug.Log("已清空所有线索");
+        Debug.Log("[ClueWall] 已清空所有线索");
     }
 
     void OnDestroy()
     {
-        // 保存数据
+        if (ClueManager.Instance != null)
+        {
+            ClueManager.Instance.OnClueCollected -= HandleClueCollected;
+        }
+
         SaveClueUnlockTimes();
     }
 }

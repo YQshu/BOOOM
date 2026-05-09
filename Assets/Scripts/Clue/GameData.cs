@@ -17,13 +17,13 @@ public class CharacterData
 /// <summary>
 /// 线索数据
 /// </summary>
-[Serializable]
 public class ClueData
 {
-    public int characterIndex;      // 属于哪个角色
-    public string time;             // 时间（如"00:05"）
-    public string clueText;         // 线索文本
-    public Sprite icon;             // 线索图标（可选）
+    public string clueId;            // 线索唯一ID（为空时回退到自动生成ID）
+    public int characterIndex;       // 属于哪个角色
+    public string time;              // 时间（如"00:05"）
+    public string clueText;          // 线索文本
+    public Sprite icon;              // 线索图标（可选）
     public bool isImportant = false; // 是否重要线索
 }
 

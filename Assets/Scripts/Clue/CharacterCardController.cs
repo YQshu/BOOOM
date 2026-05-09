@@ -1,35 +1,43 @@
-using UnityEditor.U2D.Animation;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
+/// <summary>
+/// 角色卡片控制器。
+/// 负责角色展示、点击跳转，以及线索数量与新线索提示刷新。
+/// </summary>
 public class CharacterCardController : MonoBehaviour
 {
     [Header("UI组件")]
-    public Image avatarImage;      // 头像
-    public TMP_Text nameText;          // 角色名
-    public TMP_Text descriptionText;   // 描述
-    public Button cardButton;      // 卡片按钮
+    [Tooltip("角色头像")]
+    public Image avatarImage;
+    [Tooltip("角色名文本")]
+    public TMP_Text nameText;
+    [Tooltip("角色描述文本")]
+    public TMP_Text descriptionText;
+    [Tooltip("角色卡片按钮")]
+    public Button cardButton;
 
     [Header("状态指示器")]
-    public GameObject newClueIndicator;  // 新线索指示器
-    public TMP_Text clueCountText;           // 线索数量
+    [Tooltip("新线索指示器")]
+    public GameObject newClueIndicator;
+    [Tooltip("线索数量文本")]
+    public TMP_Text clueCountText;
 
-    // 角色索引
     private int characterIndex = -1;
-
-    // 引用
     private ClueWallManager clueWallManager;
 
     /// <summary>
-    /// 初始化角色卡片
+    /// 初始化角色卡片。
     /// </summary>
+    /// <param name="characterData">角色数据。</param>
+    /// <param name="index">角色索引。</param>
+    /// <param name="manager">线索墙管理器。</param>
     public void Initialize(CharacterData characterData, int index, ClueWallManager manager)
     {
         characterIndex = index;
         clueWallManager = manager;
 
-        // 设置UI
         if (avatarImage != null && characterData.avatar != null)
         {
             avatarImage.sprite = characterData.avatar;
@@ -45,29 +53,23 @@ public class CharacterCardController : MonoBehaviour
             descriptionText.text = characterData.description;
         }
 
-        // 设置按钮颜色
         if (cardButton != null)
         {
-            var colors = cardButton.colors;
+            ColorBlock colors = cardButton.colors;
             colors.normalColor = characterData.themeColor * 0.8f;
             colors.highlightedColor = characterData.themeColor;
             colors.pressedColor = characterData.themeColor * 0.6f;
             cardButton.colors = colors;
-        }
 
-        // 绑定点击事件
-        if (cardButton != null)
-        {
             cardButton.onClick.RemoveAllListeners();
             cardButton.onClick.AddListener(OnCardClick);
         }
 
-        // 更新线索指示器
         UpdateClueIndicator();
     }
 
     /// <summary>
-    /// 卡片点击事件
+    /// 卡片点击事件。
     /// </summary>
     private void OnCardClick()
     {
@@ -78,24 +80,33 @@ public class CharacterCardController : MonoBehaviour
     }
 
     /// <summary>
-    /// 更新线索指示器
+    /// 更新线索指示器。
     /// </summary>
     public void UpdateClueIndicator()
     {
-        // 这里可以添加逻辑来检查这个角色是否有新线索
-        // 暂时设置为随机
-        bool hasNewClues = Random.Range(0, 2) == 0;
+        int collectedCount = 0;
+
+        if (ClueManager.Instance != null && clueWallManager != null)
+        {
+            var collectedClueIds = ClueManager.Instance.GetCollectedClueIds();
+            for (int i = 0; i < collectedClueIds.Count; i++)
+            {
+                int ownerCharacterIndex = clueWallManager.GetCharacterIndexByClueId(collectedClueIds[i]);
+                if (ownerCharacterIndex == characterIndex)
+                {
+                    collectedCount++;
+                }
+            }
+        }
+
+        if (clueCountText != null)
+        {
+            clueCountText.text = collectedCount.ToString();
+        }
 
         if (newClueIndicator != null)
         {
-            newClueIndicator.SetActive(hasNewClues);
-        }
-
-        // 更新线索数量
-        if (clueCountText != null)
-        {
-            int clueCount = Random.Range(1, 10);
-            clueCountText.text = clueCount.ToString();
+            newClueIndicator.SetActive(collectedCount > 0);
         }
     }
 }
