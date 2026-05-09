@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Playables;
 
 /// <summary>
 /// 周目管理器。
@@ -8,6 +9,13 @@ using UnityEngine;
 /// </summary>
 public class LoopManager : MonoBehaviour
 {
+    [System.Serializable]
+    public class LoopTimelineBinding
+    {
+        public string loopId;
+        public PlayableDirector director;
+    }
+
     /// <summary>
     /// 周目切换事件，参数为切换后的周目ID。
     /// </summary>
@@ -28,6 +36,10 @@ public class LoopManager : MonoBehaviour
     [Header("调试选项")]
     [Tooltip("是否输出周目切换日志")]
     [SerializeField] private bool _enableLog = true;
+
+    [Header("Timeline绑定（可选）")]
+    [Tooltip("每个周目对应的PlayableDirector，切换周目时自动从头播放")]
+    [SerializeField] private List<LoopTimelineBinding> _timelineBindings = new List<LoopTimelineBinding>();
 
     private int _currentLoopIndex = -1;
 
@@ -130,11 +142,26 @@ public class LoopManager : MonoBehaviour
         }
 
         OnLoopChanged?.Invoke(loopId);
+        PlayTimelineForLoop(loopId);
     }
 
     /// <summary>
-    /// 初始化默认周目。
+    /// 播放当前周目对应的Timeline（如已配置绑定）。
     /// </summary>
+    private void PlayTimelineForLoop(string loopId)
+    {
+        if (_timelineBindings == null || _timelineBindings.Count == 0) return;
+
+        LoopTimelineBinding binding = _timelineBindings.Find(b => b.loopId == loopId);
+        if (binding == null || binding.director == null) return;
+
+        binding.director.time = 0;
+        binding.director.Play();
+
+        if (_enableLog)
+            Debug.Log($"[Loop] 播放Timeline：{binding.director.name}", this);
+    }
+
     private void InitializeDefaultLoop()
     {
         if (_loopIds.Count == 0)

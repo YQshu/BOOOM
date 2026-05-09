@@ -13,9 +13,11 @@ public class Interactable : MonoBehaviour
     [Tooltip("交互名称，用于提示和日志展示")]
     [SerializeField] private string _interactionName = "演示线索";
     [Tooltip("触发交互的按键")]
-    [SerializeField] private KeyCode _interactKey = KeyCode.F;
+    [SerializeField] private KeyCode _interactKey = KeyCode.E;
 
     [Header("显示与行为")]
+    [Tooltip("头顶调查提示UI（World Space Canvas），进入范围时自动显示")]
+    [SerializeField] private GameObject _promptUI;
     [Tooltip("是否允许重复交互")]
     [SerializeField] private bool _allowRepeatInteraction;
     [Tooltip("交互后是否作为线索写入线索系统")]
@@ -67,6 +69,9 @@ public class Interactable : MonoBehaviour
 
         _isPlayerInRange = true;
 
+        if (_promptUI != null)
+            _promptUI.SetActive(true);
+
         if (_enableLog)
         {
             Debug.Log($"[Interactable] 可交互：{_interactionName}（按 {_interactKey}）", this);
@@ -85,6 +90,9 @@ public class Interactable : MonoBehaviour
         }
 
         _isPlayerInRange = false;
+
+        if (_promptUI != null)
+            _promptUI.SetActive(false);
     }
 
     /// <summary>
@@ -113,6 +121,8 @@ public class Interactable : MonoBehaviour
 
         if (_hideAfterInteraction)
         {
+            if (_promptUI != null)
+                _promptUI.SetActive(false);
             gameObject.SetActive(false);
         }
     }
