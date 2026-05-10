@@ -20,10 +20,16 @@ public class Interactable : MonoBehaviour
     [SerializeField] private GameObject _promptUI;
     [Tooltip("是否允许重复交互")]
     [SerializeField] private bool _allowRepeatInteraction;
-    [Tooltip("交互后是否作为线索写入线索系统")]
+    [Tooltip("交互后是否作为线索写入线索系统（无Ink故事时生效）")]
     [SerializeField] private bool _collectAsClue = true;
     [Tooltip("交互成功后是否隐藏当前对象")]
     [SerializeField] private bool _hideAfterInteraction;
+
+    [Header("Ink 对话（可选）")]
+    [Tooltip("交互时触发的 Ink 故事 JSON（留空则只收集线索）")]
+    [SerializeField] private TextAsset _inkStory;
+    [Tooltip("从指定 knot 开始播放，留空则从头播放")]
+    [SerializeField] private string _inkKnotName = "";
 
     [Header("调试输出")]
     [Tooltip("是否输出交互日志")]
@@ -40,32 +46,19 @@ public class Interactable : MonoBehaviour
 
     private void Update()
     {
-        if (!_isPlayerInRange)
-        {
-            return;
-        }
+        if (!_isPlayerInRange) return;
+        if (!_allowRepeatInteraction && _isInteracted) return;
 
-        if (!_allowRepeatInteraction && _isInteracted)
-        {
-            return;
-        }
+        // 对话播放期间不响应交互
+        if (InkDialogueManager.Instance != null && InkDialogueManager.Instance.IsPlaying) return;
 
         if (Input.GetKeyDown(_interactKey))
-        {
             Interact();
-        }
     }
 
-    /// <summary>
-    /// 玩家进入交互范围时设置可交互状态。
-    /// </summary>
-    /// <param name="other">进入触发器的碰撞体。</param>
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (!other.CompareTag("Player"))
-        {
-            return;
-        }
+        if (!other.CompareTag("Player")) return;
 
         _isPlayerInRange = true;
 
@@ -73,21 +66,12 @@ public class Interactable : MonoBehaviour
             _promptUI.SetActive(true);
 
         if (_enableLog)
-        {
             Debug.Log($"[Interactable] 可交互：{_interactionName}（按 {_interactKey}）", this);
-        }
     }
 
-    /// <summary>
-    /// 玩家离开交互范围时清理可交互状态。
-    /// </summary>
-    /// <param name="other">离开触发器的碰撞体。</param>
     private void OnTriggerExit2D(Collider2D other)
     {
-        if (!other.CompareTag("Player"))
-        {
-            return;
-        }
+        if (!other.CompareTag("Player")) return;
 
         _isPlayerInRange = false;
 
@@ -95,35 +79,39 @@ public class Interactable : MonoBehaviour
             _promptUI.SetActive(false);
     }
 
-    /// <summary>
-    /// 执行一次交互逻辑。
-    /// </summary>
     private void Interact()
     {
         _isInteracted = true;
 
-        if (_collectAsClue)
+        // 优先触发 Ink 对话
+        if (_inkStory != null)
         {
-            if (ClueManager.Instance != null)
+            if (InkDialogueManager.Instance != null)
             {
-                ClueManager.Instance.CollectClue(_interactionId, _interactionName);
+                InkDialogueManager.Instance.StartDialogue(_inkStory, _inkKnotName);
             }
             else if (_enableLog)
             {
-                Debug.LogWarning("[Interactable] 未找到 ClueManager，线索不会被记录。", this);
+                Debug.LogWarning("[Interactable] 未找到 InkDialogueManager。", this);
             }
+        }
+        else if (_collectAsClue)
+        {
+            // 无 Ink 故事时直接收集线索
+            if (ClueManager.Instance != null)
+                ClueManager.Instance.CollectClue(_interactionId, _interactionName);
+            else if (_enableLog)
+                Debug.LogWarning("[Interactable] 未找到 ClueManager。", this);
         }
 
         if (_enableLog)
-        {
-            Debug.Log($"[Interactable] 获得线索：{_interactionId} - {_interactionName}", this);
-        }
+            Debug.Log($"[Interactable] 交互：{_interactionId} - {_interactionName}", this);
 
         if (_hideAfterInteraction)
         {
-            if (_promptUI != null)
-                _promptUI.SetActive(false);
+            if (_promptUI != null) _promptUI.SetActive(false);
             gameObject.SetActive(false);
         }
     }
 }
+

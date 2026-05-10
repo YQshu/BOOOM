@@ -706,7 +706,7 @@ PlayerSettings:
     PS5: 
     QNX: 
     Stadia: 
-    Standalone: 
+    Standalone: INK_RUNTIME;INK_EDITOR
     VisionOS: 
     WebGL: 
     Windows Store Apps: 
