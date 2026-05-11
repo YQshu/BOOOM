@@ -33,6 +33,7 @@ public class ClueWallManager : MonoBehaviour
 
     [Header("退出按钮")]
     public Button exitClueWallButton;
+    public Button restartGameButton;
 
     // 当前选中的角色索引
     private int currentCharacterIndex = -1;
@@ -50,6 +51,11 @@ public class ClueWallManager : MonoBehaviour
         if (clueWallRoot != null) clueWallRoot.SetActive(false);
         if (characterDetailPanel != null) characterDetailPanel.SetActive(false);
 
+        // 绑定重启游戏按钮事件
+        if (restartGameButton != null)
+        {
+            restartGameButton.onClick.AddListener(() => LocaltionManager.Instance.RestartScene());
+        }
         // 绑定角色卡片点击事件
         for (int i = 0; i < characterCardButtons.Length; i++)
         {
@@ -440,4 +446,5 @@ public class ClueWallManager : MonoBehaviour
         // 保存数据
         SaveClueUnlockTimes();
     }
+    public void RestartGameButton() => LocaltionManager.Instance.RestartScene();
 }
