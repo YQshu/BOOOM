@@ -50,6 +50,9 @@ TagManager:
   - name: Walls
     uniqueID: 3132692547
     locked: 0
+  - name: CheckPoint
+    uniqueID: 965848479
+    locked: 0
   - name: Player
     uniqueID: 3538129219
     locked: 0
