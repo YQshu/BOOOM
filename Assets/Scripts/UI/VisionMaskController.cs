@@ -30,6 +30,7 @@ public class VisionMaskController : MonoBehaviour
 
     private SpriteMask _mask;
     private float _baseRadius;
+    private Transform _followTarget;
 
     private void Awake()
     {
@@ -44,10 +45,25 @@ public class VisionMaskController : MonoBehaviour
 
     private void Update()
     {
+        // 跟随指定目标（优先）或父物体
+        if (_followTarget != null)
+        {
+            transform.position = _followTarget.position;
+        }
+
         if (!_enablePulse) return;
 
         float pulse = Mathf.Sin(Time.time * _pulseSpeed) * _pulseAmplitude;
         ApplyRadius(_baseRadius + pulse);
+    }
+
+    /// <summary>
+    /// 设置视野遮罩跟随的目标Transform（回溯模式下跟随NPC）。
+    /// 传入null则恢复跟随父物体。
+    /// </summary>
+    public void SetTarget(Transform target)
+    {
+        _followTarget = target;
     }
 
     /// <summary>

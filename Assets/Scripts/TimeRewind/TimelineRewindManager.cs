@@ -3,7 +3,8 @@ using UnityEngine.Playables;
 using System.Collections;
 
 /// <summary>
-/// 支持按住回溯的 Timeline 管理器 - 完全重写版
+/// 支持暂停、回溯、快进的 Timeline 管理器。
+/// 全程使用 Pause/Resume 控制，不调用 Stop()，避免 playableGraph 销毁导致位置/旋转异常。
 /// </summary>
 public class TimelineRewindManager : MonoBehaviour
 {
@@ -30,12 +31,12 @@ public class TimelineRewindManager : MonoBehaviour
 
         if (_timelineDirector != null && _timelineDirector.playableAsset != null)
         {
+            // Hold模式：播完后暂停在最后一帧，playableGraph不销毁
+            _timelineDirector.extrapolationMode = DirectorWrapMode.Hold;
             _cachedDuration = _timelineDirector.duration;
 
             if (_autoPlayOnStart)
-            {
                 Play();
-            }
         }
     }
 
@@ -45,7 +46,7 @@ public class TimelineRewindManager : MonoBehaviour
     }
 
     /// <summary>
-    /// 播放 Timeline
+    /// 播放 Timeline（从当前时间继续，或从头开始）。
     /// </summary>
     public void Play()
     {
@@ -53,34 +54,36 @@ public class TimelineRewindManager : MonoBehaviour
 
         StopRewinding();
         _isPaused = false;
-        _timelineDirector.Play();
-        Debug.Log($"Timeline 播放");
+
+        // 若graph未激活（首次播放），用Play()启动
+        if (_timelineDirector.state != PlayState.Playing && _timelineDirector.state != PlayState.Paused)
+        {
+            _timelineDirector.Play();
+        }
+        else
+        {
+            _timelineDirector.Resume();
+        }
+
+        Debug.Log($"[Rewind] 播放，时间：{_timelineDirector.time:F2}");
     }
 
     /// <summary>
-    /// 暂停 Timeline
+    /// 暂停 Timeline（保持playableGraph存活，NPC位置/旋转不变）。
     /// </summary>
     public void Pause()
     {
         if (_timelineDirector == null) return;
 
-        // 保存当前时间
-        double currentTime = _timelineDirector.time;
-        Debug.Log($"暂停请求，当前时间: {currentTime}");
-
-        // 停止播放
-        _timelineDirector.Stop();
-
-        // 重新设置到相同时间并暂停
-        _timelineDirector.time = currentTime;
-        _timelineDirector.Evaluate();
+        StopRewinding();
         _isPaused = true;
+        _timelineDirector.Pause();
 
-        Debug.Log($"暂停完成，时间保持在: {_timelineDirector.time}");
+        Debug.Log($"[Rewind] 暂停，时间：{_timelineDirector.time:F2}");
     }
 
     /// <summary>
-    /// 恢复播放
+    /// 恢复播放。
     /// </summary>
     public void Resume()
     {
@@ -88,12 +91,13 @@ public class TimelineRewindManager : MonoBehaviour
 
         StopRewinding();
         _isPaused = false;
-        _timelineDirector.Play();
-        Debug.Log($"Timeline 恢复播放");
+        _timelineDirector.Resume();
+
+        Debug.Log($"[Rewind] 恢复播放，时间：{_timelineDirector.time:F2}");
     }
 
     /// <summary>
-    /// 停止并重置 Timeline
+    /// 停止并重置 Timeline。
     /// </summary>
     public void Stop()
     {
@@ -102,11 +106,31 @@ public class TimelineRewindManager : MonoBehaviour
         StopRewinding();
         _isPaused = false;
         _timelineDirector.Stop();
-        Debug.Log($"Timeline 停止");
+        Debug.Log("[Rewind] 停止");
     }
 
     /// <summary>
-    /// 开始按住回溯
+    /// 跳转到指定时间并刷新画面。
+    /// </summary>
+    public void ScrubTo(double time)
+    {
+        if (_timelineDirector == null) return;
+
+        time = System.Math.Max(0, System.Math.Min(time, _cachedDuration));
+
+        // 确保graph存活：如果未启动过，先Play再Pause
+        if (_timelineDirector.state != PlayState.Playing && _timelineDirector.state != PlayState.Paused)
+        {
+            _timelineDirector.Play();
+            _timelineDirector.Pause();
+        }
+
+        _timelineDirector.time = time;
+        _timelineDirector.Evaluate();
+    }
+
+    /// <summary>
+    /// 开始按住回溯。
     /// </summary>
     public void StartRewinding()
     {
@@ -114,36 +138,26 @@ public class TimelineRewindManager : MonoBehaviour
         if (_isRewinding) return;
         if (_timelineDirector.playableAsset == null) return;
 
-        // 如果正在播放，先停止
+        // 暂停正常播放（不用Stop，保持graph存活）
         if (_timelineDirector.state == PlayState.Playing)
-        {
-            double currentTime = _timelineDirector.time;
-            _timelineDirector.Stop();
-            _timelineDirector.time = currentTime;
-            _timelineDirector.Evaluate();
-        }
+            _timelineDirector.Pause();
 
         _isRewinding = true;
         _isPaused = true;
 
         if (_rewindCoroutine != null)
-        {
             StopCoroutine(_rewindCoroutine);
-        }
         _rewindCoroutine = StartCoroutine(RewindCoroutine());
 
-        Debug.Log($"开始回溯，起始时间: {_timelineDirector.time}");
+        Debug.Log($"[Rewind] 开始回溯，时间：{_timelineDirector.time:F2}");
     }
 
     /// <summary>
-    /// 停止按住回溯
+    /// 停止按住回溯。
     /// </summary>
     public void StopRewinding()
     {
         if (!_isRewinding) return;
-
-        double currentTime = _timelineDirector != null ? _timelineDirector.time : 0;
-        Debug.Log($"停止回溯，当前时间: {currentTime}");
 
         _isRewinding = false;
 
@@ -153,16 +167,11 @@ public class TimelineRewindManager : MonoBehaviour
             _rewindCoroutine = null;
         }
 
-        // 确保画面停留在当前位置
-        if (_timelineDirector != null)
-        {
-            _timelineDirector.time = currentTime;
-            _timelineDirector.Evaluate();
-        }
+        Debug.Log($"[Rewind] 停止回溯，时间：{_timelineDirector?.time:F2}");
     }
 
     /// <summary>
-    /// 回溯协程
+    /// 回溯协程：每帧递减时间并Evaluate。
     /// </summary>
     private IEnumerator RewindCoroutine()
     {
@@ -175,14 +184,12 @@ public class TimelineRewindManager : MonoBehaviour
 
             if (newTime <= 0)
             {
-                newTime = 0;
-                _timelineDirector.time = newTime;
+                _timelineDirector.time = 0;
                 _timelineDirector.Evaluate();
-                Debug.Log("回溯到起点");
+                Debug.Log("[Rewind] 回溯到起点");
                 break;
             }
 
-            newTime = System.Math.Max(0, System.Math.Min(newTime, _cachedDuration));
             _timelineDirector.time = newTime;
             _timelineDirector.Evaluate();
 
@@ -191,7 +198,6 @@ public class TimelineRewindManager : MonoBehaviour
 
         _isRewinding = false;
         _rewindCoroutine = null;
-        Debug.Log($"回溯结束，最终时间: {_timelineDirector?.time}");
     }
 
     public bool IsPlaying()
@@ -213,4 +219,27 @@ public class TimelineRewindManager : MonoBehaviour
     {
         _rewindSpeed = Mathf.Clamp(speed, 0.1f, 2.0f);
     }
+
+    /// <summary>
+    /// 运行时动态绑定新的 PlayableDirector（切换嫌疑人时调用）。
+    /// </summary>
+    public void BindDirector(PlayableDirector director)
+    {
+        StopRewinding();
+        _timelineDirector = director;
+        _cachedDuration = (director != null && director.playableAsset != null)
+            ? director.duration : 0;
+        _isPaused = false;
+        _isRewinding = false;
+
+        if (director != null)
+            director.extrapolationMode = DirectorWrapMode.Hold;
+
+        Debug.Log($"[Rewind] 绑定新 Director：{(director != null ? director.name : "null")}");
+    }
+
+    /// <summary>
+    /// 获取当前绑定的 PlayableDirector。
+    /// </summary>
+    public PlayableDirector GetDirector() => _timelineDirector;
 }

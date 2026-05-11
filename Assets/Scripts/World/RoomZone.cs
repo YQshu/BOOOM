@@ -13,6 +13,13 @@ public class RoomZone : MonoBehaviour
     [Tooltip("房间显示名称（进入时显示在UI上）")]
     [SerializeField] private string _roomName = "主厅";
 
+    /// <summary>房间唯一ID。</summary>
+    public string RoomId => _roomId;
+    /// <summary>房间显示名称。</summary>
+    public string RoomName => _roomName;
+    /// <summary>房间区域Collider2D。</summary>
+    public Collider2D RoomCollider => GetComponent<Collider2D>();
+
     private void Awake()
     {
         Collider2D col = GetComponent<Collider2D>();

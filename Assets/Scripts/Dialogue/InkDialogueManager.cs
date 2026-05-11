@@ -10,7 +10,7 @@ using TMPro;
 /// Ink 对话管理器。
 /// 驱动 Ink 故事文件，处理打字机效果、分支选择、Tag解析和线索触发。
 ///
-/// DialoguePanel 子物体名称约定（与 DialogueBehaviour 保持一致）：
+/// DialoguePanel 子物体名称约定：
 ///   SpeakerName   — TMP_Text，说话人名称
 ///   DialogueText  — TMP_Text，对话内容
 ///   Portrait      — Image，角色头像
@@ -134,6 +134,10 @@ public class InkDialogueManager : MonoBehaviour
         }
 
         _isPlaying = true;
+
+        // 若处于回溯模式，暂停Timeline
+        if (RetrospectManager.Instance != null && RetrospectManager.Instance.IsInRetrospect)
+            RetrospectManager.Instance.PauseForDialogue();
 
         // 禁用玩家移动
         PlayerController player = FindObjectOfType<PlayerController>();

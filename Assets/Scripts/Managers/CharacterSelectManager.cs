@@ -18,6 +18,8 @@ public class CharacterSelectManager : MonoBehaviour
         public string characterName;
         [Tooltip("该角色对应的PlayableDirector（Timeline）")]
         public PlayableDirector director;
+        [Tooltip("该角色NPC的Transform（用于回溯时房间追踪和视野遮罩）")]
+        public Transform npcTransform;
         [Tooltip("选择按钮")]
         public Button selectButton;
         [Tooltip("选中状态指示器（选中时激活）")]
@@ -71,7 +73,7 @@ public class CharacterSelectManager : MonoBehaviour
     }
 
     /// <summary>
-    /// 选择指定索引的角色，切换周目并播放对应Timeline。
+    /// 选择指定索引的角色，切换周目并进入回溯模式。
     /// </summary>
     public void SelectCharacter(int index)
     {
@@ -85,9 +87,14 @@ public class CharacterSelectManager : MonoBehaviour
         if (_loopManager != null)
             _loopManager.SwitchToLoopById(entry.loopId);
 
-        // 从头播放对应Timeline
-        if (entry.director != null)
+        // 通过 RetrospectManager 进入回溯模式
+        if (RetrospectManager.Instance != null && entry.director != null)
         {
+            RetrospectManager.Instance.EnterRetrospect(entry.loopId, entry.director, entry.npcTransform, entry.characterName);
+        }
+        else if (entry.director != null)
+        {
+            // 降级：RetrospectManager不存在时直接播放
             entry.director.time = 0;
             entry.director.Play();
         }
