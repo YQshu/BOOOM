@@ -24,14 +24,24 @@ public class RetrospectManager : Singleton<RetrospectManager>
     [SerializeField] private PlayerMovementConstraint _playerConstraint;
     [Tooltip("视野遮罩控制器")]
     [SerializeField] private VisionMaskController _visionMask;
+    [Tooltip("全屏暗色遮罩物体（DarkOverlay SpriteRenderer）")]
+    [SerializeField] private GameObject _darkOverlay;
 
     [Header("UI")]
-    [Tooltip("回溯模式HUD面板（进度条、控制按钮等）")]
+    [Tooltip("回溯模式HUD面板（进度条、控制按钮等），需挂载CanvasGroup，始终保持激活")]
     [SerializeField] private GameObject _retrospectHUD;
     [Tooltip("HUD控制器（自动从_retrospectHUD获取）")]
     private RetrospectHUD _retrospectHUDController;
-    [Tooltip("角色选择面板（进入回溯时隐藏）")]
+    [Tooltip("角色选择面板，需挂载CanvasGroup，始终保持激活")]
     [SerializeField] private GameObject _selectPanel;
+
+    [Header("平行世界")]
+    [Tooltip("主角线世界根节点（非回溯状态时激活，进入回溯时隐藏）")]
+    [SerializeField] private GameObject _mainWorldRoot;
+
+    private CanvasGroup _selectCanvasGroup;
+    /// <summary>当前激活的嫌疑人世界根节点（退出时用于关闭）。</summary>
+    private GameObject _currentSuspectWorldRoot;
 
     [Header("配置")]
     [Tooltip("退出回溯的按键")]
@@ -53,11 +63,15 @@ public class RetrospectManager : Singleton<RetrospectManager>
     private string _currentLoopId;
     /// <summary>是否正在快进中。</summary>
     private bool _isFastForwarding;
+    /// <summary>对话开始前Timeline是否正在播放（决定对话结束后是否恢复）。</summary>
+    private bool _wasPlayingBeforeDialogue;
 
     /// <summary>是否处于回溯模式。</summary>
     public bool IsInRetrospect { get; private set; }
     /// <summary>当前绑定的Director。</summary>
     public PlayableDirector CurrentDirector => _currentDirector;
+    /// <summary>当前回溯的嫌疑人ID（对应 SuspectEntry.suspectId）。</summary>
+    public string CurrentLoopId => _currentLoopId;
 
     // ─── 生命周期 ────────────────────────────────────────────
 
@@ -74,13 +88,24 @@ public class RetrospectManager : Singleton<RetrospectManager>
         if (_progressBar == null)
             _progressBar = FindObjectOfType<TimeProgressBar>();
 
+        // 初始化 SelectPanel CanvasGroup
+        if (_selectPanel != null)
+        {
+            _selectCanvasGroup = _selectPanel.GetComponent<CanvasGroup>();
+            if (_selectCanvasGroup == null)
+                _selectCanvasGroup = _selectPanel.AddComponent<CanvasGroup>();
+        }
+
         // 订阅对话结束事件
         if (InkDialogueManager.Instance != null)
             InkDialogueManager.Instance.OnDialogueEnd += ResumeFromDialogue;
 
-        // 初始隐藏HUD
+        // RetrospectHUD 通过 CanvasGroup 自我管理，无需 SetActive
         if (_retrospectHUD != null)
-            _retrospectHUD.SetActive(false);
+        {
+            if (_retrospectHUDController == null)
+                _retrospectHUDController = _retrospectHUD.GetComponent<RetrospectHUD>();
+        }
     }
 
     private void OnDestroy()
@@ -142,7 +167,9 @@ public class RetrospectManager : Singleton<RetrospectManager>
     /// <param name="director">嫌疑人对应的 PlayableDirector</param>
     /// <param name="npcTransform">嫌疑人NPC的Transform（用于房间追踪和视野遮罩）</param>
     /// <param name="characterName">角色显示名称（显示在HUD上）</param>
-    public void EnterRetrospect(string loopId, PlayableDirector director, Transform npcTransform, string characterName = "")
+    /// <param name="suspectWorldRoot">嫌疑人世界根节点（进入时激活，退出时隐藏）</param>
+    public void EnterRetrospect(string loopId, PlayableDirector director, Transform npcTransform,
+                                string characterName = "", GameObject suspectWorldRoot = null)
     {
         if (IsInRetrospect)
         {
@@ -159,7 +186,12 @@ public class RetrospectManager : Singleton<RetrospectManager>
         _currentLoopId = loopId;
         _currentDirector = director;
         _currentNpcTransform = npcTransform;
+        _currentSuspectWorldRoot = suspectWorldRoot;
         IsInRetrospect = true;
+
+        // ── 平行世界切换 ──────────────────────────────────────
+        if (_mainWorldRoot != null) _mainWorldRoot.SetActive(false);
+        if (_currentSuspectWorldRoot != null) _currentSuspectWorldRoot.SetActive(true);
 
         // 绑定时间控制
         if (_rewindManager != null)
@@ -179,25 +211,20 @@ public class RetrospectManager : Singleton<RetrospectManager>
         }
 
         // 启用视野遮罩跟随NPC
+        if (_darkOverlay != null) _darkOverlay.SetActive(true);
         if (_visionMask != null && npcTransform != null)
         {
             _visionMask.gameObject.SetActive(true);
             _visionMask.SetTarget(npcTransform);
         }
 
-        // 显示回溯HUD，隐藏选择面板
-        if (_retrospectHUD != null)
-        {
-            _retrospectHUD.SetActive(true);
-            // 获取HUD控制器并传入角色名
-            if (_retrospectHUDController == null)
-                _retrospectHUDController = _retrospectHUD.GetComponent<RetrospectHUD>();
-            if (_retrospectHUDController != null)
-                _retrospectHUDController.SetCharacterName(characterName);
-        }
-        if (_selectPanel != null) _selectPanel.SetActive(false);
+        // 显示回溯HUD（HUD通过事件订阅自我显示），隐藏选择面板
+        if (_retrospectHUDController != null)
+            _retrospectHUDController.SetCharacterName(characterName);
+        SetSelectVisible(false);
 
-        // 从头播放Timeline
+        // 从头播放Timeline（播放前先应用条件Track）
+        ApplyConditionalTracks(director);
         director.time = 0;
         director.Play();
 
@@ -226,9 +253,17 @@ public class RetrospectManager : Singleton<RetrospectManager>
             _playerConstraint.DisableConstraint();
         if (_visionMask != null)
             _visionMask.gameObject.SetActive(false);
+        if (_darkOverlay != null)
+            _darkOverlay.SetActive(false);
 
-        // 隐藏回溯HUD
-        if (_retrospectHUD != null) _retrospectHUD.SetActive(false);
+        // 隐藏回溯HUD（HUD通过事件订阅自我隐藏）
+
+        // 恢复条件Track原始状态
+        RestoreConditionalTracks();
+
+        // ── 平行世界恢复 ──────────────────────────────────────
+        if (_currentSuspectWorldRoot != null) _currentSuspectWorldRoot.SetActive(false);
+        if (_mainWorldRoot != null) _mainWorldRoot.SetActive(true);
 
         // 恢复玩家移动
         PlayerController player = FindObjectOfType<PlayerController>();
@@ -237,6 +272,7 @@ public class RetrospectManager : Singleton<RetrospectManager>
         IsInRetrospect = false;
         _currentDirector = null;
         _currentNpcTransform = null;
+        _currentSuspectWorldRoot = null;
 
         OnRetrospectExit?.Invoke();
         Debug.Log("[Rewind] 退出回溯。");
@@ -249,6 +285,9 @@ public class RetrospectManager : Singleton<RetrospectManager>
     {
         if (!IsInRetrospect) return;
 
+        // 记录对话前的播放状态，对话结束后按原状态决定是否恢复
+        _wasPlayingBeforeDialogue = _rewindManager != null && _rewindManager.IsPlaying();
+
         if (_rewindManager != null)
             _rewindManager.Pause();
 
@@ -256,24 +295,26 @@ public class RetrospectManager : Singleton<RetrospectManager>
         if (_progressBar != null)
             _progressBar.SetInteractable(false);
 
-        Debug.Log("[Rewind] 对话开始，Timeline 暂停。");
+        Debug.Log($"[Rewind] 对话开始，Timeline 暂停（之前播放中：{_wasPlayingBeforeDialogue}）。");
     }
 
     /// <summary>
-    /// 对话结束时恢复Timeline播放。
+    /// 对话结束时，仅在对话开始前Timeline处于播放状态时才恢复。
     /// </summary>
     public void ResumeFromDialogue()
     {
         if (!IsInRetrospect) return;
 
-        if (_rewindManager != null)
+        // 只有对话前正在播放的情况才恢复（Signal触发的对话）
+        // 玩家主动交互时Timeline可能处于暂停状态，不应强制恢复
+        if (_wasPlayingBeforeDialogue && _rewindManager != null)
             _rewindManager.Resume();
 
         // 恢复进度条交互
         if (_progressBar != null)
             _progressBar.SetInteractable(true);
 
-        Debug.Log("[Rewind] 对话结束，Timeline 恢复。");
+        Debug.Log($"[Rewind] 对话结束，{(_wasPlayingBeforeDialogue ? "Timeline 恢复播放" : "Timeline 保持暂停")}。");
     }
 
     // ─── 内部回调 ────────────────────────────────────────────
@@ -344,5 +385,33 @@ public class RetrospectManager : Singleton<RetrospectManager>
     {
         if (_playerConstraint != null)
             _playerConstraint.UpdateBounds(newRoomBounds);
+    }
+
+    private void SetSelectVisible(bool visible)
+    {
+        if (_selectCanvasGroup == null) return;
+        _selectCanvasGroup.alpha = visible ? 1f : 0f;
+        _selectCanvasGroup.interactable = visible;
+        _selectCanvasGroup.blocksRaycasts = visible;
+    }
+
+    /// <summary>
+    /// 从 director 所在 GameObject 查找 ConditionalTrackController 并应用条件。
+    /// </summary>
+    private void ApplyConditionalTracks(PlayableDirector director)
+    {
+        if (director == null) return;
+        ConditionalTrackController ctrl = director.GetComponent<ConditionalTrackController>();
+        ctrl?.ApplyConditions(director);
+    }
+
+    /// <summary>
+    /// 从当前 director 所在 GameObject 查找并恢复条件Track状态。
+    /// </summary>
+    private void RestoreConditionalTracks()
+    {
+        if (_currentDirector == null) return;
+        ConditionalTrackController ctrl = _currentDirector.GetComponent<ConditionalTrackController>();
+        ctrl?.RestoreConditions();
     }
 }

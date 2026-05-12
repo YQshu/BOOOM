@@ -8,13 +8,13 @@ TagManager:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Overlay
   - Water
   - UI
   - Ground
   - Room
-  - 
-  - 
+  - NPC
+  - Player
   - 
   - 
   - 
@@ -40,6 +40,9 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Overlay
+    uniqueID: 1758491165
     locked: 0
   - name: BackGround
     uniqueID: 2521340413

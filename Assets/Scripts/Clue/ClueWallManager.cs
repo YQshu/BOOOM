@@ -1,498 +1,380 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System.Collections;
+using UnityEngine.Playables;
 
+/// <summary>
+/// 线索墙管理器（含嫌疑人选择 + 回溯入口）。
+/// 三层结构：
+///   第一层 — 主面板：四个嫌疑人头像卡片，从屏幕侧边滑入
+///   第二层 — 嫌疑人详情面板：左侧全身像+基础信息，右侧线索展示台+进度+开始回溯按钮
+///   第三层 — 线索详细面板（预留）
+/// 所有面板通过 CanvasGroup 控制显隐，物体始终保持激活。
+/// </summary>
 public class ClueWallManager : MonoBehaviour
 {
-    [Header("界面引用")]
-    public GameObject mainScreen;
-    public GameObject clueWallRoot;
-    public GameObject characterDetailPanel;
+    // ─── 数据结构 ─────────────────────────────────────────────
 
-    [Header("角色卡片")]
-    public Button[] characterCardButtons;
-
-    [Header("角色详情界面元素")]
-    public Image characterDetailAvatar;
-    public TMP_Text characterDetailName;
-    public TMP_Text characterDetailDescription;
-    public Button backButton;
-
-    [Header("线索列表")]
-    public GameObject clueItemPrefab;
-    public Transform clueContentParent;
-    public ScrollRect clueScrollView;
-
-    [Header("角色数据")]
-    public CharacterData[] characters;
-    public ClueData[] clueDatabase;
-
-    [Header("退出按钮")]
-    public Button exitClueWallButton;
-
-    private int currentCharacterIndex = -1;
-    private Dictionary<string, float> clueUnlockTimes = new Dictionary<string, float>();
-    private const float NEW_CLUE_DURATION = 5f;
-
-    void Start()
+    [System.Serializable]
+    public class SuspectEntry
     {
-        if (mainScreen != null) mainScreen.SetActive(true);
-        if (clueWallRoot != null) clueWallRoot.SetActive(false);
-        if (characterDetailPanel != null) characterDetailPanel.SetActive(false);
+        [Header("角色信息")]
+        public CharacterData characterData;
 
-        for (int i = 0; i < characterCardButtons.Length; i++)
+        [Header("主面板卡片UI")]
+        [Tooltip("嫌疑人卡片按钮")]
+        public Button cardButton;
+        [Tooltip("卡片头像 Image")]
+        public Image cardAvatar;
+        [Tooltip("卡片名称文本（可选）")]
+        public TMP_Text cardName;
+        [Tooltip("未读新线索红点（可选）")]
+        public GameObject cardBadge;
+
+        [Header("回溯配置")]
+        [Tooltip("嫌疑人唯一ID（需与 ClueDataSO.suspectId 一致，如 SUSPECT_JESS）")]
+        public string suspectId;
+        [Tooltip("该嫌疑人的 PlayableDirector（Timeline）")]
+        public PlayableDirector director;
+        [Tooltip("嫌疑人 NPC 的 Transform（用于房间追踪和视野遮罩）")]
+        public Transform npcTransform;
+        [Tooltip("嫌疑人世界根节点（进入回溯时激活，退出时隐藏）")]
+        public GameObject worldRoot;
+    }
+
+    // ─── UI 引用 ─────────────────────────────────────────────
+
+    [Header("主面板（第一层）")]
+    [Tooltip("线索墙主面板根节点，需挂载 CanvasGroup")]
+    [SerializeField] private RectTransform _mainPanel;
+    [Tooltip("面板从屏幕外滑入的起始偏移（正值=右侧，负值=左侧）")]
+    [SerializeField] private float _slideOffscreenX = 800f;
+    [Tooltip("滑入/滑出动画时长")]
+    [SerializeField] private float _slideDuration = 0.3f;
+    [Tooltip("关闭线索墙按钮")]
+    [SerializeField] private Button _closeButton;
+
+    [Header("详情面板（第二层）")]
+    [Tooltip("嫌疑人详情面板根节点，需挂载 CanvasGroup")]
+    [SerializeField] private GameObject _detailPanel;
+    [Tooltip("返回按钮（详情 → 主面板）")]
+    [SerializeField] private Button _backButton;
+
+    [Header("详情面板 — 左侧角色信息")]
+    [SerializeField] private Image _detailFullBody;
+    [SerializeField] private TMP_Text _detailName;
+    [SerializeField] private TMP_Text _detailAge;
+    [SerializeField] private TMP_Text _detailBackground;
+
+    [Header("详情面板 — 右侧线索展示台")]
+    [Tooltip("线索条目的父节点（ScrollRect Content）")]
+    [SerializeField] private Transform _clueContentParent;
+    [Tooltip("线索条目预制体（需含 ClueItemUI 组件）")]
+    [SerializeField] private GameObject _clueItemPrefab;
+    [Tooltip("进度文本，格式：x/y")]
+    [SerializeField] private TMP_Text _clueProgressText;
+
+    [Header("详情面板 — 回溯入口")]
+    [Tooltip("开始回溯按钮（点击后关闭线索墙并进入该嫌疑人的回溯）")]
+    [SerializeField] private Button _startRetrospectButton;
+
+    [Header("数据")]
+    [SerializeField] private SuspectEntry[] _suspects;
+    [SerializeField] private ClueDataSO[] _clueDatabase;
+
+    // ─── 内部状态 ─────────────────────────────────────────────
+
+    private CanvasGroup _mainCanvasGroup;
+    private CanvasGroup _detailCanvasGroup;
+    private int _currentSuspectIndex = -1;
+    private Coroutine _slideCoroutine;
+
+    // ─── 生命周期 ─────────────────────────────────────────────
+
+    private void Awake()
+    {
+        _mainCanvasGroup = GetOrAddCanvasGroup(_mainPanel.gameObject);
+        _detailCanvasGroup = GetOrAddCanvasGroup(_detailPanel);
+
+        SetVisible(_mainCanvasGroup, false);
+        SetVisible(_detailCanvasGroup, false);
+    }
+
+    private void Start()
+    {
+        for (int i = 0; i < _suspects.Length; i++)
         {
             int index = i;
-            characterCardButtons[i].onClick.AddListener(() => OnSelectCharacter(index));
+            _suspects[i].cardButton?.onClick.AddListener(() => OpenDetailPanel(index));
         }
 
-        if (backButton != null)
-        {
-            backButton.onClick.AddListener(OnBackToCharacterList);
-        }
-
-        LoadClueUnlockTimes();
-        StartCoroutine(CheckNewCluesPeriodically());
+        if (_closeButton != null)
+            _closeButton.onClick.AddListener(CloseClueWall);
+        if (_backButton != null)
+            _backButton.onClick.AddListener(BackToMainPanel);
+        if (_startRetrospectButton != null)
+            _startRetrospectButton.onClick.AddListener(OnStartRetrospectClicked);
 
         if (ClueManager.Instance != null)
+            ClueManager.Instance.OnClueCollected += OnClueCollected;
+
+        RefreshCharacterCards();
+    }
+
+    private void OnDestroy()
+    {
+        if (ClueManager.Instance != null)
+            ClueManager.Instance.OnClueCollected -= OnClueCollected;
+    }
+
+    // ─── 公开接口 ─────────────────────────────────────────────
+
+    /// <summary>打开线索墙主面板。</summary>
+    public void OpenClueWall()
+    {
+        RefreshCharacterCards();
+        SetVisible(_mainCanvasGroup, true);
+        SetVisible(_detailCanvasGroup, false);
+
+        if (_slideCoroutine != null) StopCoroutine(_slideCoroutine);
+        _mainPanel.anchoredPosition = new Vector2(_slideOffscreenX, _mainPanel.anchoredPosition.y);
+        _slideCoroutine = StartCoroutine(SlidePanel(_mainPanel, Vector2.zero, _slideDuration));
+
+        Debug.Log("[ClueWall] 打开线索墙");
+    }
+
+    /// <summary>关闭线索墙。</summary>
+    public void CloseClueWall()
+    {
+        if (_slideCoroutine != null) StopCoroutine(_slideCoroutine);
+        _slideCoroutine = StartCoroutine(
+            SlideAndHide(_mainPanel, new Vector2(_slideOffscreenX, 0), _slideDuration, _mainCanvasGroup));
+        SetVisible(_detailCanvasGroup, false);
+
+        Debug.Log("[ClueWall] 关闭线索墙");
+    }
+
+    // ─── 第一层：主面板 ───────────────────────────────────────
+
+    private void RefreshCharacterCards()
+    {
+        for (int i = 0; i < _suspects.Length; i++)
         {
-            ClueManager.Instance.OnClueCollected += HandleClueCollected;
+            SuspectEntry entry = _suspects[i];
+            CharacterData data = entry.characterData;
+            if (data == null) continue;
+
+            if (entry.cardAvatar != null) entry.cardAvatar.sprite = data.avatar;
+            if (entry.cardName != null) entry.cardName.text = data.characterName;
+            if (entry.cardBadge != null) entry.cardBadge.SetActive(HasUnreadClue(i));
         }
     }
 
-    /// <summary>
-    /// 从主游戏界面进入线索墙
-    /// </summary>
-    public void OnEnterClueWall()
-    {
-        if (mainScreen != null) mainScreen.SetActive(false);
-        if (clueWallRoot != null) clueWallRoot.SetActive(true);
-        if (characterDetailPanel != null) characterDetailPanel.SetActive(false);
+    // ─── 第二层：详情面板 ─────────────────────────────────────
 
-        Debug.Log("[ClueWall] 进入线索墙界面");
+    private void OpenDetailPanel(int index)
+    {
+        if (index < 0 || index >= _suspects.Length) return;
+
+        _currentSuspectIndex = index;
+        SuspectEntry entry = _suspects[index];
+        CharacterData data = entry.characterData;
+
+        if (_detailFullBody != null) _detailFullBody.sprite = data.fullBodySprite;
+        if (_detailName != null) _detailName.text = data.characterName;
+        if (_detailAge != null) _detailAge.text = $"年龄：{data.age}";
+        if (_detailBackground != null) _detailBackground.text = data.background;
+
+        // 回溯按钮：director 未配置时禁用
+        if (_startRetrospectButton != null)
+            _startRetrospectButton.interactable = entry.director != null;
+
+        RefreshClueList(index);
+
+        SetVisible(_mainCanvasGroup, false);
+        SetVisible(_detailCanvasGroup, true);
+
+        if (entry.cardBadge != null) entry.cardBadge.SetActive(false);
+
+        Debug.Log($"[ClueWall] 打开详情：{data.characterName}");
     }
 
-    /// <summary>
-    /// 从线索墙返回主游戏界面
-    /// </summary>
-    public void OnExitClueWall()
+    private void BackToMainPanel()
     {
-        if (clueWallRoot != null) clueWallRoot.SetActive(false);
-
-        Debug.Log("[ClueWall] 退出线索墙界面");
+        SetVisible(_detailCanvasGroup, false);
+        SetVisible(_mainCanvasGroup, true);
+        RefreshCharacterCards();
     }
 
-    /// <summary>
-    /// 选择角色
-    /// </summary>
-    public void OnSelectCharacter(int characterIndex)
+    // ─── 回溯入口 ─────────────────────────────────────────────
+
+    private void OnStartRetrospectClicked()
     {
-        if (characterIndex < 0 || characterIndex >= characters.Length)
+        if (_currentSuspectIndex < 0 || _currentSuspectIndex >= _suspects.Length) return;
+
+        SuspectEntry entry = _suspects[_currentSuspectIndex];
+        if (entry.director == null)
         {
-            Debug.LogError("[ClueWall] 无效的角色索引: " + characterIndex);
+            Debug.LogWarning("[ClueWall] 该嫌疑人尚未配置 PlayableDirector，无法进入回溯。");
             return;
         }
 
-        currentCharacterIndex = characterIndex;
+        // 先关闭线索墙（立即隐藏，不播放滑出动画）
+        SetVisible(_mainCanvasGroup, false);
+        SetVisible(_detailCanvasGroup, false);
 
-        if (clueWallRoot != null)
+        // 进入回溯
+        if (RetrospectManager.Instance != null)
         {
-            clueWallRoot.SetActive(false);
+            RetrospectManager.Instance.EnterRetrospect(
+                entry.suspectId,
+                entry.director,
+                entry.npcTransform,
+                entry.characterData != null ? entry.characterData.characterName : "",
+                entry.worldRoot);
         }
 
-        if (exitClueWallButton != null)
-        {
-            exitClueWallButton.onClick.RemoveAllListeners();
-            exitClueWallButton.onClick.AddListener(OnExitClueWall);
-        }
-
-        if (characterDetailPanel != null)
-        {
-            characterDetailPanel.SetActive(true);
-        }
-
-        LoadCharacterDetail(characterIndex);
-
-        Debug.Log($"[ClueWall] 选择角色: {characters[characterIndex].characterName}");
+        Debug.Log($"[ClueWall] 进入回溯：{entry.characterData?.characterName}");
     }
 
-    /// <summary>
-    /// 从角色详情返回角色选择列表
-    /// </summary>
-    public void OnBackToCharacterList()
+    // ─── 右侧线索展示台 ───────────────────────────────────────
+
+    private void RefreshClueList(int suspectIndex)
     {
-        if (characterDetailPanel != null)
-        {
-            characterDetailPanel.SetActive(false);
-        }
+        if (_clueContentParent == null || _clueItemPrefab == null) return;
 
-        if (clueWallRoot != null)
-        {
-            clueWallRoot.SetActive(true);
-        }
-
-        Debug.Log("[ClueWall] 返回角色选择列表");
-    }
-
-    /// <summary>
-    /// 根据线索ID获取所属角色索引。
-    /// </summary>
-    /// <param name="clueId">线索ID。</param>
-    /// <returns>返回角色索引，未找到返回 -1。</returns>
-    public int GetCharacterIndexByClueId(string clueId)
-    {
-        if (string.IsNullOrWhiteSpace(clueId) || clueDatabase == null)
-        {
-            return -1;
-        }
-
-        for (int i = 0; i < clueDatabase.Length; i++)
-        {
-            ClueData clue = clueDatabase[i];
-            string resolvedClueId = ResolveClueId(clue, clue.characterIndex);
-            if (resolvedClueId == clueId)
-            {
-                return clue.characterIndex;
-            }
-        }
-
-        return -1;
-    }
-
-    /// <summary>
-    /// 处理线索收集事件，记录解锁时间并按需刷新当前详情界面。
-    /// </summary>
-    private void HandleClueCollected(string clueId, string clueName)
-    {
-        if (string.IsNullOrWhiteSpace(clueId))
-        {
-            return;
-        }
-
-        clueUnlockTimes[clueId] = Time.time;
-        SaveClueUnlockTimes();
-
-        int characterIndex = GetCharacterIndexByClueId(clueId);
-        if (characterIndex >= 0 && currentCharacterIndex == characterIndex && characterDetailPanel != null && characterDetailPanel.activeSelf)
-        {
-            LoadClueListForCharacter(characterIndex);
-        }
-
-        Debug.Log($"[ClueWall] 收到新线索：{clueId} - {clueName}");
-    }
-
-    /// <summary>
-    /// 加载角色详情
-    /// </summary>
-    private void LoadCharacterDetail(int characterIndex)
-    {
-        CharacterData character = characters[characterIndex];
-
-        if (characterDetailAvatar != null && character.avatar != null)
-        {
-            characterDetailAvatar.sprite = character.avatar;
-        }
-
-        if (characterDetailName != null)
-        {
-            characterDetailName.text = character.characterName;
-        }
-
-        if (characterDetailDescription != null)
-        {
-            characterDetailDescription.text = character.description;
-        }
-
-        LoadClueListForCharacter(characterIndex);
-    }
-
-    /// <summary>
-    /// 加载指定角色的线索列表，仅展示当前已收集线索。
-    /// </summary>
-    private void LoadClueListForCharacter(int characterIndex)
-    {
-        if (clueItemPrefab == null || clueContentParent == null)
-        {
-            Debug.LogError("[ClueWall] 线索预制体或父对象未设置");
-            return;
-        }
-
-        foreach (Transform child in clueContentParent)
-        {
+        foreach (Transform child in _clueContentParent)
             Destroy(child.gameObject);
-        }
 
-        List<ClueData> characterClues = GetCluesForCharacter(characterIndex);
-        characterClues.Sort((a, b) =>
+        List<ClueDataSO> clues = GetCluesForSuspect(suspectIndex);
+        int total = clues.Count;
+        int collected = 0;
+
+        foreach (ClueDataSO clue in clues)
         {
-            if (a.time == null || b.time == null) return 0;
-            return a.time.CompareTo(b.time);
-        });
+            bool isCollected = ClueManager.Instance != null
+                               && ClueManager.Instance.HasClue(clue.clueId);
 
-        int visibleCount = 0;
-        foreach (ClueData clue in characterClues)
-        {
-            string clueId = ResolveClueId(clue, characterIndex);
-            if (!IsClueCollected(clueId))
+            GameObject item = Instantiate(_clueItemPrefab, _clueContentParent);
+            ClueItemUI ui = item.GetComponent<ClueItemUI>();
+
+            if (ui != null)
             {
-                continue;
-            }
-
-            GameObject clueItemObj = Instantiate(clueItemPrefab, clueContentParent);
-            ClueItemUI clueItem = clueItemObj.GetComponent<ClueItemUI>();
-
-            if (clueItem != null)
-            {
-                float unlockTime = GetClueUnlockTime(clueId);
-                bool isNew = (Time.time - unlockTime) <= NEW_CLUE_DURATION;
-                clueItem.Setup(clue.time, clue.clueText, clue.icon, isNew);
-
-                Button clueButton = clueItemObj.GetComponent<Button>();
-                if (clueButton != null)
+                if (isCollected)
                 {
-                    clueButton.onClick.RemoveAllListeners();
-                    clueButton.onClick.AddListener(() => OnClueClicked(clueId, clue));
+                    ui.Setup(clue.time, clue.clueName, clue.icon, isNewClue: IsNewClue(clue.clueId));
+                    Button btn = item.GetComponent<Button>();
+                    if (btn != null)
+                    {
+                        string clueId = clue.clueId;
+                        btn.onClick.AddListener(() => OnClueItemClicked(clueId));
+                    }
+                }
+                else
+                {
+                    ui.Setup(clue.time, "???", null, isNewClue: false);
+                    Button btn = item.GetComponent<Button>();
+                    if (btn != null) btn.interactable = false;
                 }
             }
 
-            visibleCount++;
+            if (isCollected) collected++;
         }
 
-        if (clueScrollView != null)
-        {
-            clueScrollView.verticalNormalizedPosition = 1f;
-        }
-
-        Debug.Log($"[ClueWall] 为角色 {characters[characterIndex].characterName} 显示了 {visibleCount} 条已收集线索");
+        if (_clueProgressText != null)
+            _clueProgressText.text = $"{collected}/{total}";
     }
 
-    /// <summary>
-    /// 获取指定角色的所有线索
-    /// </summary>
-    private List<ClueData> GetCluesForCharacter(int characterIndex)
+    private void OnClueItemClicked(string clueId)
     {
-        List<ClueData> result = new List<ClueData>();
+        // 预留：打开第三层线索详细面板
+        Debug.Log($"[ClueWall] 点击线索：{clueId}（详细面板待实装）");
+    }
 
-        if (clueDatabase == null || clueDatabase.Length == 0)
+    // ─── 事件回调 ─────────────────────────────────────────────
+
+    private void OnClueCollected(ClueDataSO clue)
+    {
+        if (_detailCanvasGroup.alpha > 0.01f && _currentSuspectIndex >= 0)
         {
-            return result;
+            string suspectId = _suspects[_currentSuspectIndex].suspectId;
+            if (clue.suspectId == suspectId)
+                RefreshClueList(_currentSuspectIndex);
         }
+        RefreshCharacterCards();
+    }
 
-        foreach (ClueData clue in clueDatabase)
+    // ─── 工具方法 ─────────────────────────────────────────────
+
+    private List<ClueDataSO> GetCluesForSuspect(int suspectIndex)
+    {
+        List<ClueDataSO> result = new List<ClueDataSO>();
+        if (_clueDatabase == null || suspectIndex < 0 || suspectIndex >= _suspects.Length) return result;
+        string suspectId = _suspects[suspectIndex].suspectId;
+        foreach (ClueDataSO clue in _clueDatabase)
         {
-            if (clue == null)
-            {
-                continue;
-            }
-
-            if (clue.characterIndex == characterIndex)
-            {
+            if (clue != null && clue.suspectId == suspectId)
                 result.Add(clue);
-            }
         }
-
+        result.Sort((a, b) => string.Compare(a.time, b.time, System.StringComparison.Ordinal));
         return result;
     }
 
-    /// <summary>
-    /// 线索被点击
-    /// </summary>
-    private void OnClueClicked(string clueId, ClueData clue)
+    private bool HasUnreadClue(int suspectIndex)
     {
-        Debug.Log($"[ClueWall] 点击线索: {clue.clueText}");
-        MarkClueAsViewed(clueId);
+        foreach (ClueDataSO clue in GetCluesForSuspect(suspectIndex))
+        {
+            if (ClueManager.Instance != null
+                && ClueManager.Instance.HasClue(clue.clueId)
+                && IsNewClue(clue.clueId))
+                return true;
+        }
+        return false;
     }
 
-    /// <summary>
-    /// 标记线索为已查看
-    /// </summary>
-    private void MarkClueAsViewed(string clueId)
+    private bool IsNewClue(string clueId)
     {
-        if (clueUnlockTimes.ContainsKey(clueId))
-        {
-            clueUnlockTimes[clueId] = Time.time - (NEW_CLUE_DURATION + 1f);
-            SaveClueUnlockTimes();
-        }
+        float unlockTime = PlayerPrefs.GetFloat("ClueTime_" + clueId, -9999f);
+        return (Time.time - unlockTime) <= 30f;
     }
 
-    /// <summary>
-    /// 添加新线索（测试功能）。
-    /// </summary>
-    public void AddNewClue(int characterIndex, string time, string clueText, Sprite icon = null)
+    private static CanvasGroup GetOrAddCanvasGroup(GameObject go)
     {
-        ClueData newClue = new ClueData
-        {
-            clueId = $"TEST_{characterIndex}_{time}",
-            characterIndex = characterIndex,
-            time = time,
-            clueText = clueText,
-            icon = icon
-        };
-
-        Array.Resize(ref clueDatabase, clueDatabase.Length + 1);
-        clueDatabase[clueDatabase.Length - 1] = newClue;
-
-        if (ClueManager.Instance != null)
-        {
-            ClueManager.Instance.CollectClue(newClue.clueId, clueText);
-        }
-
-        Debug.Log($"[ClueWall] 添加新线索: {clueText}");
+        CanvasGroup cg = go.GetComponent<CanvasGroup>();
+        if (cg == null) cg = go.AddComponent<CanvasGroup>();
+        return cg;
     }
 
-    /// <summary>
-    /// 获取线索的解锁时间，不存在时默认返回很早时间。
-    /// </summary>
-    private float GetClueUnlockTime(string clueId)
+    private static void SetVisible(CanvasGroup cg, bool visible)
     {
-        if (clueUnlockTimes.ContainsKey(clueId))
-        {
-            return clueUnlockTimes[clueId];
-        }
-
-        return -9999f;
+        if (cg == null) return;
+        cg.alpha = visible ? 1f : 0f;
+        cg.interactable = visible;
+        cg.blocksRaycasts = visible;
     }
 
-    /// <summary>
-    /// 判断线索是否已收集。
-    /// </summary>
-    private bool IsClueCollected(string clueId)
-    {
-        if (ClueManager.Instance == null)
-        {
-            return false;
-        }
+    // ─── 滑动动画 ─────────────────────────────────────────────
 
-        return ClueManager.Instance.HasClue(clueId);
+    private IEnumerator SlidePanel(RectTransform panel, Vector2 targetPos, float duration)
+    {
+        Vector2 startPos = panel.anchoredPosition;
+        float elapsed = 0f;
+        while (elapsed < duration)
+        {
+            elapsed += Time.unscaledDeltaTime;
+            panel.anchoredPosition = Vector2.Lerp(startPos, targetPos, elapsed / duration);
+            yield return null;
+        }
+        panel.anchoredPosition = targetPos;
+        _slideCoroutine = null;
     }
 
-    /// <summary>
-    /// 解析线索ID。优先使用配置ID，缺失时使用回退规则。
-    /// </summary>
-    private string ResolveClueId(ClueData clue, int characterIndex)
+    private IEnumerator SlideAndHide(RectTransform panel, Vector2 targetPos, float duration, CanvasGroup cg)
     {
-        if (!string.IsNullOrWhiteSpace(clue.clueId))
-        {
-            return clue.clueId;
-        }
-
-        return $"Character{characterIndex}_Clue{clue.time}";
-    }
-
-    /// <summary>
-    /// 保存线索解锁时间
-    /// </summary>
-    private void SaveClueUnlockTimes()
-    {
-        foreach (var pair in clueUnlockTimes)
-        {
-            PlayerPrefs.SetFloat("ClueTime_" + pair.Key, pair.Value);
-        }
-        PlayerPrefs.Save();
-    }
-
-    /// <summary>
-    /// 加载线索解锁时间
-    /// </summary>
-    private void LoadClueUnlockTimes()
-    {
-        clueUnlockTimes.Clear();
-
-        if (characters == null || characters.Length == 0)
-        {
-            return;
-        }
-
-        for (int i = 0; i < characters.Length; i++)
-        {
-            List<ClueData> clues = GetCluesForCharacter(i);
-            foreach (ClueData clue in clues)
-            {
-                string clueId = ResolveClueId(clue, i);
-                if (PlayerPrefs.HasKey("ClueTime_" + clueId))
-                {
-                    float time = PlayerPrefs.GetFloat("ClueTime_" + clueId);
-                    clueUnlockTimes[clueId] = time;
-                }
-            }
-        }
-    }
-
-    /// <summary>
-    /// 定期检查新线索状态
-    /// </summary>
-    private IEnumerator CheckNewCluesPeriodically()
-    {
-        while (true)
-        {
-            yield return new WaitForSeconds(1f);
-
-            if (characterDetailPanel != null && characterDetailPanel.activeSelf && currentCharacterIndex >= 0)
-            {
-                RefreshClueItemsExclamation();
-            }
-        }
-    }
-
-    /// <summary>
-    /// 刷新线索条目的感叹号状态
-    /// </summary>
-    private void RefreshClueItemsExclamation()
-    {
-        foreach (Transform child in clueContentParent)
-        {
-            ClueItemUI clueItem = child.GetComponent<ClueItemUI>();
-            if (clueItem != null)
-            {
-                clueItem.CheckExclamationState();
-            }
-        }
-    }
-
-    /// <summary>
-    /// 测试用：添加示例线索
-    /// </summary>
-    public void AddTestClues()
-    {
-        AddNewClue(0, "00:03", "杰斯听到走廊有奇怪的脚步声", null);
-        AddNewClue(0, "00:10", "杰斯在书房发现一本奇怪的笔记", null);
-        AddNewClue(0, "00:15", "杰斯注意到墙上的画像位置移动了", null);
-
-        AddNewClue(1, "00:05", "凯在花园看到可疑的脚印", null);
-        AddNewClue(1, "00:12", "凯发现后门的锁被撬开了", null);
-    }
-
-    /// <summary>
-    /// 清空所有线索
-    /// </summary>
-    public void ClearAllClues()
-    {
-        clueDatabase = new ClueData[0];
-        clueUnlockTimes.Clear();
-
-        if (ClueManager.Instance != null)
-        {
-            ClueManager.Instance.ClearAllClues();
-        }
-
-        foreach (Transform child in clueContentParent)
-        {
-            Destroy(child.gameObject);
-        }
-
-        Debug.Log("[ClueWall] 已清空所有线索");
-    }
-
-    void OnDestroy()
-    {
-        if (ClueManager.Instance != null)
-        {
-            ClueManager.Instance.OnClueCollected -= HandleClueCollected;
-        }
-
-        SaveClueUnlockTimes();
+        yield return StartCoroutine(SlidePanel(panel, targetPos, duration));
+        SetVisible(cg, false);
+        _slideCoroutine = null;
     }
 }

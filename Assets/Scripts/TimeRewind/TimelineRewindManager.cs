@@ -78,6 +78,8 @@ public class TimelineRewindManager : MonoBehaviour
         StopRewinding();
         _isPaused = true;
         _timelineDirector.Pause();
+        // 强制刷新当前帧，防止Animator回到默认状态
+        _timelineDirector.Evaluate();
 
         Debug.Log($"[Rewind] 暂停，时间：{_timelineDirector.time:F2}");
     }

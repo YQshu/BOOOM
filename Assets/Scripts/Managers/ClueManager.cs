@@ -4,154 +4,120 @@ using UnityEngine;
 
 /// <summary>
 /// 线索管理器。
-/// 负责统一记录、去重和查询已收集线索，为后续周目与结局系统提供数据基础。
+/// 统一记录、去重、查询已收集线索。
+/// 支持两种收集方式：
+///   1. CollectClue(ClueDataSO) — 直接引用 SO（推荐，可交互物体 / Signal）
+///   2. CollectClue(string id)  — 仅传 ID（Ink tag 触发，运行时查表）
 /// </summary>
 public class ClueManager : Singleton<ClueManager>
 {
-    /// <summary>
-    /// 线索首次收集事件。
-    /// 参数：线索ID、线索名称。
-    /// </summary>
-    public event Action<string, string> OnClueCollected;
+    /// <summary>线索首次收集时触发，参数为线索SO。</summary>
+    public event Action<ClueDataSO> OnClueCollected;
 
-    [Header("调试选项")]
-    [Tooltip("是否在收集和查询时输出调试日志")]
+    [Header("线索数据库")]
+    [Tooltip("项目中所有 ClueDataSO 资产，用于 Ink tag 的 ID 查表")]
+    [SerializeField] private List<ClueDataSO> _clueDatabase = new List<ClueDataSO>();
+
+    [Header("调试")]
     [SerializeField] private bool _enableLog = true;
 
-    [Header("初始化线索")]
-    [Tooltip("场景启动时预置为已收集状态的线索ID列表")]
-    [SerializeField] private List<string> _preCollectedClueIds = new List<string>();
+    private readonly HashSet<string> _collectedIds = new HashSet<string>();
+    private readonly Dictionary<string, ClueDataSO> _idToSO = new Dictionary<string, ClueDataSO>();
 
-    private readonly HashSet<string> _collectedClueIds = new HashSet<string>();
-    private readonly Dictionary<string, string> _clueNameMap = new Dictionary<string, string>();
+    [Header("运行时只读（调试用）")]
+    [SerializeField] private List<string> _collectedIdsList = new List<string>();
 
-    private new void Awake()
+    protected override void Awake()
     {
         base.Awake();
-        InitializePreCollectedClues();
+        BuildLookup();
+    }
+
+    // ─── 公开接口 ────────────────────────────────────────────
+
+    /// <summary>
+    /// 通过 SO 直接收集（推荐方式）。
+    /// </summary>
+    public bool CollectClue(ClueDataSO clue)
+    {
+        if (clue == null) return false;
+        return Collect(clue);
     }
 
     /// <summary>
-    /// 收集一条线索并执行去重。
+    /// 通过 ID 收集（Ink tag 使用）。运行时查表找到对应 SO。
     /// </summary>
-    /// <param name="clueId">线索ID。</param>
-    /// <param name="clueName">线索名称。</param>
-    /// <returns>首次收集返回 true，重复收集返回 false。</returns>
-    public bool CollectClue(string clueId, string clueName)
+    public bool CollectClue(string clueId)
     {
-        if (string.IsNullOrWhiteSpace(clueId))
+        if (string.IsNullOrWhiteSpace(clueId)) return false;
+
+        if (!_idToSO.TryGetValue(clueId.Trim(), out ClueDataSO so))
         {
-            Debug.LogWarning("[Clue] 收集失败：clueId 为空。", this);
+            Debug.LogWarning($"[Clue] 找不到 ID 对应的 ClueDataSO：'{clueId}'，请确认已加入 ClueManager._clueDatabase。");
             return false;
         }
 
-        if (_collectedClueIds.Contains(clueId))
-        {
-            if (_enableLog)
-            {
-                Debug.Log($"[Clue] 重复线索已忽略：{clueId}", this);
-            }
+        return Collect(so);
+    }
 
+    /// <summary>判断是否已收集。</summary>
+    public bool HasClue(string clueId) => _collectedIds.Contains(clueId);
+
+    /// <summary>判断是否已收集。</summary>
+    public bool HasClue(ClueDataSO clue) => clue != null && _collectedIds.Contains(clue.clueId);
+
+    /// <summary>获取已收集数量。</summary>
+    public int GetCollectedCount() => _collectedIds.Count;
+
+    /// <summary>获取已收集 ID 列表副本。</summary>
+    public List<string> GetCollectedClueIds() => new List<string>(_collectedIds);
+
+    /// <summary>获取 ID 对应的 SO（未找到返回 null）。</summary>
+    public ClueDataSO GetClueSOById(string clueId)
+    {
+        _idToSO.TryGetValue(clueId, out ClueDataSO so);
+        return so;
+    }
+
+    /// <summary>清空所有已收集线索。</summary>
+    public void ClearAllClues()
+    {
+        _collectedIds.Clear();
+        _collectedIdsList.Clear();
+        if (_enableLog) Debug.Log("[Clue] 已清空全部线索。");
+    }
+
+    // ─── 内部 ────────────────────────────────────────────────
+
+    private bool Collect(ClueDataSO clue)
+    {
+        if (_collectedIds.Contains(clue.clueId))
+        {
+            if (_enableLog) Debug.Log($"[Clue] 重复，已忽略：{clue.clueId}");
             return false;
         }
 
-        _collectedClueIds.Add(clueId);
-        _clueNameMap[clueId] = clueName;
+        _collectedIds.Add(clue.clueId);
+        _collectedIdsList.Add(clue.clueId);
 
-        if (_enableLog)
-        {
-            Debug.Log($"[Clue] 已收集：{clueId} - {clueName}", this);
-        }
+        if (_enableLog) Debug.Log($"[Clue] 已收集：{clue.clueId} - {clue.clueName}");
 
-        OnClueCollected?.Invoke(clueId, clueName);
+        OnClueCollected?.Invoke(clue);
         return true;
     }
 
-    /// <summary>
-    /// 判断指定线索是否已经收集。
-    /// </summary>
-    /// <param name="clueId">线索ID。</param>
-    /// <returns>已收集返回 true，否则返回 false。</returns>
-    public bool HasClue(string clueId)
+    private void BuildLookup()
     {
-        if (string.IsNullOrWhiteSpace(clueId))
+        _idToSO.Clear();
+        foreach (ClueDataSO so in _clueDatabase)
         {
-            return false;
-        }
-
-        return _collectedClueIds.Contains(clueId);
-    }
-
-    /// <summary>
-    /// 获取当前已收集线索数量。
-    /// </summary>
-    /// <returns>已收集线索总数。</returns>
-    public int GetCollectedCount()
-    {
-        return _collectedClueIds.Count;
-    }
-
-    /// <summary>
-    /// 获取所有已收集线索ID的只读副本。
-    /// </summary>
-    /// <returns>线索ID列表副本。</returns>
-    public List<string> GetCollectedClueIds()
-    {
-        return new List<string>(_collectedClueIds);
-    }
-
-    /// <summary>
-    /// 根据线索ID获取线索名称。
-    /// </summary>
-    /// <param name="clueId">线索ID。</param>
-    /// <returns>若存在返回线索名称，否则返回空字符串。</returns>
-    public string GetClueName(string clueId)
-    {
-        if (string.IsNullOrWhiteSpace(clueId))
-        {
-            return string.Empty;
-        }
-
-        return _clueNameMap.TryGetValue(clueId, out string clueName) ? clueName : string.Empty;
-    }
-
-    /// <summary>
-    /// 清空当前已收集线索数据。
-    /// </summary>
-    public void ClearAllClues()
-    {
-        _collectedClueIds.Clear();
-        _clueNameMap.Clear();
-
-        if (_enableLog)
-        {
-            Debug.Log("[Clue] 已清空全部线索。", this);
-        }
-    }
-
-    /// <summary>
-    /// 根据预置列表初始化线索状态。
-    /// </summary>
-    private void InitializePreCollectedClues()
-    {
-        for (int i = 0; i < _preCollectedClueIds.Count; i++)
-        {
-            string clueId = _preCollectedClueIds[i];
-            if (string.IsNullOrWhiteSpace(clueId))
+            if (so == null || string.IsNullOrWhiteSpace(so.clueId)) continue;
+            if (_idToSO.ContainsKey(so.clueId))
             {
+                Debug.LogWarning($"[Clue] 重复 clueId：{so.clueId}，请检查 ClueDatabase。");
                 continue;
             }
-
-            _collectedClueIds.Add(clueId);
-            if (!_clueNameMap.ContainsKey(clueId))
-            {
-                _clueNameMap[clueId] = clueId;
-            }
-        }
-
-        if (_enableLog && _preCollectedClueIds.Count > 0)
-        {
-            Debug.Log($"[Clue] 预置线索初始化完成，数量：{_collectedClueIds.Count}", this);
+            _idToSO[so.clueId] = so;
         }
     }
 }

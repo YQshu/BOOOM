@@ -38,7 +38,7 @@ public class InkDialogueManager : MonoBehaviour
     }
 
     [Header("UI 引用")]
-    [Tooltip("对话面板根节点，开始对话时激活")]
+    [Tooltip("对话面板根节点（需挂载 CanvasGroup，始终保持激活）")]
     [SerializeField] private GameObject _dialoguePanel;
     [Tooltip("说话人名称 TMP_Text（子物体名 SpeakerName）")]
     [SerializeField] private TMP_Text _speakerText;
@@ -72,6 +72,7 @@ public class InkDialogueManager : MonoBehaviour
     private string _currentText = string.Empty;
     private bool _isPlaying;
     private bool _isAutoPlaying;
+    private CanvasGroup _dialogueCanvasGroup;
 
     public bool IsPlaying => _isPlaying;
 
@@ -89,7 +90,11 @@ public class InkDialogueManager : MonoBehaviour
         if (_dialoguePanel != null)
         {
             AutoBindUIComponents();
-            _dialoguePanel.SetActive(false);
+            // 获取或添加 CanvasGroup
+            _dialogueCanvasGroup = _dialoguePanel.GetComponent<CanvasGroup>();
+            if (_dialogueCanvasGroup == null)
+                _dialogueCanvasGroup = _dialoguePanel.AddComponent<CanvasGroup>();
+            SetDialogueVisible(false);
         }
     }
 
@@ -143,7 +148,7 @@ public class InkDialogueManager : MonoBehaviour
         PlayerController player = FindObjectOfType<PlayerController>();
         player?.SetInputEnabled(false);
 
-        if (_dialoguePanel != null) _dialoguePanel.SetActive(true);
+        if (_dialoguePanel != null) SetDialogueVisible(true);
         if (_continueButton != null) _continueButton.gameObject.SetActive(true);
         ClearChoices();
         ContinueStory();
@@ -193,11 +198,8 @@ public class InkDialogueManager : MonoBehaviour
                     break;
 
                 case "clue":
-                    // 格式：clue: CLUE_ID|线索名称（名称可省略）
-                    string[] parts = value.Split(',');
-                    string clueId = parts[0].Trim();
-                    string clueName = parts.Length > 1 ? parts[1].Trim() : clueId;
-                    ClueManager.Instance?.CollectClue(clueId, clueName);
+                    // 格式：# clue: CLUE_ID
+                    ClueManager.Instance?.CollectClue(value.Trim());
                     break;
 
                 case "hide_continue":
@@ -341,7 +343,7 @@ public class InkDialogueManager : MonoBehaviour
         _isAutoPlaying = false;
         _story = null;
 
-        if (_dialoguePanel != null) _dialoguePanel.SetActive(false);
+        if (_dialoguePanel != null) SetDialogueVisible(false);
 
         // 恢复玩家移动
         PlayerController player = FindObjectOfType<PlayerController>();
@@ -359,13 +361,16 @@ public class InkDialogueManager : MonoBehaviour
     {
         _story.BindExternalFunction("collect_clue", (string clueId, string clueName) =>
         {
-            ClueManager.Instance?.CollectClue(clueId, clueName);
+            ClueManager.Instance?.CollectClue(clueId);
         });
+    }
 
-        _story.BindExternalFunction("switch_loop", (string loopId) =>
-        {
-            FindObjectOfType<LoopManager>()?.SwitchToLoopById(loopId);
-        });
+    private void SetDialogueVisible(bool visible)
+    {
+        if (_dialogueCanvasGroup == null) return;
+        _dialogueCanvasGroup.alpha = visible ? 1f : 0f;
+        _dialogueCanvasGroup.interactable = visible;
+        _dialogueCanvasGroup.blocksRaycasts = visible;
     }
 
     /// <summary>

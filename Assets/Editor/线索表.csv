@@ -1,0 +1,6 @@
+﻿clueId,clueName,suspectId,time,summary
+CLUE_JESS_01,VIP室的痕迹,SUSPECT_JESS,0:05,在VIP室发现了可疑的痕迹
+CLUE_JESS_02,凶器线索,SUSPECT_JESS,0:12,发现了可能是凶器的物品
+CLUE_KAI_01,不在场证明,SUSPECT_KAI,0:03,凯声称案发时在吧台
+CLUE_KAI_02,监控盲区,SUSPECT_KAI,0:08,监控恰好有盲区
+CLUE_AILA,,,,

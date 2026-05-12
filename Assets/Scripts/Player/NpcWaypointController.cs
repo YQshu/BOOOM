@@ -3,22 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
-/// NPC路径巡逻控制器（Timeline备选方案）。
-/// 按顺序在Waypoint列表间移动，LoopManager切换周目时可切换路径组。
+/// NPC路径巡逻控制器（主角线NPC在非回溯状态下的备选驱动方案）。
+/// 按顺序在Waypoint列表间循环移动。
 /// </summary>
 public class NpcWaypointController : MonoBehaviour
 {
-    [System.Serializable]
-    public class PatrolRoute
-    {
-        [Tooltip("对应的周目ID，为空表示所有周目均使用此路径")]
-        public string loopId;
-        [Tooltip("路径点列表（按顺序移动）")]
-        public List<Transform> waypoints = new List<Transform>();
-    }
-
     [Header("路径配置")]
-    [SerializeField] private List<PatrolRoute> _routes = new List<PatrolRoute>();
+    [Tooltip("路径点列表（按顺序移动）")]
+    [SerializeField] private List<Transform> _waypoints = new List<Transform>();
     [SerializeField] private float _speed = 2f;
     [Tooltip("到达路径点后的等待时间（秒）")]
     [SerializeField] private float _waitTime = 1f;
@@ -32,9 +24,7 @@ public class NpcWaypointController : MonoBehaviour
     [SerializeField] private string _isMovingParam = "IsMoving";
 
     private Animator _animator;
-    private LoopManager _loopManager;
     private Coroutine _patrolCoroutine;
-    private PatrolRoute _currentRoute;
 
     private void Awake()
     {
@@ -43,47 +33,13 @@ public class NpcWaypointController : MonoBehaviour
 
     private void Start()
     {
-        _loopManager = FindObjectOfType<LoopManager>();
-        if (_loopManager != null)
-            _loopManager.OnLoopChanged += OnLoopChanged;
-
-        if (_autoStart)
-            StartPatrolForCurrentLoop();
-    }
-
-    private void OnDestroy()
-    {
-        if (_loopManager != null)
-            _loopManager.OnLoopChanged -= OnLoopChanged;
-    }
-
-    private void OnLoopChanged(string loopId)
-    {
-        StartPatrolForCurrentLoop();
-    }
-
-    private void StartPatrolForCurrentLoop()
-    {
-        string currentLoopId = _loopManager != null ? _loopManager.CurrentLoopId : string.Empty;
-
-        // 优先匹配当前周目，其次找通用路径（loopId为空）
-        PatrolRoute route = _routes.Find(r => r.loopId == currentLoopId)
-                         ?? _routes.Find(r => string.IsNullOrEmpty(r.loopId));
-
-        if (route == null || route.waypoints.Count == 0)
-        {
-            StopPatrol();
-            return;
-        }
-
-        _currentRoute = route;
-        StartPatrol();
+        if (_autoStart) StartPatrol();
     }
 
     public void StartPatrol()
     {
-        if (_patrolCoroutine != null)
-            StopCoroutine(_patrolCoroutine);
+        if (_waypoints.Count == 0) return;
+        if (_patrolCoroutine != null) StopCoroutine(_patrolCoroutine);
         _patrolCoroutine = StartCoroutine(PatrolRoutine());
     }
 
@@ -99,15 +55,12 @@ public class NpcWaypointController : MonoBehaviour
 
     private IEnumerator PatrolRoutine()
     {
-        if (_currentRoute == null || _currentRoute.waypoints.Count == 0) yield break;
-
         int index = 0;
         while (true)
         {
-            Transform target = _currentRoute.waypoints[index];
+            Transform target = _waypoints[index];
             if (target == null) { index = NextIndex(index); continue; }
 
-            // 移动到目标点
             while (Vector2.Distance(transform.position, target.position) > 0.05f)
             {
                 Vector2 dir = ((Vector2)target.position - (Vector2)transform.position).normalized;
@@ -126,10 +79,7 @@ public class NpcWaypointController : MonoBehaviour
         }
     }
 
-    private int NextIndex(int current)
-    {
-        return (current + 1) % _currentRoute.waypoints.Count;
-    }
+    private int NextIndex(int current) => (current + 1) % _waypoints.Count;
 
     private void SetAnimation(bool moving, Vector2 dir)
     {

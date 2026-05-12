@@ -5,7 +5,9 @@ using TMPro;
 /// <summary>
 /// 回溯模式HUD控制器。
 /// 管理进度条、控制按钮、角色名显示和退出按钮的状态更新。
+/// 通过CanvasGroup控制显隐，物体始终保持激活以确保事件订阅正常。
 /// </summary>
+[RequireComponent(typeof(CanvasGroup))]
 public class RetrospectHUD : MonoBehaviour
 {
     [Header("信息显示")]
@@ -28,6 +30,14 @@ public class RetrospectHUD : MonoBehaviour
     [SerializeField] private RetrospectManager _retrospectManager;
     [SerializeField] private TimelineRewindManager _rewindManager;
 
+    private CanvasGroup _canvasGroup;
+
+    private void Awake()
+    {
+        _canvasGroup = GetComponent<CanvasGroup>();
+        SetVisible(false);
+    }
+
     private void Start()
     {
         if (_retrospectManager == null)
@@ -35,20 +45,16 @@ public class RetrospectHUD : MonoBehaviour
         if (_rewindManager == null)
             _rewindManager = FindObjectOfType<TimelineRewindManager>();
 
-        // 绑定按钮事件
         if (_pauseButton != null)
             _pauseButton.onClick.AddListener(OnPauseClicked);
         if (_exitButton != null)
             _exitButton.onClick.AddListener(OnExitClicked);
 
-        // 订阅回溯事件
         if (_retrospectManager != null)
         {
             _retrospectManager.OnRetrospectEnter += OnRetrospectEnter;
             _retrospectManager.OnRetrospectExit += OnRetrospectExit;
         }
-
-        gameObject.SetActive(false);
     }
 
     private void OnDestroy()
@@ -62,7 +68,7 @@ public class RetrospectHUD : MonoBehaviour
 
     private void Update()
     {
-        if (!gameObject.activeSelf) return;
+        if (_canvasGroup.alpha < 0.01f) return;
 
         UpdateTimeDisplay();
         UpdatePauseIcon();
@@ -83,12 +89,20 @@ public class RetrospectHUD : MonoBehaviour
 
     private void OnRetrospectEnter()
     {
-        gameObject.SetActive(true);
+        SetVisible(true);
     }
 
     private void OnRetrospectExit()
     {
-        gameObject.SetActive(false);
+        SetVisible(false);
+    }
+
+    private void SetVisible(bool visible)
+    {
+        if (_canvasGroup == null) return;
+        _canvasGroup.alpha = visible ? 1f : 0f;
+        _canvasGroup.interactable = visible;
+        _canvasGroup.blocksRaycasts = visible;
     }
 
     private void OnPauseClicked()
@@ -107,9 +121,6 @@ public class RetrospectHUD : MonoBehaviour
             _retrospectManager.ExitRetrospect();
     }
 
-    /// <summary>
-    /// 更新时间显示文本。
-    /// </summary>
     private void UpdateTimeDisplay()
     {
         if (_timeText == null || _rewindManager == null) return;
@@ -119,19 +130,14 @@ public class RetrospectHUD : MonoBehaviour
 
         double current = director.time;
         double total = director.duration;
-
         _timeText.text = $"{FormatTime(current)} / {FormatTime(total)}";
     }
 
-    /// <summary>
-    /// 根据播放状态切换暂停/继续图标。
-    /// </summary>
     private void UpdatePauseIcon()
     {
         if (_rewindManager == null) return;
 
         bool isPaused = _rewindManager.IsPaused() || _rewindManager.IsRewinding();
-
         if (_pauseIcon != null) _pauseIcon.SetActive(!isPaused);
         if (_playIcon != null) _playIcon.SetActive(isPaused);
     }

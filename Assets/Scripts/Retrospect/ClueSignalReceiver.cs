@@ -13,10 +13,8 @@ public class ClueSignalReceiver : MonoBehaviour, INotificationReceiver
     [System.Serializable]
     public class SignalClueEntry
     {
-        [Tooltip("线索ID（如 CLUE_BAR_GLASS_01）")]
-        public string clueId;
-        [Tooltip("线索显示名称")]
-        public string clueName;
+        [Tooltip("触发的线索 SO")]
+        public ClueDataSO clueData;
         [Tooltip("触发时启动的Ink对话（留空则直接收集线索）")]
         public TextAsset inkStory;
         [Tooltip("Ink对话起始knot（留空则从头播放）")]
@@ -59,9 +57,9 @@ public class ClueSignalReceiver : MonoBehaviour, INotificationReceiver
         SignalClueEntry entry = _clueEntries[_signalIndex];
         _signalIndex++;
 
-        if (string.IsNullOrEmpty(entry.clueId))
+        if (entry.clueData == null)
         {
-            Debug.LogWarning("[Rewind] 线索配置缺少clueId，跳过。");
+            Debug.LogWarning("[Rewind] 线索配置缺少 ClueDataSO，跳过。");
             return;
         }
 
@@ -84,25 +82,18 @@ public class ClueSignalReceiver : MonoBehaviour, INotificationReceiver
     /// </summary>
     private void TriggerDirectClue(SignalClueEntry entry)
     {
-        if (ClueManager.Instance != null)
-            ClueManager.Instance.CollectClue(entry.clueId, entry.clueName);
-
-        Debug.Log($"[Rewind] 自动线索触发：{entry.clueId}（{entry.clueName}）");
+        ClueManager.Instance?.CollectClue(entry.clueData);
+        Debug.Log($"[Rewind] 自动线索触发：{entry.clueData.clueId}（{entry.clueData.clueName}）");
     }
 
-    /// <summary>
-    /// 通过对话触发线索（暂停Timeline → 播放Ink对话 → 对话中收集线索）。
-    /// </summary>
     private void TriggerDialogueClue(SignalClueEntry entry)
     {
-        // 暂停Timeline
         if (RetrospectManager.Instance != null)
             RetrospectManager.Instance.PauseForDialogue();
 
-        // 启动Ink对话
         if (InkDialogueManager.Instance != null)
             InkDialogueManager.Instance.StartDialogue(entry.inkStory, entry.inkKnotName);
 
-        Debug.Log($"[Rewind] 对话线索触发：{entry.clueId}，启动对话 knot={entry.inkKnotName}");
+        Debug.Log($"[Rewind] 对话线索触发：{entry.clueData.clueId}，启动对话 knot={entry.inkKnotName}");
     }
 }
