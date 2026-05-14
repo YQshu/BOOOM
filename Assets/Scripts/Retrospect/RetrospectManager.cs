@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Playables;
 
@@ -49,9 +50,9 @@ public class RetrospectManager : Singleton<RetrospectManager>
     [Tooltip("暂停/继续播放")]
     [SerializeField] private KeyCode _pauseKey = KeyCode.Space;
     [Tooltip("回溯（按住）")]
-    [SerializeField] private KeyCode _rewindKey = KeyCode.LeftArrow;
+    [SerializeField] private KeyCode _rewindKey = KeyCode.Q;
     [Tooltip("快进（按住）")]
-    [SerializeField] private KeyCode _fastForwardKey = KeyCode.RightArrow;
+    [SerializeField] private KeyCode _fastForwardKey = KeyCode.E;
     [Tooltip("快进倍速")]
     [SerializeField] private float _fastForwardSpeed = 3f;
 
@@ -206,7 +207,7 @@ public class RetrospectManager : Singleton<RetrospectManager>
             _npcRoomTracker.OnNpcRoomChanged += OnNpcRoomChanged;
 
             // 用初始房间启用玩家约束
-            if (_playerConstraint != null && _npcRoomTracker.CurrentRoomBounds != null)
+            if (_playerConstraint != null && _npcRoomTracker.CurrentRoomBounds.Count > 0)
                 _playerConstraint.EnableConstraint(_npcRoomTracker.CurrentRoomBounds);
         }
 
@@ -381,7 +382,7 @@ public class RetrospectManager : Singleton<RetrospectManager>
     /// <summary>
     /// NPC切换房间时更新玩家移动约束区域。
     /// </summary>
-    private void OnNpcRoomChanged(Collider2D newRoomBounds)
+    private void OnNpcRoomChanged(List<Collider2D> newRoomBounds)
     {
         if (_playerConstraint != null)
             _playerConstraint.UpdateBounds(newRoomBounds);

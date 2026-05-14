@@ -21,6 +21,10 @@ public class ClueSignalReceiver : MonoBehaviour, INotificationReceiver
         public TextAsset inkStory;
         [Tooltip("Ink对话起始knot（留空则从头播放）")]
         public string inkKnotName;
+
+        [Header("Timeline 同步配置")]
+        [Tooltip("对话句子数量（填写后启用 Timeline 同步模式：对话自动播放，Timeline 继续运行；留空或填 0 则为传统模式：暂停 Timeline，手动点击继续）")]
+        public int sentenceCount = 0;
     }
 
     [Header("线索配置")]
@@ -116,12 +120,23 @@ public class ClueSignalReceiver : MonoBehaviour, INotificationReceiver
 
     private void TriggerDialogueClue(SignalClueEntry entry)
     {
-        if (RetrospectManager.Instance != null)
+        // Timeline 同步模式：sentenceCount > 0 时自动播放，Timeline 继续运行
+        // 传统模式：sentenceCount = 0 时暂停 Timeline，手动点击继续
+        bool isTimelineSyncMode = entry.sentenceCount > 0;
+
+        if (!isTimelineSyncMode && RetrospectManager.Instance != null)
+        {
+            // 传统模式：暂停 Timeline
             RetrospectManager.Instance.PauseForDialogue();
+        }
 
+        // 启动对话，传入句子数量
         if (InkDialogueManager.Instance != null)
-            InkDialogueManager.Instance.StartDialogue(entry.inkStory, entry.inkKnotName);
+        {
+            InkDialogueManager.Instance.StartDialogue(entry.inkStory, entry.inkKnotName, entry.sentenceCount);
+        }
 
-        Debug.Log($"[Rewind] 对话线索触发：{entry.clueData.clueId}，启动对话 knot={entry.inkKnotName}");
+        string mode = isTimelineSyncMode ? $"Timeline 同步模式（{entry.sentenceCount} 句）" : "传统模式（暂停 Timeline）";
+        Debug.Log($"[Rewind] 对话线索触发：{entry.clueData.clueId}，启动对话 knot={entry.inkKnotName}，{mode}");
     }
 }

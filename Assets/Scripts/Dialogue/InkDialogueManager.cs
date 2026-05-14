@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Ink.Runtime;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Playables;
 using TMPro;
 
 /// <summary>
@@ -59,12 +60,18 @@ public class InkDialogueManager : MonoBehaviour
     [SerializeField] private List<CharacterPortrait> _portraits = new List<CharacterPortrait>();
 
     [Header("打字机配置")]
-    [Tooltip("每个字符的显示间隔（秒）")]
-    [SerializeField] private float _typewriterSpeed = 0.04f;
+    [Tooltip("Timeline 同步模式下，每句话的总时长（秒），包含打字时间和持续时间")]
+    [SerializeField] private float _sentenceDuration = 2f;
 
     [Header("自动播放")]
-    [Tooltip("自动播放时，文本显示完毕后等待的时间（秒）")]
-    [SerializeField] private float _autoPlayDelay = 1f;
+    [Tooltip("Timeline 同步模式下，每句话完全显示后的持续时间（秒）。例如：0.5 表示文本打印完毕后再等待 0.5 秒，然后开始下一句")]
+    [SerializeField] private float _autoPlayDelay = 0.5f;
+
+    [Header("Timeline 同步自动播放")]
+    [Tooltip("暂停键（Timeline 同步模式下可暂停 Timeline 和对话）")]
+    [SerializeField] private KeyCode _pauseKey = KeyCode.T;
+    [Tooltip("暂停提示 UI（可选）")]
+    [SerializeField] private GameObject _pauseIndicator;
 
     private Story _story;
     private Coroutine _typewriterCoroutine;
@@ -73,6 +80,13 @@ public class InkDialogueManager : MonoBehaviour
     private bool _isPlaying;
     private bool _isAutoPlaying;
     private CanvasGroup _dialogueCanvasGroup;
+
+    // Timeline 同步自动播放相关
+    private bool _isTimelineSyncMode; // 是否为 Timeline 同步模式（对话自动播放，Timeline 继续运行）
+    private int _sentenceCount;       // 对话句子数量（> 0 时启用 Timeline 同步模式）
+    private bool _isAutoPaused;       // 是否处于手动暂停状态
+    private Coroutine _autoPlayCoroutine;
+    private float _remainingTime;     // 剩余等待时间
 
     public bool IsPlaying => _isPlaying;
 
@@ -106,6 +120,18 @@ public class InkDialogueManager : MonoBehaviour
             _autoPlayButton.onClick.AddListener(ToggleAutoPlay);
     }
 
+    private void Update()
+    {
+        // Timeline 同步自动播放模式下，按暂停键可暂停/恢复
+        if (_isTimelineSyncMode && Input.GetKeyDown(_pauseKey))
+        {
+            if (_isAutoPaused)
+                ResumeAutoPlay();
+            else
+                PauseAutoPlay();
+        }
+    }
+
     // ─── 公开接口 ────────────────────────────────────────────
 
     /// <summary>
@@ -113,7 +139,13 @@ public class InkDialogueManager : MonoBehaviour
     /// </summary>
     /// <param name="inkJSON">编译后的 .json TextAsset（Ink 插件自动生成）</param>
     /// <param name="knotName">从指定 knot 开始，留空则从头播放</param>
-    public void StartDialogue(TextAsset inkJSON, string knotName = "")
+    /// <summary>
+    /// 启动 Ink 对话。
+    /// </summary>
+    /// <param name="inkJSON">Ink 故事文件</param>
+    /// <param name="knotName">起始 knot 名称（留空则从头播放）</param>
+    /// <param name="sentenceCount">对话句子数量（> 0 时启用 Timeline 同步模式：对话自动播放，Timeline 继续运行；= 0 时为传统模式：暂停 Timeline，手动点击继续）</param>
+    public void StartDialogue(TextAsset inkJSON, string knotName = "", int sentenceCount = 0)
     {
         if (_isPlaying)
         {
@@ -139,14 +171,29 @@ public class InkDialogueManager : MonoBehaviour
         }
 
         _isPlaying = true;
+        _isTimelineSyncMode = sentenceCount > 0; // sentenceCount > 0 时启用 Timeline 同步模式
+        _sentenceCount = sentenceCount;
+        _isAutoPaused = false;
 
-        // 若处于回溯模式，暂停Timeline
-        if (RetrospectManager.Instance != null && RetrospectManager.Instance.IsInRetrospect)
-            RetrospectManager.Instance.PauseForDialogue();
-
-        // 禁用玩家移动
-        PlayerController player = FindObjectOfType<PlayerController>();
-        player?.SetInputEnabled(false);
+        // Timeline 同步模式：自动播放，不暂停 Timeline
+        if (_isTimelineSyncMode)
+        {
+            _isAutoPlaying = true;
+            // 隐藏自动播放按钮（Timeline 同步模式下由系统控制）
+            if (_autoPlayButton != null)
+                _autoPlayButton.gameObject.SetActive(false);
+            Debug.Log($"[InkDialogue] Timeline 同步模式：对话自动播放（{sentenceCount} 句），每句持续 {_autoPlayDelay} 秒（打印完毕后）");
+        }
+        else
+        {
+            // 传统模式：若处于回溯模式，暂停 Timeline
+            if (RetrospectManager.Instance != null && RetrospectManager.Instance.IsInRetrospect)
+                RetrospectManager.Instance.PauseForDialogue();
+            // 显示自动播放按钮（玩家可以手动切换）
+            if (_autoPlayButton != null)
+                _autoPlayButton.gameObject.SetActive(true);
+            Debug.Log("[InkDialogue] 传统模式：手动点击继续");
+        }
 
         if (_dialoguePanel != null) SetDialogueVisible(true);
         if (_continueButton != null) _continueButton.gameObject.SetActive(true);
@@ -232,11 +279,37 @@ public class InkDialogueManager : MonoBehaviour
         _isTyping = true;
         if (_contentText != null) _contentText.text = string.Empty;
 
+        // Timeline 同步模式：根据总时长和持续时间，动态计算打字机速度
+        float typewriterSpeed;
+        if (_isTimelineSyncMode)
+        {
+            // 打字时间 = 总时长 - 持续时间
+            float typingDuration = _sentenceDuration - _autoPlayDelay;
+            if (typingDuration <= 0f)
+            {
+                // 如果持续时间 >= 总时长，直接瞬间显示
+                typewriterSpeed = 0f;
+            }
+            else
+            {
+                // 每字符间隔 = 打字时间 ÷ 字符数
+                int charCount = text.Length;
+                typewriterSpeed = charCount > 0 ? typingDuration / charCount : 0f;
+            }
+        }
+        else
+        {
+            // 传统模式：使用固定速度（0.05秒/字符）
+            typewriterSpeed = 0.05f;
+        }
+
+        // 打字效果
         foreach (char c in text)
         {
             if (!_isTyping) break;
             if (_contentText != null) _contentText.text += c;
-            yield return new WaitForSecondsRealtime(_typewriterSpeed);
+            if (typewriterSpeed > 0f)
+                yield return new WaitForSecondsRealtime(typewriterSpeed);
         }
 
         // 确保完整显示
@@ -251,9 +324,15 @@ public class InkDialogueManager : MonoBehaviour
         }
         else if (_isAutoPlaying && _story != null && _story.canContinue)
         {
-            // 自动播放：等待延迟后继续
-            yield return new WaitForSecondsRealtime(_autoPlayDelay);
-            ContinueStory();
+            // Timeline 同步模式：使用固定的 _autoPlayDelay（文本显示完毕后的持续时间）
+            if (_autoPlayCoroutine != null) StopCoroutine(_autoPlayCoroutine);
+            _autoPlayCoroutine = StartCoroutine(AutoPlayWaitRoutine(_autoPlayDelay));
+        }
+        else if (_isAutoPlaying && _story != null && !_story.canContinue && _story.currentChoices.Count == 0)
+        {
+            // Timeline 同步模式：最后一句话显示完毕后自动结束对话
+            if (_autoPlayCoroutine != null) StopCoroutine(_autoPlayCoroutine);
+            _autoPlayCoroutine = StartCoroutine(AutoPlayWaitRoutine(_autoPlayDelay, true)); // 传入 isLastSentence = true
         }
     }
 
@@ -282,6 +361,13 @@ public class InkDialogueManager : MonoBehaviour
 
     private void ToggleAutoPlay()
     {
+        // Timeline 同步模式下，自动播放由系统控制，不允许手动切换
+        if (_isTimelineSyncMode)
+        {
+            Debug.LogWarning("[InkDialogue] Timeline 同步模式下，自动播放由系统控制，无法手动切换。");
+            return;
+        }
+
         _isAutoPlaying = !_isAutoPlaying;
         Debug.Log($"[InkDialogue] 自动播放：{(_isAutoPlaying ? "开启" : "关闭")}");
 
@@ -299,6 +385,31 @@ public class InkDialogueManager : MonoBehaviour
         _typewriterCoroutine = null;
         if (_isAutoPlaying && _story != null && _story.canContinue)
             ContinueStory();
+    }
+
+    private IEnumerator AutoPlayWaitRoutine(float duration, bool isLastSentence = false)
+    {
+        float elapsed = 0f;
+        _remainingTime = duration;
+
+        while (elapsed < duration)
+        {
+            elapsed += Time.deltaTime;
+            _remainingTime = duration - elapsed;
+            yield return null;
+        }
+
+        _autoPlayCoroutine = null;
+
+        // 如果是最后一句话，直接结束对话
+        if (isLastSentence)
+        {
+            EndDialogue();
+        }
+        else if (_isAutoPlaying && _story != null && _story.canContinue)
+        {
+            ContinueStory();
+        }
     }
 
     private void ShowChoices()
@@ -341,13 +452,11 @@ public class InkDialogueManager : MonoBehaviour
     {
         _isPlaying = false;
         _isAutoPlaying = false;
+        _isTimelineSyncMode = false;
+        _isAutoPaused = false;
         _story = null;
 
         if (_dialoguePanel != null) SetDialogueVisible(false);
-
-        // 恢复玩家移动
-        PlayerController player = FindObjectOfType<PlayerController>();
-        player?.SetInputEnabled(true);
 
         OnDialogueEnd?.Invoke();
         Debug.Log("[InkDialogue] 对话结束。");
@@ -392,5 +501,77 @@ public class InkDialogueManager : MonoBehaviour
             _choiceContainer = root.Find("ChoiceContainer");
         if (_autoPlayButton == null)
             _autoPlayButton = root.Find("AutoPlayButton")?.GetComponent<Button>();
+        if (_pauseIndicator == null)
+            _pauseIndicator = root.Find("PauseIndicator")?.gameObject;
+    }
+
+    // ─── Timeline 同步自动播放功能 ────────────────────────────
+
+    /// <summary>
+    /// 暂停自动播放（同时暂停 Timeline）。
+    /// </summary>
+    private void PauseAutoPlay()
+    {
+        if (!_isTimelineSyncMode) return;
+
+        _isAutoPaused = true;
+
+        // 停止自动播放协程
+        if (_autoPlayCoroutine != null)
+        {
+            StopCoroutine(_autoPlayCoroutine);
+            _autoPlayCoroutine = null;
+        }
+
+        // 暂停 Timeline（通过 RetrospectManager）
+        if (RetrospectManager.Instance != null && RetrospectManager.Instance.CurrentDirector != null)
+        {
+            var director = RetrospectManager.Instance.CurrentDirector;
+            if (director.state == PlayState.Playing)
+            {
+                director.Pause();
+                Debug.Log("[InkDialogue] Timeline 已暂停");
+            }
+        }
+
+        // 显示暂停提示
+        if (_pauseIndicator != null)
+            _pauseIndicator.SetActive(true);
+
+        Debug.Log("[InkDialogue] 自动播放已暂停（按 ESC 继续）");
+    }
+
+    /// <summary>
+    /// 恢复自动播放（同时恢复 Timeline）。
+    /// </summary>
+    private void ResumeAutoPlay()
+    {
+        if (!_isTimelineSyncMode) return;
+
+        _isAutoPaused = false;
+
+        // 恢复 Timeline（通过 RetrospectManager）
+        if (RetrospectManager.Instance != null && RetrospectManager.Instance.CurrentDirector != null)
+        {
+            var director = RetrospectManager.Instance.CurrentDirector;
+            if (director.state == PlayState.Paused)
+            {
+                director.Resume();
+                Debug.Log("[InkDialogue] Timeline 已恢复");
+            }
+        }
+
+        // 隐藏暂停提示
+        if (_pauseIndicator != null)
+            _pauseIndicator.SetActive(false);
+
+        // 继续自动播放（使用剩余时间）
+        if (!_isTyping && _story != null && _story.canContinue && _remainingTime > 0f)
+        {
+            if (_autoPlayCoroutine != null) StopCoroutine(_autoPlayCoroutine);
+            _autoPlayCoroutine = StartCoroutine(AutoPlayWaitRoutine(_remainingTime));
+        }
+
+        Debug.Log("[InkDialogue] 自动播放已恢复");
     }
 }

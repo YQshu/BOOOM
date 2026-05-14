@@ -1,10 +1,13 @@
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
 /// <summary>
 /// 玩家移动约束。
 /// 将玩家限制在指定的Collider2D区域内（回溯模式下限制在NPC所在房间）。
+/// 支持NPC处于多个房间交界处时，玩家可以在所有这些房间内移动。
 /// 挂载在Player GameObject上。
 /// NPC换房间时通过屏幕淡黑过渡代替硬瞬移。
 /// </summary>
@@ -23,7 +26,7 @@ public class PlayerMovementConstraint : MonoBehaviour
     /// <summary>是否正在约束中。</summary>
     public bool IsConstrained { get; private set; }
 
-    private Collider2D _currentBounds;
+    private List<Collider2D> _currentBounds = new List<Collider2D>();
     private Rigidbody2D _playerRb;
     private Coroutine _fadeCoroutine;
 
@@ -46,38 +49,47 @@ public class PlayerMovementConstraint : MonoBehaviour
     // ─── 公开接口 ────────────────────────────────────────────
 
     /// <summary>
-    /// 启用约束，传入允许移动的区域Collider2D。
+    /// 启用约束，传入允许移动的区域Collider2D列表。
     /// </summary>
-    public void EnableConstraint(Collider2D bounds)
+    public void EnableConstraint(List<Collider2D> bounds)
     {
-        _currentBounds = bounds;
-        IsConstrained = bounds != null;
+        _currentBounds = bounds ?? new List<Collider2D>();
+        IsConstrained = _currentBounds.Count > 0;
 
         if (IsConstrained)
-            Debug.Log("[Rewind] 玩家移动约束已启用。");
+        {
+            if (_currentBounds.Count > 1)
+                Debug.Log($"[Rewind] 玩家移动约束已启用（{_currentBounds.Count} 个房间）。");
+            else
+                Debug.Log("[Rewind] 玩家移动约束已启用。");
+        }
     }
 
     /// <summary>
     /// 更新约束区域（NPC换房间时调用），带屏幕淡黑过渡。
     /// </summary>
-    public void UpdateBounds(Collider2D newBounds)
+    public void UpdateBounds(List<Collider2D> newBounds)
     {
-        if (newBounds == null) return;
+        if (newBounds == null || newBounds.Count == 0) return;
 
-        bool needsTeleport = _playerRb != null && !newBounds.OverlapPoint(_playerRb.position);
+        // 检查玩家是否在任何新房间内
+        bool playerInAnyNewRoom = _playerRb != null && newBounds.Any(b => b.OverlapPoint(_playerRb.position));
 
-        if (needsTeleport && _fadeImage != null)
+        if (!playerInAnyNewRoom && _fadeImage != null)
         {
-            // 有淡黑图：走过渡协程
+            // 玩家不在任何新房间内：走过渡协程
             if (_fadeCoroutine != null) StopCoroutine(_fadeCoroutine);
             _fadeCoroutine = StartCoroutine(RoomTransitionRoutine(newBounds));
         }
         else
         {
-            // 无淡黑图或玩家已在新房间内：直接更新
+            // 玩家已在新房间内：直接更新
             _currentBounds = newBounds;
-            if (needsTeleport && _playerRb != null)
-                _playerRb.position = newBounds.bounds.center;
+            if (!playerInAnyNewRoom && _playerRb != null)
+            {
+                // 传送到第一个房间中心
+                _playerRb.position = newBounds[0].bounds.center;
+            }
         }
     }
 
@@ -95,7 +107,7 @@ public class PlayerMovementConstraint : MonoBehaviour
             _fadeImage.color = new Color(0, 0, 0, 0);
 
         IsConstrained = false;
-        _currentBounds = null;
+        _currentBounds.Clear();
         Debug.Log("[Rewind] 玩家移动约束已解除。");
     }
 
@@ -103,31 +115,59 @@ public class PlayerMovementConstraint : MonoBehaviour
 
     private void LateUpdate()
     {
-        if (!IsConstrained || _currentBounds == null || _playerRb == null) return;
+        if (!IsConstrained || _currentBounds.Count == 0 || _playerRb == null) return;
 
         // 过渡期间不做边界检测，防止和传送位置冲突
         if (_fadeCoroutine != null) return;
 
         Vector2 playerPos = _playerRb.position;
-        if (!_currentBounds.OverlapPoint(playerPos))
+
+        // 检查玩家是否在任何允许的房间内
+        bool inAnyRoom = _currentBounds.Any(b => b.OverlapPoint(playerPos));
+
+        if (!inAnyRoom)
         {
-            Vector2 closestPoint = _currentBounds.ClosestPoint(playerPos);
+            // 玩家越界，找到最近的房间边界并拉回
+            Vector2 closestPoint = FindClosestPointInBounds(playerPos);
             _playerRb.position = closestPoint;
         }
     }
 
     /// <summary>
+    /// 找到玩家在所有允许房间中的最近点。
+    /// </summary>
+    private Vector2 FindClosestPointInBounds(Vector2 playerPos)
+    {
+        Vector2 closestPoint = playerPos;
+        float minDistance = float.MaxValue;
+
+        foreach (var bounds in _currentBounds)
+        {
+            Vector2 point = bounds.ClosestPoint(playerPos);
+            float distance = Vector2.Distance(playerPos, point);
+
+            if (distance < minDistance)
+            {
+                minDistance = distance;
+                closestPoint = point;
+            }
+        }
+
+        return closestPoint;
+    }
+
+    /// <summary>
     /// 换房间过渡：淡黑 → 传送 → 淡出。
     /// </summary>
-    private IEnumerator RoomTransitionRoutine(Collider2D newBounds)
+    private IEnumerator RoomTransitionRoutine(List<Collider2D> newBounds)
     {
         // 淡入（变黑）
         yield return StartCoroutine(Fade(0f, 1f, _fadeDuration));
 
-        // 传送并更新约束
+        // 传送并更新约束（传送到第一个房间中心）
         _currentBounds = newBounds;
-        if (_playerRb != null)
-            _playerRb.position = newBounds.bounds.center;
+        if (_playerRb != null && newBounds.Count > 0)
+            _playerRb.position = newBounds[0].bounds.center;
 
         // 淡出（变透明）
         yield return StartCoroutine(Fade(1f, 0f, _fadeDuration));
