@@ -705,8 +705,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "\u8FD4\u56DE"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 034d17bb5b49b3648809aa2a0b9665a2, type: 2}
-  m_sharedMaterial: {fileID: 1595279912121955130, guid: 034d17bb5b49b3648809aa2a0b9665a2, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -2113,7 +2113,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &150498745
 Transform:
   m_ObjectHideFlags: 0
@@ -2453,7 +2453,7 @@ RectTransform:
   m_Father: {fileID: 354119419}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 10, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -2711,7 +2711,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &258466456
 Transform:
   m_ObjectHideFlags: 0
@@ -3213,8 +3213,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "\u786E\u8BA4\uFF1F"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 034d17bb5b49b3648809aa2a0b9665a2, type: 2}
-  m_sharedMaterial: {fileID: 1595279912121955130, guid: 034d17bb5b49b3648809aa2a0b9665a2, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -3347,8 +3347,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "\u4F60\u786E\u5B9A\u8981\u6307\u8BA4 {name} \u4E3A\u771F\u51F6\u5417\uFF1F"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 034d17bb5b49b3648809aa2a0b9665a2, type: 2}
-  m_sharedMaterial: {fileID: 1595279912121955130, guid: 034d17bb5b49b3648809aa2a0b9665a2, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -4031,8 +4031,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "\u7EBF\u7D22\u6570\uFF1A78/93"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 034d17bb5b49b3648809aa2a0b9665a2, type: 2}
-  m_sharedMaterial: {fileID: 1595279912121955130, guid: 034d17bb5b49b3648809aa2a0b9665a2, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -5141,12 +5141,73 @@ MonoBehaviour:
   - {fileID: 11400000, guid: d2fab1289375c74448250c059af365d8, type: 2}
   - {fileID: 11400000, guid: 9955a329e360e20449aad28e34f11ae8, type: 2}
   - {fileID: 11400000, guid: 36342d8aa1545bd418d2b4d6899e17af, type: 2}
+  - {fileID: 11400000, guid: a3bc650207ffde34a8b93dc1daf678c3, type: 2}
   - {fileID: 11400000, guid: ef10ad96131d21041a352ea9caae329c, type: 2}
-  - {fileID: 11400000, guid: ef10ad96131d21041a352ea9caae329c, type: 2}
-  - {fileID: 11400000, guid: ef10ad96131d21041a352ea9caae329c, type: 2}
-  - {fileID: 11400000, guid: ef10ad96131d21041a352ea9caae329c, type: 2}
-  - {fileID: 11400000, guid: ef10ad96131d21041a352ea9caae329c, type: 2}
-  - {fileID: 11400000, guid: ef10ad96131d21041a352ea9caae329c, type: 2}
+  - {fileID: 11400000, guid: 8ec24588a8489424cb35e6c8b19b0f61, type: 2}
+  - {fileID: 11400000, guid: 7264f1240b5f8dd44972796dd12f8680, type: 2}
+  - {fileID: 11400000, guid: 6144618ed886e0b44a6924733afb62da, type: 2}
+  - {fileID: 11400000, guid: 24cc1b85d32ff4a419689ef9c8139824, type: 2}
+  - {fileID: 11400000, guid: b8402f2db0d494045a78be64e7337e82, type: 2}
+  - {fileID: 11400000, guid: 7076b8914496014458eb9d71f04eff24, type: 2}
+  - {fileID: 11400000, guid: b372bf4c0be44ec40ab13d4068d950d2, type: 2}
+  - {fileID: 11400000, guid: fd9e9fba1282233489bb449b95384180, type: 2}
+  - {fileID: 11400000, guid: 6934a3596b2bcf84b818c4b6b8b3f295, type: 2}
+  - {fileID: 11400000, guid: 96159cbee76fbff468c91c630d02c6a1, type: 2}
+  - {fileID: 11400000, guid: 4cd6e9b8612993342bb0e27b2a5eaae8, type: 2}
+  - {fileID: 11400000, guid: 14f4c4a81b3c6ad42859400e59e775fd, type: 2}
+  - {fileID: 11400000, guid: a2499d73690c6df488591b6906ace43f, type: 2}
+  - {fileID: 11400000, guid: 03a2332ef9c136d428e15485fb9208ea, type: 2}
+  - {fileID: 11400000, guid: a761f81587a1f23418975d7dff1c769b, type: 2}
+  - {fileID: 11400000, guid: 4de97efc3705ecd45a8fa230b5ea945e, type: 2}
+  - {fileID: 11400000, guid: e038d21d2ccc95f429cc581575c97c23, type: 2}
+  - {fileID: 11400000, guid: e86c326fc75ae7743a0d56938c3105b8, type: 2}
+  - {fileID: 11400000, guid: 54106845f6e58f942b51c05f9ad163b1, type: 2}
+  - {fileID: 11400000, guid: 23d9bc6476d950c43b8781835f801b2e, type: 2}
+  - {fileID: 11400000, guid: d59c1cb905f6f1242836f75ded0e5e50, type: 2}
+  - {fileID: 11400000, guid: 9422ff4d690a89a45a2f095843e16b9e, type: 2}
+  - {fileID: 11400000, guid: 334967a51407db54188de97f35522ba0, type: 2}
+  - {fileID: 11400000, guid: daa0072a3edac1346bf7082a35db4e9c, type: 2}
+  - {fileID: 11400000, guid: befb45ceb8b514d4c8ab289ddab92af4, type: 2}
+  - {fileID: 11400000, guid: e67d9463c8be9c34ebd5114aa281da8a, type: 2}
+  - {fileID: 11400000, guid: 0c168094e4eb2f74aa5c25c57bc3ab0b, type: 2}
+  - {fileID: 11400000, guid: 38e19f5eb2545ee41a8b153e826f6b54, type: 2}
+  - {fileID: 11400000, guid: 656cc4d228a814649a7f91a35ab4cc7e, type: 2}
+  - {fileID: 11400000, guid: 6abe6197aa381e6459100029b9fa255e, type: 2}
+  - {fileID: 11400000, guid: 394f40a76ad8c394f97d0086dcfe1496, type: 2}
+  - {fileID: 11400000, guid: 76b4c7aefda048f46a6c52ac4e572401, type: 2}
+  - {fileID: 11400000, guid: c70eb7e3e66d1154e89bccec283e8a34, type: 2}
+  - {fileID: 11400000, guid: 5734004578eac3d42afd4d58b2c75438, type: 2}
+  - {fileID: 11400000, guid: a6d46322446b274489777a531e392bb9, type: 2}
+  - {fileID: 11400000, guid: 6be4c873171f21c4e883ae071070bb73, type: 2}
+  - {fileID: 11400000, guid: c3e22d8201ee4104ba1e02346a7fe154, type: 2}
+  - {fileID: 11400000, guid: 382fb8772b21bbf43ab023f1fdc12448, type: 2}
+  - {fileID: 11400000, guid: e5a5b1831e452384dab54949b6289024, type: 2}
+  - {fileID: 11400000, guid: d88b5a3120674f645840283883ca84e9, type: 2}
+  - {fileID: 11400000, guid: 8e8107d427ddaf74ea0d68dd8c1055f1, type: 2}
+  - {fileID: 11400000, guid: 0c9ddecc804e355428b716563179d8df, type: 2}
+  - {fileID: 11400000, guid: b2676f8090ebcf84cb6ca1290cf4788d, type: 2}
+  - {fileID: 11400000, guid: 5e7c86d46246d314898bf66be41b2b13, type: 2}
+  - {fileID: 11400000, guid: 7b6df0b1d4d7553459f11c90d51e8d12, type: 2}
+  - {fileID: 11400000, guid: 43b11bce0505da6429929f67b3b5a016, type: 2}
+  - {fileID: 11400000, guid: d055f2447d511194eb2eff6bac53ee6b, type: 2}
+  - {fileID: 11400000, guid: f6b6ae30e44b6874fbb7c9690701eecd, type: 2}
+  - {fileID: 11400000, guid: 2a181f9fe98bf054ab3038e2a44a3456, type: 2}
+  - {fileID: 11400000, guid: dc6534376c58e7247b8ad93b98d85bd8, type: 2}
+  - {fileID: 11400000, guid: f0fb7a449d769e346b8c14a3b642224b, type: 2}
+  - {fileID: 11400000, guid: 550defcdb024c324da7bfe89b87182a4, type: 2}
+  - {fileID: 11400000, guid: 998c23b1f8b5f8647af6ee225a90e839, type: 2}
+  - {fileID: 11400000, guid: 3389e47206cc0794fb31dc6d96edd3e2, type: 2}
+  - {fileID: 11400000, guid: 27817a38f9fbea4459d64c80d26d1f98, type: 2}
+  - {fileID: 11400000, guid: 5dc0302796d020b4e8c790e7fec336d3, type: 2}
+  - {fileID: 11400000, guid: 3be42912f7d8759498524f9085fc4ff1, type: 2}
+  - {fileID: 11400000, guid: 3bae521a5a7b1ec4eba756b72f8af42a, type: 2}
+  - {fileID: 11400000, guid: 5bf94993c14982e47b3e831c3795d89b, type: 2}
+  - {fileID: 11400000, guid: 63833730b313f604cb3321c65155ae3e, type: 2}
+  - {fileID: 11400000, guid: e9c76c0d65be5d040a849f365906a6e8, type: 2}
+  - {fileID: 11400000, guid: 92ec6a310c6a3dd4c8e39380ff6dcad5, type: 2}
+  - {fileID: 11400000, guid: a813c12516acb7b44a3b07364be711ed, type: 2}
+  - {fileID: 11400000, guid: 95b8dfa499105fa4db500de4fdb9a06b, type: 2}
+  - {fileID: 11400000, guid: 306e8a59f49a2b249b182cce9324e555, type: 2}
   _enableLog: 1
   _collectedIdsList: []
 --- !u!1 &475788332
@@ -5608,14 +5669,110 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _clueEntries:
-  - clueData: {fileID: 0}
+  - clueData: {fileID: 11400000, guid: d055f2447d511194eb2eff6bac53ee6b, type: 2}
     narrationClip: {fileID: 0}
     inkStory: {fileID: 0}
     inkKnotName: 
-  - clueData: {fileID: 0}
+  - clueData: {fileID: 11400000, guid: f6b6ae30e44b6874fbb7c9690701eecd, type: 2}
     narrationClip: {fileID: 0}
-    inkStory: {fileID: 4900000, guid: 0322efd9e9af274448b36c25bd54df78, type: 3}
-    inkKnotName: clue_vip_room
+    inkStory: {fileID: 4900000, guid: 6c8eb571373cd8f45ba6ececaf19132d, type: 3}
+    inkKnotName: "\u5BF9\u8BDD17"
+  - clueData: {fileID: 11400000, guid: 2a181f9fe98bf054ab3038e2a44a3456, type: 2}
+    narrationClip: {fileID: 0}
+    inkStory: {fileID: 0}
+    inkKnotName: 
+  - clueData: {fileID: 11400000, guid: 54106845f6e58f942b51c05f9ad163b1, type: 2}
+    narrationClip: {fileID: 0}
+    inkStory: {fileID: 0}
+    inkKnotName: 
+  - clueData: {fileID: 11400000, guid: dc6534376c58e7247b8ad93b98d85bd8, type: 2}
+    narrationClip: {fileID: 0}
+    inkStory: {fileID: 4900000, guid: 6c8eb571373cd8f45ba6ececaf19132d, type: 3}
+    inkKnotName: "\u5BF9\u8BDD2n1"
+  - clueData: {fileID: 11400000, guid: dc6534376c58e7247b8ad93b98d85bd8, type: 2}
+    narrationClip: {fileID: 0}
+    inkStory: {fileID: 0}
+    inkKnotName: 
+  - clueData: {fileID: 11400000, guid: 334967a51407db54188de97f35522ba0, type: 2}
+    narrationClip: {fileID: 0}
+    inkStory: {fileID: 0}
+    inkKnotName: 
+  - clueData: {fileID: 11400000, guid: dc6534376c58e7247b8ad93b98d85bd8, type: 2}
+    narrationClip: {fileID: 0}
+    inkStory: {fileID: 4900000, guid: 6c8eb571373cd8f45ba6ececaf19132d, type: 3}
+    inkKnotName: "\u5BF9\u8BDD6"
+  - clueData: {fileID: 11400000, guid: dc6534376c58e7247b8ad93b98d85bd8, type: 2}
+    narrationClip: {fileID: 0}
+    inkStory: {fileID: 0}
+    inkKnotName: 0
+  - clueData: {fileID: 11400000, guid: befb45ceb8b514d4c8ab289ddab92af4, type: 2}
+    narrationClip: {fileID: 0}
+    inkStory: {fileID: 0}
+    inkKnotName: 0
+  - clueData: {fileID: 11400000, guid: f0fb7a449d769e346b8c14a3b642224b, type: 2}
+    narrationClip: {fileID: 0}
+    inkStory: {fileID: 0}
+    inkKnotName: 0
+  - clueData: {fileID: 11400000, guid: f0fb7a449d769e346b8c14a3b642224b, type: 2}
+    narrationClip: {fileID: 0}
+    inkStory: {fileID: 0}
+    inkKnotName: 0
+  - clueData: {fileID: 11400000, guid: 550defcdb024c324da7bfe89b87182a4, type: 2}
+    narrationClip: {fileID: 0}
+    inkStory: {fileID: 4900000, guid: 6c8eb571373cd8f45ba6ececaf19132d, type: 3}
+    inkKnotName: "\u5BF9\u8BDD8"
+  - clueData: {fileID: 11400000, guid: 998c23b1f8b5f8647af6ee225a90e839, type: 2}
+    narrationClip: {fileID: 0}
+    inkStory: {fileID: 0}
+    inkKnotName: 
+  - clueData: {fileID: 11400000, guid: 3389e47206cc0794fb31dc6d96edd3e2, type: 2}
+    narrationClip: {fileID: 0}
+    inkStory: {fileID: 4900000, guid: 6c8eb571373cd8f45ba6ececaf19132d, type: 3}
+    inkKnotName: "\u5BF9\u8BDD13"
+  - clueData: {fileID: 11400000, guid: 27817a38f9fbea4459d64c80d26d1f98, type: 2}
+    narrationClip: {fileID: 0}
+    inkStory: {fileID: 4900000, guid: 6c8eb571373cd8f45ba6ececaf19132d, type: 3}
+    inkKnotName: "\u5BF9\u8BDD14"
+  - clueData: {fileID: 11400000, guid: 5dc0302796d020b4e8c790e7fec336d3, type: 2}
+    narrationClip: {fileID: 0}
+    inkStory: {fileID: 0}
+    inkKnotName: 
+  - clueData: {fileID: 11400000, guid: 3be42912f7d8759498524f9085fc4ff1, type: 2}
+    narrationClip: {fileID: 0}
+    inkStory: {fileID: 0}
+    inkKnotName: 
+  - clueData: {fileID: 11400000, guid: 3bae521a5a7b1ec4eba756b72f8af42a, type: 2}
+    narrationClip: {fileID: 0}
+    inkStory: {fileID: 0}
+    inkKnotName: 
+  - clueData: {fileID: 11400000, guid: 5bf94993c14982e47b3e831c3795d89b, type: 2}
+    narrationClip: {fileID: 0}
+    inkStory: {fileID: 0}
+    inkKnotName: 
+  - clueData: {fileID: 11400000, guid: 63833730b313f604cb3321c65155ae3e, type: 2}
+    narrationClip: {fileID: 0}
+    inkStory: {fileID: 0}
+    inkKnotName: 
+  - clueData: {fileID: 11400000, guid: e9c76c0d65be5d040a849f365906a6e8, type: 2}
+    narrationClip: {fileID: 0}
+    inkStory: {fileID: 0}
+    inkKnotName: 
+  - clueData: {fileID: 11400000, guid: 92ec6a310c6a3dd4c8e39380ff6dcad5, type: 2}
+    narrationClip: {fileID: 0}
+    inkStory: {fileID: 0}
+    inkKnotName: 
+  - clueData: {fileID: 11400000, guid: a813c12516acb7b44a3b07364be711ed, type: 2}
+    narrationClip: {fileID: 0}
+    inkStory: {fileID: 0}
+    inkKnotName: 
+  - clueData: {fileID: 11400000, guid: 95b8dfa499105fa4db500de4fdb9a06b, type: 2}
+    narrationClip: {fileID: 0}
+    inkStory: {fileID: 0}
+    inkKnotName: 
+  - clueData: {fileID: 11400000, guid: 306e8a59f49a2b249b182cce9324e555, type: 2}
+    narrationClip: {fileID: 0}
+    inkStory: {fileID: 0}
+    inkKnotName: 
 --- !u!320 &519625634
 PlayableDirector:
   m_ObjectHideFlags: 0
@@ -5625,7 +5782,7 @@ PlayableDirector:
   m_GameObject: {fileID: 519625630}
   m_Enabled: 1
   serializedVersion: 3
-  m_PlayableAsset: {fileID: 0}
+  m_PlayableAsset: {fileID: 11400000, guid: b0e196743410dc9499ee4861a8f2cdbc, type: 2}
   m_InitialState: 0
   m_WrapMode: 0
   m_DirectorUpdateMode: 1
@@ -5641,6 +5798,20 @@ PlayableDirector:
     value: {fileID: 0}
   - key: {fileID: 0}
     value: {fileID: 0}
+  - key: {fileID: -5973570343002985191, guid: b0e196743410dc9499ee4861a8f2cdbc, type: 2}
+    value: {fileID: 519625636}
+  - key: {fileID: 4341454060312565036, guid: b0e196743410dc9499ee4861a8f2cdbc, type: 2}
+    value: {fileID: 1318010246}
+  - key: {fileID: -4622274956575711215, guid: b0e196743410dc9499ee4861a8f2cdbc, type: 2}
+    value: {fileID: 1468470998}
+  - key: {fileID: 520702824213873773, guid: b0e196743410dc9499ee4861a8f2cdbc, type: 2}
+    value: {fileID: 805055572}
+  - key: {fileID: -8079534360913466963, guid: b0e196743410dc9499ee4861a8f2cdbc, type: 2}
+    value: {fileID: 1394001447}
+  - key: {fileID: -4799030111461768943, guid: b0e196743410dc9499ee4861a8f2cdbc, type: 2}
+    value: {fileID: 1394001447}
+  - key: {fileID: 4870445423086190315, guid: b0e196743410dc9499ee4861a8f2cdbc, type: 2}
+    value: {fileID: 519625635}
   m_ExposedReferences:
     m_References: []
 --- !u!114 &519625635
@@ -6879,8 +7050,8 @@ RectTransform:
   m_Children: []
   m_Father: {fileID: 1221885687}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 0.7065378}
+  m_AnchorMax: {x: 1, y: 0.9999994}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -9719,8 +9890,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "\u8B66\u544A"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 034d17bb5b49b3648809aa2a0b9665a2, type: 2}
-  m_sharedMaterial: {fileID: 1595279912121955130, guid: 034d17bb5b49b3648809aa2a0b9665a2, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -10648,9 +10819,9 @@ RectTransform:
   m_Father: {fileID: 828270686}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_SizeDelta: {x: -17, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &916283467
 MonoBehaviour:
@@ -12110,8 +12281,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "\u5F53\u524D\u7EBF\u7D22\u8FD8\u4E0D\u8DB3\u4EE5\u6307\u8BA4\u8BE5\u5ACC\u7591\u4EBA"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 034d17bb5b49b3648809aa2a0b9665a2, type: 2}
-  m_sharedMaterial: {fileID: 1595279912121955130, guid: 034d17bb5b49b3648809aa2a0b9665a2, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -12939,8 +13110,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "\u6307\u8BA4\u51F6\u624B"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 034d17bb5b49b3648809aa2a0b9665a2, type: 2}
-  m_sharedMaterial: {fileID: 1595279912121955130, guid: 034d17bb5b49b3648809aa2a0b9665a2, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -13709,14 +13880,102 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _clueEntries:
-  - clueData: {fileID: 0}
+  - clueData: {fileID: 11400000, guid: 38eb1651ad0169448a91cc259367a87b, type: 2}
     narrationClip: {fileID: 0}
     inkStory: {fileID: 0}
     inkKnotName: 
-  - clueData: {fileID: 0}
+  - clueData: {fileID: 11400000, guid: d48b517f73332de468c2de85c5c62f04, type: 2}
     narrationClip: {fileID: 0}
-    inkStory: {fileID: 4900000, guid: 0322efd9e9af274448b36c25bd54df78, type: 3}
-    inkKnotName: clue_vip_room
+    inkStory: {fileID: 0}
+    inkKnotName: 
+  - clueData: {fileID: 11400000, guid: 83b047cb2c1ba744dbef82fea7b86b78, type: 2}
+    narrationClip: {fileID: 0}
+    inkStory: {fileID: 0}
+    inkKnotName: 
+  - clueData: {fileID: 11400000, guid: 1189b6faa1cc563409b7ebdfc9787a4a, type: 2}
+    narrationClip: {fileID: 0}
+    inkStory: {fileID: 0}
+    inkKnotName: 
+  - clueData: {fileID: 11400000, guid: f21da7627a0c9d8428f9c389eff85346, type: 2}
+    narrationClip: {fileID: 0}
+    inkStory: {fileID: 0}
+    inkKnotName: 
+  - clueData: {fileID: 11400000, guid: 0c2a2bcf1793a5f4296a5eb3ceff6dd4, type: 2}
+    narrationClip: {fileID: 0}
+    inkStory: {fileID: 0}
+    inkKnotName: 
+  - clueData: {fileID: 11400000, guid: 5ac3e89d7aaf2fa48af048a73a5cdb14, type: 2}
+    narrationClip: {fileID: 0}
+    inkStory: {fileID: 4900000, guid: 6c8eb571373cd8f45ba6ececaf19132d, type: 3}
+    inkKnotName: "\u5BF9\u8BDD4"
+  - clueData: {fileID: 11400000, guid: 3a55e1a3b7430ae458d0a778f18539a2, type: 2}
+    narrationClip: {fileID: 0}
+    inkStory: {fileID: 0}
+    inkKnotName: 
+  - clueData: {fileID: 11400000, guid: 9c8acb2072ebfaf479077f7f1428ddae, type: 2}
+    narrationClip: {fileID: 0}
+    inkStory: {fileID: 0}
+    inkKnotName: 
+  - clueData: {fileID: 11400000, guid: 5f4e0e6b91552bd49a7cfbd36a4b880f, type: 2}
+    narrationClip: {fileID: 0}
+    inkStory: {fileID: 4900000, guid: 6c8eb571373cd8f45ba6ececaf19132d, type: 3}
+    inkKnotName: "\u5BF9\u8BDD13"
+  - clueData: {fileID: 11400000, guid: 148a5bb13a0f17545839b6cf86f5e743, type: 2}
+    narrationClip: {fileID: 0}
+    inkStory: {fileID: 4900000, guid: 6c8eb571373cd8f45ba6ececaf19132d, type: 3}
+    inkKnotName: "\u5BF9\u8BDD14"
+  - clueData: {fileID: 11400000, guid: 6b0dd46b59ff02444a4e1fa3b3208fd0, type: 2}
+    narrationClip: {fileID: 0}
+    inkStory: {fileID: 4900000, guid: 6c8eb571373cd8f45ba6ececaf19132d, type: 3}
+    inkKnotName: "\u5BF9\u8BDD4"
+  - clueData: {fileID: 11400000, guid: e8df3f26f4230c34794f7dc5f443614c, type: 2}
+    narrationClip: {fileID: 0}
+    inkStory: {fileID: 0}
+    inkKnotName: 
+  - clueData: {fileID: 11400000, guid: ef10ad96131d21041a352ea9caae329c, type: 2}
+    narrationClip: {fileID: 0}
+    inkStory: {fileID: 0}
+    inkKnotName: 
+  - clueData: {fileID: 11400000, guid: 7d09a5e301538124ab5d6db80abedadd, type: 2}
+    narrationClip: {fileID: 0}
+    inkStory: {fileID: 0}
+    inkKnotName: 
+  - clueData: {fileID: 11400000, guid: 96f89f844dced534b882cee9fcf669d0, type: 2}
+    narrationClip: {fileID: 0}
+    inkStory: {fileID: 4900000, guid: 6c8eb571373cd8f45ba6ececaf19132d, type: 3}
+    inkKnotName: "\u5BF9\u8BDD15"
+  - clueData: {fileID: 11400000, guid: 889a0f9489b67424ea2538f73862e11a, type: 2}
+    narrationClip: {fileID: 0}
+    inkStory: {fileID: 0}
+    inkKnotName: 
+  - clueData: {fileID: 11400000, guid: 383a0fb45016c4d4398b55709b236571, type: 2}
+    narrationClip: {fileID: 0}
+    inkStory: {fileID: 0}
+    inkKnotName: 
+  - clueData: {fileID: 11400000, guid: 2bab62bbcd8bb824a956912dbd28b1e7, type: 2}
+    narrationClip: {fileID: 0}
+    inkStory: {fileID: 0}
+    inkKnotName: 
+  - clueData: {fileID: 11400000, guid: 5a8c06833e2e499489da8555d9ad7b9c, type: 2}
+    narrationClip: {fileID: 0}
+    inkStory: {fileID: 4900000, guid: 6c8eb571373cd8f45ba6ececaf19132d, type: 3}
+    inkKnotName: "\u5BF9\u8BDD11"
+  - clueData: {fileID: 11400000, guid: 3346b4db1492a4140b9f1d5229f47f91, type: 2}
+    narrationClip: {fileID: 0}
+    inkStory: {fileID: 0}
+    inkKnotName: 
+  - clueData: {fileID: 11400000, guid: bc6ad482a0bc97d40a4e280ef04c8dd3, type: 2}
+    narrationClip: {fileID: 0}
+    inkStory: {fileID: 0}
+    inkKnotName: 
+  - clueData: {fileID: 11400000, guid: 09eaf590fa9517740b95583e73fd7575, type: 2}
+    narrationClip: {fileID: 0}
+    inkStory: {fileID: 0}
+    inkKnotName: 
+  - clueData: {fileID: 11400000, guid: 91ead821ee223ef44a110c6d454cee4a, type: 2}
+    narrationClip: {fileID: 0}
+    inkStory: {fileID: 0}
+    inkKnotName: 
 --- !u!320 &1260613771
 PlayableDirector:
   m_ObjectHideFlags: 0
@@ -13726,7 +13985,7 @@ PlayableDirector:
   m_GameObject: {fileID: 1260613767}
   m_Enabled: 1
   serializedVersion: 3
-  m_PlayableAsset: {fileID: 0}
+  m_PlayableAsset: {fileID: 11400000, guid: 7db47173ea3b3214aaa99c3455f20c63, type: 2}
   m_InitialState: 0
   m_WrapMode: 0
   m_DirectorUpdateMode: 1
@@ -13742,6 +14001,20 @@ PlayableDirector:
     value: {fileID: 0}
   - key: {fileID: 0}
     value: {fileID: 0}
+  - key: {fileID: -5973570343002985191, guid: 7db47173ea3b3214aaa99c3455f20c63, type: 2}
+    value: {fileID: 1800777702}
+  - key: {fileID: 4341454060312565036, guid: 7db47173ea3b3214aaa99c3455f20c63, type: 2}
+    value: {fileID: 1260613773}
+  - key: {fileID: -4622274956575711215, guid: 7db47173ea3b3214aaa99c3455f20c63, type: 2}
+    value: {fileID: 345088006}
+  - key: {fileID: 520702824213873773, guid: 7db47173ea3b3214aaa99c3455f20c63, type: 2}
+    value: {fileID: 1567665341}
+  - key: {fileID: -8079534360913466963, guid: 7db47173ea3b3214aaa99c3455f20c63, type: 2}
+    value: {fileID: 2099918784}
+  - key: {fileID: -4799030111461768943, guid: 7db47173ea3b3214aaa99c3455f20c63, type: 2}
+    value: {fileID: 2099918784}
+  - key: {fileID: -3541117446722573832, guid: 7db47173ea3b3214aaa99c3455f20c63, type: 2}
+    value: {fileID: 1260613772}
   m_ExposedReferences:
     m_References: []
 --- !u!114 &1260613772
@@ -15021,8 +15294,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "\u786E\u8BA4"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 034d17bb5b49b3648809aa2a0b9665a2, type: 2}
-  m_sharedMaterial: {fileID: 1595279912121955130, guid: 034d17bb5b49b3648809aa2a0b9665a2, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -15959,7 +16232,7 @@ RectTransform:
   m_Father: {fileID: 779489511}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 20, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -16773,14 +17046,118 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _clueEntries:
-  - clueData: {fileID: 0}
+  - clueData: {fileID: 11400000, guid: 4de97efc3705ecd45a8fa230b5ea945e, type: 2}
+    narrationClip: {fileID: 0}
+    inkStory: {fileID: 4900000, guid: 6c8eb571373cd8f45ba6ececaf19132d, type: 3}
+    inkKnotName: "\u5BF9\u8BDD1"
+  - clueData: {fileID: 11400000, guid: e038d21d2ccc95f429cc581575c97c23, type: 2}
     narrationClip: {fileID: 0}
     inkStory: {fileID: 0}
     inkKnotName: 
-  - clueData: {fileID: 0}
+  - clueData: {fileID: 11400000, guid: 23d9bc6476d950c43b8781835f801b2e, type: 2}
     narrationClip: {fileID: 0}
-    inkStory: {fileID: 4900000, guid: 0322efd9e9af274448b36c25bd54df78, type: 3}
-    inkKnotName: clue_vip_room
+    inkStory: {fileID: 0}
+    inkKnotName: 
+  - clueData: {fileID: 11400000, guid: d59c1cb905f6f1242836f75ded0e5e50, type: 2}
+    narrationClip: {fileID: 0}
+    inkStory: {fileID: 4900000, guid: 6c8eb571373cd8f45ba6ececaf19132d, type: 3}
+    inkKnotName: "\u5BF9\u8BDD2"
+  - clueData: {fileID: 11400000, guid: 334967a51407db54188de97f35522ba0, type: 2}
+    narrationClip: {fileID: 0}
+    inkStory: {fileID: 0}
+    inkKnotName: 
+  - clueData: {fileID: 11400000, guid: daa0072a3edac1346bf7082a35db4e9c, type: 2}
+    narrationClip: {fileID: 0}
+    inkStory: {fileID: 4900000, guid: 6c8eb571373cd8f45ba6ececaf19132d, type: 3}
+    inkKnotName: "\u5BF9\u8BDD6"
+  - clueData: {fileID: 11400000, guid: befb45ceb8b514d4c8ab289ddab92af4, type: 2}
+    narrationClip: {fileID: 0}
+    inkStory: {fileID: 0}
+    inkKnotName: 
+  - clueData: {fileID: 11400000, guid: e67d9463c8be9c34ebd5114aa281da8a, type: 2}
+    narrationClip: {fileID: 0}
+    inkStory: {fileID: 4900000, guid: 6c8eb571373cd8f45ba6ececaf19132d, type: 3}
+    inkKnotName: "\u5BF9\u8BDD7"
+  - clueData: {fileID: 11400000, guid: 0c168094e4eb2f74aa5c25c57bc3ab0b, type: 2}
+    narrationClip: {fileID: 0}
+    inkStory: {fileID: 0}
+    inkKnotName: 
+  - clueData: {fileID: 11400000, guid: 38e19f5eb2545ee41a8b153e826f6b54, type: 2}
+    narrationClip: {fileID: 0}
+    inkStory: {fileID: 4900000, guid: 6c8eb571373cd8f45ba6ececaf19132d, type: 3}
+    inkKnotName: "\u5BF9\u8BDD8"
+  - clueData: {fileID: 11400000, guid: 656cc4d228a814649a7f91a35ab4cc7e, type: 2}
+    narrationClip: {fileID: 0}
+    inkStory: {fileID: 0}
+    inkKnotName: 
+  - clueData: {fileID: 11400000, guid: 6abe6197aa381e6459100029b9fa255e, type: 2}
+    narrationClip: {fileID: 0}
+    inkStory: {fileID: 4900000, guid: 6c8eb571373cd8f45ba6ececaf19132d, type: 3}
+    inkKnotName: "\u5BF9\u8BDD9"
+  - clueData: {fileID: 11400000, guid: 394f40a76ad8c394f97d0086dcfe1496, type: 2}
+    narrationClip: {fileID: 0}
+    inkStory: {fileID: 0}
+    inkKnotName: 
+  - clueData: {fileID: 11400000, guid: 76b4c7aefda048f46a6c52ac4e572401, type: 2}
+    narrationClip: {fileID: 0}
+    inkStory: {fileID: 4900000, guid: 6c8eb571373cd8f45ba6ececaf19132d, type: 3}
+    inkKnotName: "\u5BF9\u8BDD5n1"
+  - clueData: {fileID: 11400000, guid: c70eb7e3e66d1154e89bccec283e8a34, type: 2}
+    narrationClip: {fileID: 0}
+    inkStory: {fileID: 0}
+    inkKnotName: 
+  - clueData: {fileID: 11400000, guid: 5734004578eac3d42afd4d58b2c75438, type: 2}
+    narrationClip: {fileID: 0}
+    inkStory: {fileID: 0}
+    inkKnotName: 
+  - clueData: {fileID: 11400000, guid: a6d46322446b274489777a531e392bb9, type: 2}
+    narrationClip: {fileID: 0}
+    inkStory: {fileID: 0}
+    inkKnotName: 
+  - clueData: {fileID: 11400000, guid: 6be4c873171f21c4e883ae071070bb73, type: 2}
+    narrationClip: {fileID: 0}
+    inkStory: {fileID: 0}
+    inkKnotName: 
+  - clueData: {fileID: 11400000, guid: c3e22d8201ee4104ba1e02346a7fe154, type: 2}
+    narrationClip: {fileID: 0}
+    inkStory: {fileID: 0}
+    inkKnotName: 
+  - clueData: {fileID: 11400000, guid: 382fb8772b21bbf43ab023f1fdc12448, type: 2}
+    narrationClip: {fileID: 0}
+    inkStory: {fileID: 4900000, guid: 6c8eb571373cd8f45ba6ececaf19132d, type: 3}
+    inkKnotName: "\u5BF9\u8BDD10"
+  - clueData: {fileID: 11400000, guid: e5a5b1831e452384dab54949b6289024, type: 2}
+    narrationClip: {fileID: 0}
+    inkStory: {fileID: 0}
+    inkKnotName: 
+  - clueData: {fileID: 11400000, guid: d88b5a3120674f645840283883ca84e9, type: 2}
+    narrationClip: {fileID: 0}
+    inkStory: {fileID: 0}
+    inkKnotName: 
+  - clueData: {fileID: 11400000, guid: 8e8107d427ddaf74ea0d68dd8c1055f1, type: 2}
+    narrationClip: {fileID: 0}
+    inkStory: {fileID: 4900000, guid: 6c8eb571373cd8f45ba6ececaf19132d, type: 3}
+    inkKnotName: "\u5BF9\u8BDD12"
+  - clueData: {fileID: 11400000, guid: 0c9ddecc804e355428b716563179d8df, type: 2}
+    narrationClip: {fileID: 0}
+    inkStory: {fileID: 0}
+    inkKnotName: 
+  - clueData: {fileID: 11400000, guid: b2676f8090ebcf84cb6ca1290cf4788d, type: 2}
+    narrationClip: {fileID: 0}
+    inkStory: {fileID: 0}
+    inkKnotName: 
+  - clueData: {fileID: 11400000, guid: 5e7c86d46246d314898bf66be41b2b13, type: 2}
+    narrationClip: {fileID: 0}
+    inkStory: {fileID: 0}
+    inkKnotName: 
+  - clueData: {fileID: 11400000, guid: 7b6df0b1d4d7553459f11c90d51e8d12, type: 2}
+    narrationClip: {fileID: 0}
+    inkStory: {fileID: 4900000, guid: 6c8eb571373cd8f45ba6ececaf19132d, type: 3}
+    inkKnotName: "\u5BF9\u8BDD16"
+  - clueData: {fileID: 11400000, guid: 43b11bce0505da6429929f67b3b5a016, type: 2}
+    narrationClip: {fileID: 0}
+    inkStory: {fileID: 0}
+    inkKnotName: 
 --- !u!320 &1477725458
 PlayableDirector:
   m_ObjectHideFlags: 0
@@ -16818,6 +17195,8 @@ PlayableDirector:
     value: {fileID: 1477725460}
   - key: {fileID: -4799030111461768943, guid: 03cb24d331845d54a81b540cd0738ee3, type: 2}
     value: {fileID: 1252183237}
+  - key: {fileID: -6406520778860720735, guid: 03cb24d331845d54a81b540cd0738ee3, type: 2}
+    value: {fileID: 1477725459}
   m_ExposedReferences:
     m_References: []
 --- !u!114 &1477725459
@@ -17308,8 +17687,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "\u89E3\u9501\u5168\u7EBF\u7D22"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 034d17bb5b49b3648809aa2a0b9665a2, type: 2}
-  m_sharedMaterial: {fileID: 1595279912121955130, guid: 034d17bb5b49b3648809aa2a0b9665a2, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -19263,8 +19642,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "\u91CD\u5F00\n"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 034d17bb5b49b3648809aa2a0b9665a2, type: 2}
-  m_sharedMaterial: {fileID: 1595279912121955130, guid: 034d17bb5b49b3648809aa2a0b9665a2, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -20699,8 +21078,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "\u5948\u7279\u57CE\u7684\u65E5\u672C\u4EBA\u611F\u53F9\u4E8E\u4F60\u4EEC\u8FD9\u5E2E\u65E0\u540D\u5C0F\u5352\u5DE6\u53F3\u4E86\u65B0\u6D1B\u6749\u77F6\u7684\u4E00\u65B9\u5929\u5730\u3002\n\u4F46\u4ED6\u4EEC\u6CA1\u6709\u60F3\u5230\u7684\u662F\uFF0C\u5C31\u5728\u4E0D\u4E45\u540E\uFF0C\u4F1A\u6709\u53E6\u4E00\u4E2A\u65E0\u540D\u5C0F\u5352\u51FA\u73B0\uFF0C\u4ED6\u4F1A\u50CF\u4F60\u4EEC\u6539\u53D8\u65B0\u6D1B\u6749\u77F6\u4E00\u6837\u6539\u53D8\u5948\u7279\u57CE\uFF0C\u6210\u4E3A\u90A3\u91CC\u552F\u4E00\u6D3B\u7740\u7684\u4F20\u5947\u3002"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 034d17bb5b49b3648809aa2a0b9665a2, type: 2}
-  m_sharedMaterial: {fileID: 1595279912121955130, guid: 034d17bb5b49b3648809aa2a0b9665a2, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -20921,8 +21300,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "\u8FD4\u56DE"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 034d17bb5b49b3648809aa2a0b9665a2, type: 2}
-  m_sharedMaterial: {fileID: 1595279912121955130, guid: 034d17bb5b49b3648809aa2a0b9665a2, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -21804,8 +22183,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "\u8FD4\u56DE\n"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 034d17bb5b49b3648809aa2a0b9665a2, type: 2}
-  m_sharedMaterial: {fileID: 1595279912121955130, guid: 034d17bb5b49b3648809aa2a0b9665a2, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -21897,7 +22276,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1973348182
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -23458,7 +23837,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1.75, y: 0.875}
+    oldSize: {x: 1.75, y: 0.9375}
     newSize: {x: 1.75, y: 0.875}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
@@ -23986,7 +24365,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1.75, y: 0.9375}
+    oldSize: {x: 1.75, y: 0.875}
     newSize: {x: 1.75, y: 0.875}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
@@ -24024,7 +24403,83 @@ MonoBehaviour:
     narrationClip: {fileID: 0}
     inkStory: {fileID: 4900000, guid: 6c8eb571373cd8f45ba6ececaf19132d, type: 3}
     inkKnotName: "\u5BF9\u8BDD2"
+  - clueData: {fileID: 11400000, guid: e86c326fc75ae7743a0d56938c3105b8, type: 2}
+    narrationClip: {fileID: 0}
+    inkStory: {fileID: 0}
+    inkKnotName: 
+  - clueData: {fileID: 11400000, guid: 7076b8914496014458eb9d71f04eff24, type: 2}
+    narrationClip: {fileID: 0}
+    inkStory: {fileID: 0}
+    inkKnotName: 
+  - clueData: {fileID: 11400000, guid: 9422ff4d690a89a45a2f095843e16b9e, type: 2}
+    narrationClip: {fileID: 0}
+    inkStory: {fileID: 0}
+    inkKnotName: 
+  - clueData: {fileID: 11400000, guid: b372bf4c0be44ec40ab13d4068d950d2, type: 2}
+    narrationClip: {fileID: 0}
+    inkStory: {fileID: 4900000, guid: 6c8eb571373cd8f45ba6ececaf19132d, type: 3}
+    inkKnotName: "\u5BF9\u8BDD3"
+  - clueData: {fileID: 11400000, guid: fd9e9fba1282233489bb449b95384180, type: 2}
+    narrationClip: {fileID: 0}
+    inkStory: {fileID: 0}
+    inkKnotName: 
+  - clueData: {fileID: 11400000, guid: 6934a3596b2bcf84b818c4b6b8b3f295, type: 2}
+    narrationClip: {fileID: 0}
+    inkStory: {fileID: 4900000, guid: 6c8eb571373cd8f45ba6ececaf19132d, type: 3}
+    inkKnotName: "\u5BF9\u8BDD4"
+  - clueData: {fileID: 11400000, guid: 96159cbee76fbff468c91c630d02c6a1, type: 2}
+    narrationClip: {fileID: 0}
+    inkStory: {fileID: 0}
+    inkKnotName: 
+  - clueData: {fileID: 11400000, guid: 69cfa4a1406da81409b25d9661f671b9, type: 2}
+    narrationClip: {fileID: 0}
+    inkStory: {fileID: 0}
+    inkKnotName: 
+  - clueData: {fileID: 11400000, guid: 14f4c4a81b3c6ad42859400e59e775fd, type: 2}
+    narrationClip: {fileID: 0}
+    inkStory: {fileID: 0}
+    inkKnotName: 
+  - clueData: {fileID: 11400000, guid: 4cd6e9b8612993342bb0e27b2a5eaae8, type: 2}
+    narrationClip: {fileID: 0}
+    inkStory: {fileID: 0}
+    inkKnotName: 
+  - clueData: {fileID: 11400000, guid: 4ff05824af0fd3a40b5099e11fa06197, type: 2}
+    narrationClip: {fileID: 0}
+    inkStory: {fileID: 0}
+    inkKnotName: 
+  - clueData: {fileID: 11400000, guid: a2499d73690c6df488591b6906ace43f, type: 2}
+    narrationClip: {fileID: 0}
+    inkStory: {fileID: 0}
+    inkKnotName: 
+  - clueData: {fileID: 11400000, guid: 03a2332ef9c136d428e15485fb9208ea, type: 2}
+    narrationClip: {fileID: 0}
+    inkStory: {fileID: 4900000, guid: 6c8eb571373cd8f45ba6ececaf19132d, type: 3}
+    inkKnotName: "\u5BF9\u8BDD5"
   - clueData: {fileID: 11400000, guid: a3bc650207ffde34a8b93dc1daf678c3, type: 2}
+    narrationClip: {fileID: 0}
+    inkStory: {fileID: 0}
+    inkKnotName: 
+  - clueData: {fileID: 11400000, guid: 27bf1f1b73caab445b06808d2f1ddb38, type: 2}
+    narrationClip: {fileID: 0}
+    inkStory: {fileID: 0}
+    inkKnotName: 
+  - clueData: {fileID: 11400000, guid: 8ec24588a8489424cb35e6c8b19b0f61, type: 2}
+    narrationClip: {fileID: 0}
+    inkStory: {fileID: 0}
+    inkKnotName: 
+  - clueData: {fileID: 11400000, guid: 7264f1240b5f8dd44972796dd12f8680, type: 2}
+    narrationClip: {fileID: 0}
+    inkStory: {fileID: 0}
+    inkKnotName: 
+  - clueData: {fileID: 11400000, guid: 6144618ed886e0b44a6924733afb62da, type: 2}
+    narrationClip: {fileID: 0}
+    inkStory: {fileID: 0}
+    inkKnotName: 
+  - clueData: {fileID: 11400000, guid: 24cc1b85d32ff4a419689ef9c8139824, type: 2}
+    narrationClip: {fileID: 0}
+    inkStory: {fileID: 0}
+    inkKnotName: 
+  - clueData: {fileID: 11400000, guid: a761f81587a1f23418975d7dff1c769b, type: 2}
     narrationClip: {fileID: 0}
     inkStory: {fileID: 0}
     inkKnotName: 
