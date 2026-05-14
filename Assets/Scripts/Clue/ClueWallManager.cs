@@ -80,9 +80,18 @@ public class ClueWallManager : MonoBehaviour
     [Tooltip("开始回溯按钮（点击后关闭线索墙并进入该嫌疑人的回溯）")]
     [SerializeField] private Button _startRetrospectButton;
 
+    [Header("指认凶手入口")]
+    [Tooltip("指认凶手按钮（主面板上）")]
+    [SerializeField] private Button _accuseButton;
+    [Tooltip("收集多少条线索后才显示指认按钮（0 = 始终显示）")]
+    [SerializeField] private int _accuseUnlockClueCount = 3;
+
+    [Header("测试功能")]
+    [Tooltip("【测试用】一键解锁所有线索按钮")]
+    [SerializeField] private Button _debugUnlockAllButton;
+
     [Header("数据")]
     [SerializeField] private SuspectEntry[] _suspects;
-    [SerializeField] private ClueDataSO[] _clueDatabase;
 
     // ─── 内部状态 ─────────────────────────────────────────────
 
@@ -116,11 +125,16 @@ public class ClueWallManager : MonoBehaviour
             _backButton.onClick.AddListener(BackToMainPanel);
         if (_startRetrospectButton != null)
             _startRetrospectButton.onClick.AddListener(OnStartRetrospectClicked);
+        if (_accuseButton != null)
+            _accuseButton.onClick.AddListener(OnAccuseButtonClick);
+        if (_debugUnlockAllButton != null)
+            _debugUnlockAllButton.onClick.AddListener(OnDebugUnlockAll);
 
         if (ClueManager.Instance != null)
             ClueManager.Instance.OnClueCollected += OnClueCollected;
 
         RefreshCharacterCards();
+        RefreshAccuseButton();
     }
 
     private void OnDestroy()
@@ -135,6 +149,7 @@ public class ClueWallManager : MonoBehaviour
     public void OpenClueWall()
     {
         RefreshCharacterCards();
+        RefreshAccuseButton();
         SetVisible(_mainCanvasGroup, true);
         SetVisible(_detailCanvasGroup, false);
 
@@ -304,6 +319,7 @@ public class ClueWallManager : MonoBehaviour
                 RefreshClueList(_currentSuspectIndex);
         }
         RefreshCharacterCards();
+        RefreshAccuseButton();
     }
 
     // ─── 工具方法 ─────────────────────────────────────────────
@@ -311,9 +327,13 @@ public class ClueWallManager : MonoBehaviour
     private List<ClueDataSO> GetCluesForSuspect(int suspectIndex)
     {
         List<ClueDataSO> result = new List<ClueDataSO>();
-        if (_clueDatabase == null || suspectIndex < 0 || suspectIndex >= _suspects.Length) return result;
+        if (ClueManager.Instance == null || suspectIndex < 0 || suspectIndex >= _suspects.Length) return result;
+
+        List<ClueDataSO> allClues = ClueManager.Instance.GetAllClues();
+        if (allClues == null) return result;
+
         string suspectId = _suspects[suspectIndex].suspectId;
-        foreach (ClueDataSO clue in _clueDatabase)
+        foreach (ClueDataSO clue in allClues)
         {
             if (clue != null && clue.suspectId == suspectId)
                 result.Add(clue);
@@ -376,5 +396,31 @@ public class ClueWallManager : MonoBehaviour
         yield return StartCoroutine(SlidePanel(panel, targetPos, duration));
         SetVisible(cg, false);
         _slideCoroutine = null;
+    }
+
+    // ─── 指认入口 ─────────────────────────────────────────────
+
+    private void RefreshAccuseButton()
+    {
+        if (_accuseButton == null) return;
+        int count = ClueManager.Instance != null ? ClueManager.Instance.GetCollectedCount() : 0;
+        bool unlocked = _accuseUnlockClueCount <= 0 || count >= _accuseUnlockClueCount;
+        _accuseButton.gameObject.SetActive(unlocked);
+    }
+
+    private void OnAccuseButtonClick()
+    {
+        CloseClueWall();
+        EndingManager.Instance?.ShowAccusationPanel();
+    }
+
+    // ─── 测试功能 ─────────────────────────────────────────────
+
+    private void OnDebugUnlockAll()
+    {
+        ClueManager.Instance?.UnlockAllClues();
+        RefreshCharacterCards();
+        RefreshAccuseButton();
+        Debug.Log("[ClueWall] 测试：已解锁所有线索");
     }
 }

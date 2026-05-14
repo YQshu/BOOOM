@@ -72,6 +72,9 @@ public class ClueManager : Singleton<ClueManager>
     /// <summary>获取已收集 ID 列表副本。</summary>
     public List<string> GetCollectedClueIds() => new List<string>(_collectedIds);
 
+    /// <summary>获取完整线索数据库（只读）。</summary>
+    public List<ClueDataSO> GetAllClues() => _clueDatabase;
+
     /// <summary>获取 ID 对应的 SO（未找到返回 null）。</summary>
     public ClueDataSO GetClueSOById(string clueId)
     {
@@ -85,6 +88,28 @@ public class ClueManager : Singleton<ClueManager>
         _collectedIds.Clear();
         _collectedIdsList.Clear();
         if (_enableLog) Debug.Log("[Clue] 已清空全部线索。");
+    }
+
+    /// <summary>
+    /// 【测试用】一键解锁所有线索。
+    /// </summary>
+    public void UnlockAllClues()
+    {
+        if (_clueDatabase == null || _clueDatabase.Count == 0)
+        {
+            Debug.LogWarning("[Clue] 线索数据库为空，无法解锁。");
+            return;
+        }
+
+        int unlocked = 0;
+        foreach (ClueDataSO clue in _clueDatabase)
+        {
+            if (clue == null) continue;
+            if (CollectClue(clue))
+                unlocked++;
+        }
+
+        Debug.Log($"[Clue] 测试模式：已解锁 {unlocked} 条线索（总计 {_collectedIds.Count} 条）");
     }
 
     // ─── 内部 ────────────────────────────────────────────────

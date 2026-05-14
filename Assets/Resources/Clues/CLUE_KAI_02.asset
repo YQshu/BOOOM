@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   clueId: CLUE_KAI_02
   clueName: "\u76D1\u63A7\u76F2\u533A"
-  suspectId: SUSPECT_KAI
+  suspectId: SUSPECT_AILA
   time: 00:08
   summary: "\u76D1\u63A7\u6070\u597D\u6709\u76F2\u533A"
   icon: {fileID: 0}

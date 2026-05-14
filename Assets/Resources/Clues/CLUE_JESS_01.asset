@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   clueId: CLUE_JESS_01
   clueName: "VIP\u5BA4\u7684\u75D5\u8FF9"
-  suspectId: SUSPECT_JESS
+  suspectId: SUSPECT_JIESI
   time: 00:05
   summary: "\u5728VIP\u5BA4\u53D1\u73B0\u4E86\u53EF\u7591\u7684\u75D5\u8FF9"
   icon: {fileID: 0}

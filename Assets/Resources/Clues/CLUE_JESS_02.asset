@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   clueId: CLUE_JESS_02
   clueName: "\u51F6\u5668\u7EBF\u7D22"
-  suspectId: SUSPECT_JESS
+  suspectId: SUSPECT_XIANSI
   time: 00:12
   summary: "\u53D1\u73B0\u4E86\u53EF\u80FD\u662F\u51F6\u5668\u7684\u7269\u54C1"
   icon: {fileID: 0}
