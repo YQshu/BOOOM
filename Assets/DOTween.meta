@@ -1,6 +1,10 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/DOTween.meta
 guid: b479b4615e7d7f4448d42dd5f7d9aef2
 folderAsset: yes
+========
+guid: 407217d7ecab3b6478c22a07c52ee231
+>>>>>>>> origin/动线制作:Assets/Ink/Stories/对话表.ink.meta
 DefaultImporter:
   externalObjects: {}
   userData: 

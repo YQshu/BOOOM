@@ -57,12 +57,12 @@ public static class CsvToInkConverter
         if (rawLines.Length < 2) throw new System.Exception("CSV 文件为空或只有表头");
 
         string[] headers = ParseCsvLine(rawLines[0]);
-        int idxSeq     = FindColumn(headers, "对话序号");
+        int idxKnot     = FindColumn(headers, "Knot");
         int idxSpeaker = FindColumn(headers, "角色");
         int idxContent = FindColumn(headers, "对话内容");
 
-        if (idxSeq < 0 || idxContent < 0)
-            throw new System.Exception("找不到必要列：对话序号 / 对话内容\n请检查 CSV 表头名称是否正确。");
+        if (idxKnot < 0 || idxContent < 0)
+            throw new System.Exception("找不到必要列：Knot / 对话内容\n请检查 CSV 表头名称是否正确。");
 
         var order  = new List<string>();
         var groups = new Dictionary<string, List<(string speaker, string content)>>();
@@ -72,18 +72,18 @@ public static class CsvToInkConverter
             if (string.IsNullOrWhiteSpace(rawLines[i])) continue;
             string[] cols = ParseCsvLine(rawLines[i]);
 
-            string seq     = GetCol(cols, idxSeq).Trim();
+            string knot     = GetCol(cols, idxKnot).Trim();
             string speaker = idxSpeaker >= 0 ? GetCol(cols, idxSpeaker).Trim() : "";
             string content = GetCol(cols, idxContent).Trim();
 
-            if (string.IsNullOrEmpty(seq) || string.IsNullOrEmpty(content)) continue;
+            if (string.IsNullOrEmpty(knot) || string.IsNullOrEmpty(content)) continue;
 
-            if (!groups.ContainsKey(seq))
+            if (!groups.ContainsKey(knot))
             {
-                order.Add(seq);
-                groups[seq] = new List<(string, string)>();
+                order.Add(knot);
+                groups[knot] = new List<(string, string)>();
             }
-            groups[seq].Add((speaker, content));
+            groups[knot].Add((speaker, content));
         }
 
         if (order.Count == 0)
@@ -118,8 +118,14 @@ public static class CsvToInkConverter
 
     static string SanitizeKnotName(string name, int index)
     {
-        var match = Regex.Match(name, @"\d+");
-        return match.Success ? $"dialogue_{match.Value}" : $"dialogue_{index}";
+        // 基于你的要求：把 CSV 中的 Knot 名称原样使用，但将短横线 '-' 替换为字母 'n'
+        var s = (name ?? "").Trim();
+        if (!string.IsNullOrEmpty(s))
+        {
+            s = s.Replace("-", "n");
+        }
+        else s = $"knot_{index}";
+        return s;
     }
 
     static int FindColumn(string[] headers, string name)
