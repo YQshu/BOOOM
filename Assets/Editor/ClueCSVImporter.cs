@@ -8,13 +8,12 @@ using UnityEditor;
 /// 菜单：BOOOM → 导入线索 CSV
 ///
 /// CSV 格式（UTF-8，首行为表头）：
-/// clueId, clueName, suspectId, time, summary
+/// clueId, suspectId, time, summary
 ///
-/// - clueId   : 线索唯一ID，如 CLUE_JESS_01（必填）
-/// - clueName : 线索名称（必填）
-/// - suspectId: 所属嫌疑人ID，与 SuspectEntry.loopId 一致（必填）
+/// - clueId   : 线索唯一ID，支持中文（如 凯-1-B）（必填）
+/// - suspectId: 所属嫌疑人ID，与 SuspectEntry.suspectId 一致（必填）
 /// - time     : 时间戳，如 00:05（可留空）
-/// - summary  : 线索摘要（可留空）
+/// - summary  : 线索描述（可留空）
 ///
 /// 生成路径：Assets/Resources/Clues/（自动创建）
 /// 已存在同名 SO 时跳过（不覆盖），避免误删已有数据。
@@ -54,7 +53,7 @@ public class ClueCSVImporter : EditorWindow
 
         // 模板路径提示
         string templatePath = Path.Combine(Application.dataPath, "Editor/ClueImportTemplate.csv");
-        EditorGUILayout.HelpBox($"CSV 模板位置：{templatePath}\n列顺序：clueId, clueName, suspectId, time, summary", MessageType.Info);
+        EditorGUILayout.HelpBox($"CSV 模板位置：{templatePath}\n列顺序：clueId, suspectId, time, summary", MessageType.Info);
 
         EditorGUILayout.Space();
 
@@ -99,14 +98,13 @@ public class ClueCSVImporter : EditorWindow
         // 解析表头，确定列索引（允许列顺序不固定）
         string[] headers = ParseRow(lines[0]);
         int iId      = FindHeader(headers, "clueId");
-        int iName    = FindHeader(headers, "clueName");
         int iSuspect = FindHeader(headers, "suspectId");
         int iTime    = FindHeader(headers, "time");
         int iSummary = FindHeader(headers, "summary");
 
-        if (iId < 0 || iName < 0 || iSuspect < 0)
+        if (iId < 0 || iSuspect < 0)
         {
-            _lastLog = "[错误] CSV 表头缺少必填列（clueId / clueName / suspectId）。";
+            _lastLog = "[错误] CSV 表头缺少必填列（clueId / suspectId）。";
             return;
         }
 
@@ -117,15 +115,14 @@ public class ClueCSVImporter : EditorWindow
 
             string[] cols = ParseRow(line);
 
-            string clueId   = SafeGet(cols, iId).Trim();
-            string clueName = SafeGet(cols, iName).Trim();
+            string clueId    = SafeGet(cols, iId).Trim();
             string suspectId = SafeGet(cols, iSuspect).Trim();
             string time      = iTime    >= 0 ? SafeGet(cols, iTime).Trim()    : "";
             string summary   = iSummary >= 0 ? SafeGet(cols, iSummary).Trim() : "";
 
-            if (string.IsNullOrEmpty(clueId) || string.IsNullOrEmpty(clueName) || string.IsNullOrEmpty(suspectId))
+            if (string.IsNullOrEmpty(clueId) || string.IsNullOrEmpty(suspectId))
             {
-                log.AppendLine($"[第{i+1}行] 跳过：clueId/clueName/suspectId 不能为空");
+                log.AppendLine($"[第{i+1}行] 跳过：clueId/suspectId 不能为空");
                 error++;
                 continue;
             }
@@ -142,7 +139,6 @@ public class ClueCSVImporter : EditorWindow
 
             ClueDataSO so = ScriptableObject.CreateInstance<ClueDataSO>();
             so.clueId    = clueId;
-            so.clueName  = clueName;
             so.suspectId = suspectId;
             so.time      = time;
             so.summary   = summary;

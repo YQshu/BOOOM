@@ -15,7 +15,9 @@ public class ClueSignalReceiver : MonoBehaviour, INotificationReceiver
     {
         [Tooltip("触发的线索 SO")]
         public ClueDataSO clueData;
-        [Tooltip("触发时启动的Ink对话（留空则直接收集线索）")]
+        [Tooltip("触发时播放的旁白音频（可选，有旁白则不触发Ink对话）")]
+        public AudioClip narrationClip;
+        [Tooltip("触发时启动的Ink对话（留空则直接收集线索，有旁白时忽略）")]
         public TextAsset inkStory;
         [Tooltip("Ink对话起始knot（留空则从头播放）")]
         public string inkKnotName;
@@ -63,14 +65,20 @@ public class ClueSignalReceiver : MonoBehaviour, INotificationReceiver
             return;
         }
 
-        // 有Ink对话：暂停Timeline并启动对话（对话中通过tag自动收集线索）
-        if (entry.inkStory != null)
+        // 优先级：旁白 > Ink对话 > 直接收集
+        if (entry.narrationClip != null)
         {
+            // 有旁白：播放旁白并直接收集线索（不触发Ink）
+            TriggerNarrationClue(entry);
+        }
+        else if (entry.inkStory != null)
+        {
+            // 有Ink对话：暂停Timeline并启动对话（对话中通过tag自动收集线索）
             TriggerDialogueClue(entry);
         }
         else
         {
-            // 无对话：直接收集线索
+            // 无旁白无对话：直接收集线索
             TriggerDirectClue(entry);
         }
     }
@@ -78,12 +86,32 @@ public class ClueSignalReceiver : MonoBehaviour, INotificationReceiver
     // ─── 内部逻辑 ────────────────────────────────────────────
 
     /// <summary>
-    /// 直接收集线索（无对话）。
+    /// 播放旁白并直接收集线索（不触发Ink对话）。
+    /// </summary>
+    private void TriggerNarrationClue(SignalClueEntry entry)
+    {
+        // 播放旁白音频
+        if (InnsmouthCafe.Audio.AudioManager.Instance != null)
+        {
+            InnsmouthCafe.Audio.AudioManager.Instance.PlayNarration(entry.narrationClip);
+        }
+        else
+        {
+            Debug.LogWarning("[Rewind] AudioManager 未找到，无法播放旁白。");
+        }
+
+        // 直接收集线索
+        ClueManager.Instance?.CollectClue(entry.clueData);
+        Debug.Log($"[Rewind] 旁白线索触发：{entry.clueData.clueId}，旁白={entry.narrationClip.name}");
+    }
+
+    /// <summary>
+    /// 直接收集线索（无对话、无旁白）。
     /// </summary>
     private void TriggerDirectClue(SignalClueEntry entry)
     {
         ClueManager.Instance?.CollectClue(entry.clueData);
-        Debug.Log($"[Rewind] 自动线索触发：{entry.clueData.clueId}（{entry.clueData.clueName}）");
+        Debug.Log($"[Rewind] 自动线索触发：{entry.clueData.clueId}");
     }
 
     private void TriggerDialogueClue(SignalClueEntry entry)

@@ -125,7 +125,7 @@ public class ClueManager : Singleton<ClueManager>
         _collectedIds.Add(clue.clueId);
         _collectedIdsList.Add(clue.clueId);
 
-        if (_enableLog) Debug.Log($"[Clue] 已收集：{clue.clueId} - {clue.clueName}");
+        if (_enableLog) Debug.Log($"[Clue] 已收集：{clue.clueId}");
 
         OnClueCollected?.Invoke(clue);
         return true;

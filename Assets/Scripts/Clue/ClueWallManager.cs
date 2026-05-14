@@ -279,7 +279,7 @@ public class ClueWallManager : MonoBehaviour
             {
                 if (isCollected)
                 {
-                    ui.Setup(clue.time, clue.clueName, clue.icon, isNewClue: IsNewClue(clue.clueId));
+                    ui.Setup(clue.clueId, clue.time, clue.summary, isNewClue: IsNewClue(clue.clueId));
                     Button btn = item.GetComponent<Button>();
                     if (btn != null)
                     {
@@ -289,7 +289,7 @@ public class ClueWallManager : MonoBehaviour
                 }
                 else
                 {
-                    ui.Setup(clue.time, "???", null, isNewClue: false);
+                    ui.Setup("???", "???", "???", isNewClue: false);
                     Button btn = item.GetComponent<Button>();
                     if (btn != null) btn.interactable = false;
                 }
