@@ -86,4 +86,22 @@ public class PlayerController : MonoBehaviour
         if (_enableLog)
             Debug.Log($"[Player] 输入{(enabled ? "启用" : "禁用")}");
     }
+
+    /// <summary>
+    /// 获取当前位置（用于保存）。
+    /// </summary>
+    public Vector2 GetPosition()
+    {
+        return _rb.position;
+    }
+
+    /// <summary>
+    /// 加载位置（存档恢复时调用）。
+    /// </summary>
+    public void LoadPosition(Vector2 position)
+    {
+        _rb.position = position;
+        if (_enableLog)
+            Debug.Log($"[Player] 位置已加载：{position}");
+    }
 }

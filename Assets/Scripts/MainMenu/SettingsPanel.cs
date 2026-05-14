@@ -25,9 +25,13 @@ namespace InnsmouthCafe.UI
 
         [Header("导航")]
         [SerializeField] private Button _backButton;
+        [SerializeField] private Button _clearSaveButton;
 
         [Header("依赖")]
+        [Tooltip("主菜单控制器（仅主菜单场景使用）")]
         [SerializeField] private MainMenuController _mainMenuController;
+        [Tooltip("游戏控制器（仅游戏场景使用）")]
+        [SerializeField] private MainGameController _mainGameController;
 
         // ── 运行时字段 ────────────────────────────────────────────
 
@@ -141,6 +145,9 @@ namespace InnsmouthCafe.UI
             _resolutionDropdown.onValueChanged.AddListener(OnResolutionChanged);
             _backButton.onClick.AddListener(OnBackClicked);
 
+            if (_clearSaveButton != null)
+                _clearSaveButton.onClick.AddListener(OnClearSaveClicked);
+
             // SFX 滑条松手时播放测试音效，让用户听到实际效果
             AddPointerUpHandler(_sfxSlider.gameObject, OnSfxSliderPointerUp);
         }
@@ -190,7 +197,38 @@ namespace InnsmouthCafe.UI
             if (AudioManager.Instance != null)
                 AudioManager.Instance.PlaySfx(SoundId.ButtonClick);
 
-            _mainMenuController.ShowMainMenu();
+            // 根据场景判断调用哪个控制器
+            if (_mainMenuController != null)
+            {
+                // 主菜单场景
+                _mainMenuController.ShowMainMenu();
+            }
+            else if (_mainGameController != null)
+            {
+                // 游戏场景
+                _mainGameController.CloseSettings();
+            }
+            else
+            {
+                Debug.LogWarning("[SettingsPanel] 未找到控制器引用");
+            }
+        }
+
+        private void OnClearSaveClicked()
+        {
+            if (AudioManager.Instance != null)
+                AudioManager.Instance.PlaySfx(SoundId.ButtonClick);
+
+            // 删除存档
+            if (SaveManager.Instance != null)
+            {
+                SaveManager.Instance.DeleteSave();
+                Debug.Log("[Settings] 存档已清除");
+            }
+            else
+            {
+                Debug.LogWarning("[Settings] SaveManager 未找到，无法清除存档");
+            }
         }
 
         // ── 工具方法 ──────────────────────────────────────────────

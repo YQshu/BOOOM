@@ -91,6 +91,47 @@ public class ClueManager : Singleton<ClueManager>
     }
 
     /// <summary>
+    /// 批量加载线索（存档恢复时调用）。
+    /// 清空现有线索，批量添加存档中的线索ID。
+    /// </summary>
+    public void LoadClues(List<string> clueIds)
+    {
+        if (clueIds == null)
+        {
+            Debug.LogWarning("[Clue] LoadClues 参数为 null");
+            return;
+        }
+
+        // 清空现有线索
+        _collectedIds.Clear();
+        _collectedIdsList.Clear();
+
+        // 批量添加（不触发事件，避免重复保存）
+        int loadedCount = 0;
+        foreach (string clueId in clueIds)
+        {
+            if (string.IsNullOrWhiteSpace(clueId)) continue;
+
+            // 验证线索ID是否存在于数据库
+            if (!_idToSO.ContainsKey(clueId))
+            {
+                Debug.LogWarning($"[Clue] 存档中的线索ID不存在于数据库：{clueId}");
+                continue;
+            }
+
+            if (!_collectedIds.Contains(clueId))
+            {
+                _collectedIds.Add(clueId);
+                _collectedIdsList.Add(clueId);
+                loadedCount++;
+            }
+        }
+
+        if (_enableLog)
+            Debug.Log($"[Clue] 已加载 {loadedCount} 条线索（总计 {_collectedIds.Count} 条）");
+    }
+
+    /// <summary>
     /// 【测试用】一键解锁所有线索。
     /// </summary>
     public void UnlockAllClues()

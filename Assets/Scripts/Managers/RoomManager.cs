@@ -99,4 +99,21 @@ public class RoomManager : MonoBehaviour
             _isFading = true;
         }
     }
+
+    /// <summary>
+    /// 获取当前房间ID（用于保存）。
+    /// </summary>
+    public string GetCurrentRoomId()
+    {
+        return _currentRoomId;
+    }
+
+    /// <summary>
+    /// 加载房间ID（存档恢复时调用，不触发UI提示）。
+    /// </summary>
+    public void LoadRoomId(string roomId)
+    {
+        _currentRoomId = roomId;
+        Debug.Log($"[Room] 房间ID已加载：{roomId}");
+    }
 }
