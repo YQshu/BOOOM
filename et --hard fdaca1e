@@ -1,0 +1,30 @@
+[33md757dda[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32m动线制作[m[33m, [m[1;31morigin/动线制作[m[33m)[m HEAD@{0}: checkout: moving from main to 动线制作
+[33mfdaca1e[m[33m ([m[1;32mmain[m[33m)[m HEAD@{1}: commit: 动线完成
+[33md757dda[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32m动线制作[m[33m, [m[1;31morigin/动线制作[m[33m)[m HEAD@{2}: reset: moving to origin/动线制作
+[33md9268d2[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m HEAD@{3}: rebase (abort): returning to refs/heads/main
+[33md757dda[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32m动线制作[m[33m, [m[1;31morigin/动线制作[m[33m)[m HEAD@{4}: pull --rebase origin 动线制作 (start): checkout d757dda952e668d7f5f4e172380cc5f2bfddce07
+[33md9268d2[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m HEAD@{5}: commit: 开始界面完成
+[33ma0f88cb[m HEAD@{6}: commit: 开始界面
+[33m57f4c61[m HEAD@{7}: pull --rebase origin main (finish): returning to refs/heads/main
+[33m57f4c61[m HEAD@{8}: pull --rebase origin main (start): checkout 57f4c61aaed2ce25a9eefd1558a28791eb3c796f
+[33m2baaf7e[m HEAD@{9}: checkout: moving from feature/CheckPoint to main
+[33m535f2e5[m[33m ([m[1;31morigin/feature/CheckPoint[m[33m, [m[1;32mfeature/CheckPoint[m[33m)[m HEAD@{10}: commit: 检查点
+[33maadd2cd[m[33m ([m[1;31morigin/feature/MainMenu[m[33m, [m[1;32mfeature/MainMenu[m[33m)[m HEAD@{11}: checkout: moving from feature/MainMenu to feature/CheckPoint
+[33maadd2cd[m[33m ([m[1;31morigin/feature/MainMenu[m[33m, [m[1;32mfeature/MainMenu[m[33m)[m HEAD@{12}: commit: 主界面
+[33m4e8212d[m[33m ([m[1;31morigin/feature/clue[m[33m, [m[1;32mfeature/clue[m[33m)[m HEAD@{13}: checkout: moving from feature/clue to feature/MainMenu
+[33m4e8212d[m[33m ([m[1;31morigin/feature/clue[m[33m, [m[1;32mfeature/clue[m[33m)[m HEAD@{14}: commit: 线索墙
+[33m63a749d[m HEAD@{15}: commit: 线索墙雏形
+[33m3af9b01[m[33m ([m[1;31morigin/feature/player-rewind[m[33m, [m[1;32mfeature/player-rewind[m[33m)[m HEAD@{16}: checkout: moving from feature/player-rewind to feature/clue
+[33m3af9b01[m[33m ([m[1;31morigin/feature/player-rewind[m[33m, [m[1;32mfeature/player-rewind[m[33m)[m HEAD@{17}: commit: 对话
+[33m3fb7979[m HEAD@{18}: commit: 新的角色资产
+[33mdf41876[m HEAD@{19}: checkout: moving from feature/player-rewind to feature/player-rewind
+[33mdf41876[m HEAD@{20}: commit: 回溯
+[33m2baaf7e[m HEAD@{21}: pull --rebase origin main: Fast-forward
+[33m6cd4da5[m HEAD@{22}: checkout: moving from main to feature/player-rewind
+[33m2baaf7e[m HEAD@{23}: pull --rebase origin main: Fast-forward
+[33m6cd4da5[m HEAD@{24}: checkout: moving from feature/player-rewind to main
+[33m6cd4da5[m HEAD@{25}: checkout: moving from main to feature/player-rewind
+[33m6cd4da5[m HEAD@{26}: commit: 回溯
+[33m252ba55[m HEAD@{27}: pull origin main: Fast-forward
+[33m2676e44[m HEAD@{28}: Branch: renamed refs/heads/master to refs/heads/main
+[33m2676e44[m HEAD@{30}: commit (initial): 初期
