@@ -1624,7 +1624,7 @@ Animator:
   m_GameObject: {fileID: 128462353}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: aa39ee696457c274b9ad6a623db17aee, type: 2}
+  m_Controller: {fileID: 0}
   m_CullingMode: 0
   m_UpdateMode: 1
   m_ApplyRootMotion: 0
@@ -18362,6 +18362,10 @@ PlayableDirector:
     value: {fileID: 577039501}
   - key: {fileID: -5973570343002985191, guid: aec2848c51784a440bc7bb4a517be74b, type: 2}
     value: {fileID: 1111791926}
+  - key: {fileID: -8079534360913466963, guid: aec2848c51784a440bc7bb4a517be74b, type: 2}
+    value: {fileID: 5957199484915939270}
+  - key: {fileID: -4201361181741767580, guid: aec2848c51784a440bc7bb4a517be74b, type: 2}
+    value: {fileID: 5957199484915939271}
   m_ExposedReferences:
     m_References: []
 --- !u!95 &5957199484915939270
