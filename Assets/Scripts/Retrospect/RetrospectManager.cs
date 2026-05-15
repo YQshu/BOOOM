@@ -240,6 +240,13 @@ public class RetrospectManager : Singleton<RetrospectManager>
     {
         if (!IsInRetrospect) return;
 
+        // 如果正在播放对话，强制停止
+        if (InkDialogueManager.Instance != null && InkDialogueManager.Instance.IsPlaying)
+        {
+            InkDialogueManager.Instance.StopDialogue();
+            Debug.Log("[Rewind] 退出回溯时强制停止对话。");
+        }
+
         // 停止Timeline
         if (_currentDirector != null)
             _currentDirector.Stop();

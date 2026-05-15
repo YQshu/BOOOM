@@ -23,14 +23,23 @@ public class RetrospectHUD : MonoBehaviour
     [SerializeField] private GameObject _pauseIcon;
     [Tooltip("继续图标（暂停时显示）")]
     [SerializeField] private GameObject _playIcon;
+    [Tooltip("倍速按钮")]
+    [SerializeField] private Button _speedButton;
+    [Tooltip("倍速按钮文本")]
+    [SerializeField] private TMP_Text _speedButtonText;
     [Tooltip("退出回溯按钮")]
     [SerializeField] private Button _exitButton;
+
+    [Header("倍速配置")]
+    [Tooltip("可用的播放倍速")]
+    [SerializeField] private float[] _availableSpeeds = { 1f, 2f, 3f };
 
     [Header("引用")]
     [SerializeField] private RetrospectManager _retrospectManager;
     [SerializeField] private TimelineRewindManager _rewindManager;
 
     private CanvasGroup _canvasGroup;
+    private int _currentSpeedIndex = 0;
 
     private void Awake()
     {
@@ -47,6 +56,8 @@ public class RetrospectHUD : MonoBehaviour
 
         if (_pauseButton != null)
             _pauseButton.onClick.AddListener(OnPauseClicked);
+        if (_speedButton != null)
+            _speedButton.onClick.AddListener(OnSpeedClicked);
         if (_exitButton != null)
             _exitButton.onClick.AddListener(OnExitClicked);
 
@@ -55,6 +66,16 @@ public class RetrospectHUD : MonoBehaviour
             _retrospectManager.OnRetrospectEnter += OnRetrospectEnter;
             _retrospectManager.OnRetrospectExit += OnRetrospectExit;
         }
+
+        // 订阅对话开始/结束事件
+        if (InkDialogueManager.Instance != null)
+        {
+            InkDialogueManager.Instance.OnDialogueStart += OnDialogueStart;
+            InkDialogueManager.Instance.OnDialogueEnd += OnDialogueEnd;
+        }
+
+        // 初始化倍速显示
+        UpdateSpeedButtonText();
     }
 
     private void OnDestroy()
@@ -63,6 +84,12 @@ public class RetrospectHUD : MonoBehaviour
         {
             _retrospectManager.OnRetrospectEnter -= OnRetrospectEnter;
             _retrospectManager.OnRetrospectExit -= OnRetrospectExit;
+        }
+
+        if (InkDialogueManager.Instance != null)
+        {
+            InkDialogueManager.Instance.OnDialogueStart -= OnDialogueStart;
+            InkDialogueManager.Instance.OnDialogueEnd -= OnDialogueEnd;
         }
     }
 
@@ -90,11 +117,15 @@ public class RetrospectHUD : MonoBehaviour
     private void OnRetrospectEnter()
     {
         SetVisible(true);
+        // 进入回溯时重置为1倍速
+        ResetSpeed();
     }
 
     private void OnRetrospectExit()
     {
         SetVisible(false);
+        // 退出回溯时重置为1倍速
+        ResetSpeed();
     }
 
     private void SetVisible(bool visible)
@@ -119,6 +150,25 @@ public class RetrospectHUD : MonoBehaviour
     {
         if (_retrospectManager != null)
             _retrospectManager.ExitRetrospect();
+    }
+
+    private void OnDialogueStart()
+    {
+        // 对话开始时：重置为1倍速 + 禁用倍速按钮
+        ResetSpeed();
+        if (_speedButton != null)
+        {
+            _speedButton.interactable = false;
+        }
+    }
+
+    private void OnDialogueEnd()
+    {
+        // 对话结束时：启用倍速按钮
+        if (_speedButton != null)
+        {
+            _speedButton.interactable = true;
+        }
     }
 
     private void UpdateTimeDisplay()
@@ -147,5 +197,45 @@ public class RetrospectHUD : MonoBehaviour
         int m = (int)(seconds / 60);
         int s = (int)(seconds % 60);
         return $"{m:00}:{s:00}";
+    }
+
+    // ─── 倍速控制 ────────────────────────────────────────────
+
+    private void OnSpeedClicked()
+    {
+        if (_rewindManager == null) return;
+
+        // 循环切换倍速
+        _currentSpeedIndex = (_currentSpeedIndex + 1) % _availableSpeeds.Length;
+        float newSpeed = _availableSpeeds[_currentSpeedIndex];
+
+        // 设置播放速度
+        _rewindManager.SetPlaybackSpeed(newSpeed);
+
+        // 更新按钮显示
+        UpdateSpeedButtonText();
+    }
+
+    private void UpdateSpeedButtonText()
+    {
+        if (_speedButtonText == null) return;
+
+        float currentSpeed = _availableSpeeds[_currentSpeedIndex];
+        _speedButtonText.text = $"{currentSpeed:F0}x";
+    }
+
+    /// <summary>
+    /// 重置倍速为1x（公开方法，供外部调用）
+    /// </summary>
+    public void ResetSpeed()
+    {
+        _currentSpeedIndex = 0;
+
+        if (_rewindManager != null)
+        {
+            _rewindManager.SetPlaybackSpeed(_availableSpeeds[0]);
+        }
+
+        UpdateSpeedButtonText();
     }
 }

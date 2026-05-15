@@ -244,4 +244,22 @@ public class TimelineRewindManager : MonoBehaviour
     /// 获取当前绑定的 PlayableDirector。
     /// </summary>
     public PlayableDirector GetDirector() => _timelineDirector;
+
+    /// <summary>
+    /// 设置播放速度（用于倍速播放功能）。
+    /// </summary>
+    /// <param name="speed">播放速度倍率（1.0 = 正常速度，2.0 = 2倍速）</param>
+    public void SetPlaybackSpeed(float speed)
+    {
+        if (_timelineDirector == null) return;
+        if (_timelineDirector.playableGraph.IsValid() == false) return;
+
+        // 获取根Playable并设置速度
+        var rootPlayable = _timelineDirector.playableGraph.GetRootPlayable(0);
+        if (rootPlayable.IsValid())
+        {
+            rootPlayable.SetSpeed(speed);
+            Debug.Log($"[Rewind] 设置播放速度：{speed}x");
+        }
+    }
 }

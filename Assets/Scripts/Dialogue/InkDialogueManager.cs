@@ -27,6 +27,8 @@ public class InkDialogueManager : MonoBehaviour
 {
     public static InkDialogueManager Instance { get; private set; }
 
+    /// <summary>对话开始时触发。</summary>
+    public event Action OnDialogueStart;
     /// <summary>对话结束时触发。</summary>
     public event Action OnDialogueEnd;
 
@@ -174,6 +176,9 @@ public class InkDialogueManager : MonoBehaviour
         _isTimelineSyncMode = sentenceCount > 0; // sentenceCount > 0 时启用 Timeline 同步模式
         _sentenceCount = sentenceCount;
         _isAutoPaused = false;
+
+        // 触发对话开始事件
+        OnDialogueStart?.Invoke();
 
         // Timeline 同步模式：自动播放，不暂停 Timeline
         if (_isTimelineSyncMode)
@@ -460,6 +465,35 @@ public class InkDialogueManager : MonoBehaviour
 
         OnDialogueEnd?.Invoke();
         Debug.Log("[InkDialogue] 对话结束。");
+    }
+
+    /// <summary>
+    /// 强制停止当前对话（用于外部中断，如退出回溯）。
+    /// </summary>
+    public void StopDialogue()
+    {
+        if (!_isPlaying) return;
+
+        // 停止所有协程
+        if (_typewriterCoroutine != null)
+        {
+            StopCoroutine(_typewriterCoroutine);
+            _typewriterCoroutine = null;
+        }
+        if (_autoPlayCoroutine != null)
+        {
+            StopCoroutine(_autoPlayCoroutine);
+            _autoPlayCoroutine = null;
+        }
+
+        // 清理状态
+        _isTyping = false;
+        ClearChoices();
+
+        // 调用正常的结束流程
+        EndDialogue();
+
+        Debug.Log("[InkDialogue] 对话被强制停止。");
     }
 
     /// <summary>
