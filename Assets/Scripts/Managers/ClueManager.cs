@@ -168,6 +168,13 @@ public class ClueManager : Singleton<ClueManager>
 
         if (_enableLog) Debug.Log($"[Clue] 已收集：{clue.clueId}");
 
+        // 触发事件
+        if (_enableLog)
+        {
+            int subscriberCount = OnClueCollected?.GetInvocationList().Length ?? 0;
+            Debug.Log($"[Clue] ★ 触发 OnClueCollected 事件，订阅者数量: {subscriberCount}");
+        }
+
         OnClueCollected?.Invoke(clue);
         return true;
     }

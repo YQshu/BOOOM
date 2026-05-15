@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 /// <summary>
 /// 存档管理器。
@@ -10,6 +11,9 @@ using UnityEngine;
 /// </summary>
 public class SaveManager : Singleton<SaveManager>
 {
+    /// <summary>保存开始事件。</summary>
+    public event Action OnSaveStart;
+
     /// <summary>保存完成事件。</summary>
     public event Action OnSaveComplete;
 
@@ -31,37 +35,127 @@ public class SaveManager : Singleton<SaveManager>
     [SerializeField] private bool _enableLog = true;
 
     private string SaveFilePath => Path.Combine(Application.persistentDataPath, "gamesave.json");
+    private bool _isSubscribedToClueEvent = false;
+    private bool _isSubscribedToDialogueEvent = false;
+    private bool _hasPendingSave = false; // 是否有待保存的内容
 
     protected override void Awake()
     {
         base.Awake();
         DontDestroyOnLoad(gameObject);
+
+        // 监听场景加载事件
+        SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
     private void Start()
     {
-        // 订阅线索收集事件
-        if (_saveOnClueCollected && ClueManager.Instance != null)
-        {
-            ClueManager.Instance.OnClueCollected += OnClueCollected;
-        }
+        if (_enableLog)
+            Debug.Log("[Save] ========== SaveManager.Start() ==========");
+
+        // 延迟订阅，确保 ClueManager 已初始化
+        StartCoroutine(DelayedSubscribe());
 
         // 启动自动保存
         if (_enableAutoSave)
         {
             StartAutoSave();
+            if (_enableLog)
+                Debug.Log("[Save] 自动保存已启动");
         }
 
         if (_enableLog)
             Debug.Log($"[Save] 存档路径：{SaveFilePath}");
     }
 
-    private void OnDestroy()
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        // 取消订阅
+        // 每次场景加载后，尝试重新订阅事件
+        if (_enableLog)
+            Debug.Log($"[Save] 场景加载：{scene.name}，尝试订阅事件");
+
+        StartCoroutine(DelayedSubscribe());
+    }
+
+    private IEnumerator DelayedSubscribe()
+    {
+        // 等待一帧，确保所有单例初始化完成
+        yield return null;
+
+        // 订阅线索收集事件
+        if (_saveOnClueCollected)
+        {
+            TrySubscribeToClueManager();
+        }
+
+        // 订阅对话结束事件
+        TrySubscribeToDialogueManager();
+    }
+
+    private void TrySubscribeToClueManager()
+    {
+        if (_enableLog)
+            Debug.Log($"[Save] TrySubscribeToClueManager 被调用 - 已订阅状态: {_isSubscribedToClueEvent}");
+
+        if (_isSubscribedToClueEvent)
+        {
+            if (_enableLog)
+                Debug.Log("[Save] 已经订阅过了，跳过");
+            return;
+        }
+
         if (ClueManager.Instance != null)
         {
+            ClueManager.Instance.OnClueCollected += OnClueCollected;
+            _isSubscribedToClueEvent = true;
+
+            if (_enableLog)
+                Debug.Log("[Save] ✓ 成功订阅 ClueManager.OnClueCollected 事件");
+        }
+        else
+        {
+            if (_enableLog)
+                Debug.LogWarning("[Save] ✗ ClueManager.Instance 为 null，无法订阅事件");
+        }
+    }
+
+    private void TrySubscribeToDialogueManager()
+    {
+        if (_isSubscribedToDialogueEvent)
+            return;
+
+        if (InkDialogueManager.Instance != null)
+        {
+            InkDialogueManager.Instance.OnDialogueEnd += OnDialogueEnd;
+            _isSubscribedToDialogueEvent = true;
+
+            if (_enableLog)
+                Debug.Log("[Save] ✓ 成功订阅 InkDialogueManager.OnDialogueEnd 事件");
+        }
+        else
+        {
+            if (_enableLog)
+                Debug.LogWarning("[Save] ✗ InkDialogueManager.Instance 为 null，无法订阅对话结束事件");
+        }
+    }
+
+    private void OnDestroy()
+    {
+        // 取消监听场景加载事件
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+
+        // 取消订阅线索事件
+        if (_isSubscribedToClueEvent && ClueManager.Instance != null)
+        {
             ClueManager.Instance.OnClueCollected -= OnClueCollected;
+            _isSubscribedToClueEvent = false;
+        }
+
+        // 取消订阅对话事件
+        if (_isSubscribedToDialogueEvent && InkDialogueManager.Instance != null)
+        {
+            InkDialogueManager.Instance.OnDialogueEnd -= OnDialogueEnd;
+            _isSubscribedToDialogueEvent = false;
         }
     }
 
@@ -74,13 +168,20 @@ public class SaveManager : Singleton<SaveManager>
     {
         try
         {
+            // 触发保存开始事件
+            OnSaveStart?.Invoke();
+
             SaveData data = GetCurrentSaveData();
             WriteSaveFile(data);
 
             if (_enableLog)
                 Debug.Log($"[Save] 保存成功：{data.collectedClueIds.Count} 条线索");
 
+            // 触发保存完成事件
             OnSaveComplete?.Invoke();
+
+            // 清除待保存标记
+            _hasPendingSave = false;
         }
         catch (Exception ex)
         {
@@ -199,13 +300,56 @@ public class SaveManager : Singleton<SaveManager>
 
     private void OnClueCollected(ClueDataSO clue)
     {
-        if (!_saveOnClueCollected) return;
+        if (_enableLog)
+            Debug.Log($"[Save] ★ OnClueCollected 事件触发！线索: {clue?.clueId ?? "null"}");
+
+        if (!_saveOnClueCollected)
+        {
+            if (_enableLog)
+                Debug.Log("[Save] _saveOnClueCollected 为 false，跳过自动保存");
+            return;
+        }
 
         if (ShouldAutoSave())
         {
             SaveGame();
             if (_enableLog)
                 Debug.Log($"[Save] 自动保存触发（线索：{clue.clueId}）");
+        }
+        else
+        {
+            // 标记有待保存的内容，等待对话结束后保存
+            _hasPendingSave = true;
+            if (_enableLog)
+                Debug.Log("[Save] 当前无法保存（对话中/回溯中），标记为待保存");
+        }
+    }
+
+    /// <summary>
+    /// 对话结束事件处理。
+    /// 如果有待保存的内容，则触发保存。
+    /// </summary>
+    private void OnDialogueEnd()
+    {
+        if (_enableLog)
+            Debug.Log($"[Save] 对话结束，待保存标记: {_hasPendingSave}");
+
+        if (_hasPendingSave)
+        {
+            // 延迟一帧保存，确保对话完全结束
+            StartCoroutine(DelayedSave());
+        }
+    }
+
+    private IEnumerator DelayedSave()
+    {
+        yield return null;
+
+        if (_hasPendingSave && ShouldAutoSave())
+        {
+            SaveGame();
+            if (_enableLog)
+                Debug.Log("[Save] 对话结束后自动保存");
         }
     }
 
@@ -214,12 +358,16 @@ public class SaveManager : Singleton<SaveManager>
         // 回溯模式中不保存
         if (RetrospectManager.Instance != null && RetrospectManager.Instance.IsInRetrospect)
         {
+            if (_enableLog)
+                Debug.Log("[Save] 跳过保存：正在回溯模式中");
             return false;
         }
 
         // 对话中不保存
         if (InkDialogueManager.Instance != null && InkDialogueManager.Instance.IsPlaying)
         {
+            if (_enableLog)
+                Debug.Log("[Save] 跳过保存：正在播放对话");
             return false;
         }
 

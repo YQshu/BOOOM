@@ -26,6 +26,7 @@ namespace InnsmouthCafe.UI
         [Header("导航")]
         [SerializeField] private Button _backButton;
         [SerializeField] private Button _clearSaveButton;
+        [SerializeField] private Button _returnToMainMenuButton;
 
         [Header("依赖")]
         [Tooltip("主菜单控制器（仅主菜单场景使用）")]
@@ -49,7 +50,23 @@ namespace InnsmouthCafe.UI
             InitDisplayModeDropdown();
             RefreshResolutionDropdown();
             BindEvents();
+            UpdateButtonVisibility();
             _initialized = true;
+        }
+
+        /// <summary>
+        /// 根据场景更新按钮可见性。
+        /// 主菜单场景：隐藏"返回主菜单"按钮
+        /// 游戏场景：显示"返回主菜单"按钮
+        /// </summary>
+        private void UpdateButtonVisibility()
+        {
+            if (_returnToMainMenuButton != null)
+            {
+                // 如果在游戏场景（有 MainGameController），显示返回主菜单按钮
+                bool isInGameScene = _mainGameController != null;
+                _returnToMainMenuButton.gameObject.SetActive(isInGameScene);
+            }
         }
 
         /// <summary>
@@ -148,6 +165,9 @@ namespace InnsmouthCafe.UI
             if (_clearSaveButton != null)
                 _clearSaveButton.onClick.AddListener(OnClearSaveClicked);
 
+            if (_returnToMainMenuButton != null)
+                _returnToMainMenuButton.onClick.AddListener(OnReturnToMainMenuClicked);
+
             // SFX 滑条松手时播放测试音效，让用户听到实际效果
             AddPointerUpHandler(_sfxSlider.gameObject, OnSfxSliderPointerUp);
         }
@@ -229,6 +249,21 @@ namespace InnsmouthCafe.UI
             {
                 Debug.LogWarning("[Settings] SaveManager 未找到，无法清除存档");
             }
+        }
+
+        /// <summary>
+        /// 返回主菜单按钮点击事件。
+        /// </summary>
+        private void OnReturnToMainMenuClicked()
+        {
+            if (AudioManager.Instance != null)
+                AudioManager.Instance.PlaySfx(SoundId.ButtonClick);
+
+            // 恢复时间缩放（防止暂停状态）
+            Time.timeScale = 1f;
+
+            // 加载主菜单场景
+            UnityEngine.SceneManagement.SceneManager.LoadScene("MainMenu");
         }
 
         // ── 工具方法 ──────────────────────────────────────────────
