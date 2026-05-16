@@ -5116,6 +5116,53 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 386337857}
   m_CullTransparentMesh: 1
+--- !u!1 &393598673
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 393598674}
+  - component: {fileID: 393598675}
+  m_Layer: 0
+  m_Name: "\u5D29\u574F\u8BB0\u5FC6\u7247\u6BB5"
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &393598674
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 393598673}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 555486764}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &393598675
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 393598673}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dddd3205b29cd1145a990f913ac1c91d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _conditionalTracks:
+  - trackName: 
+    requiredClueId: 
 --- !u!1 &405056452
 GameObject:
   m_ObjectHideFlags: 0
@@ -7305,6 +7352,7 @@ Transform:
   - {fileID: 477547882}
   - {fileID: 700238572}
   - {fileID: 952501423}
+  - {fileID: 393598674}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &573027152
@@ -13057,7 +13105,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &983304163
 Transform:
   m_ObjectHideFlags: 0
@@ -18835,10 +18883,6 @@ PlayableDirector:
   - key: {fileID: -4799030111461768943, guid: aec2848c51784a440bc7bb4a517be74b, type: 2}
     value: {fileID: 1477725460}
   - key: {fileID: 0}
-    value: {fileID: 1477725460}
-  - key: {fileID: 0}
-    value: {fileID: 1477725459}
-  - key: {fileID: 0}
     value: {fileID: 0}
   - key: {fileID: 0}
     value: {fileID: 0}
@@ -18888,6 +18932,10 @@ PlayableDirector:
     value: {fileID: 1089323087}
   - key: {fileID: -4297858200976531124, guid: 3b1a2cb74d975974c8a83971acc1c5c2, type: 2}
     value: {fileID: 1163584640}
+  - key: {fileID: 0}
+    value: {fileID: 1031637664}
+  - key: {fileID: 0}
+    value: {fileID: 1031637667}
   m_ExposedReferences:
     m_References: []
 --- !u!114 &1477725459

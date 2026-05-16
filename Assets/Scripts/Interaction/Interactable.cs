@@ -84,9 +84,9 @@ public class Interactable : MonoBehaviour
         if (_narrationClip != null)
         {
             // 有旁白：播放旁白并收集线索（不触发Ink）
-            if (InnsmouthCafe.Audio.AudioManager.Instance != null)
+            if (AudioManager.Instance != null)
             {
-                InnsmouthCafe.Audio.AudioManager.Instance.PlayNarration(_narrationClip);
+                AudioManager.Instance.PlayNarration(_narrationClip);
             }
             else if (_enableLog)
             {

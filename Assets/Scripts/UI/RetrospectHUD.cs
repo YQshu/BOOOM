@@ -140,6 +140,9 @@ public class RetrospectHUD : MonoBehaviour
     {
         if (_rewindManager == null) return;
 
+        // 播放时间线按钮音效
+        AudioManager.Instance?.PlaySfx(SoundId.TimelineButton);
+
         if (_rewindManager.IsPaused())
             _rewindManager.Resume();
         else
@@ -148,6 +151,9 @@ public class RetrospectHUD : MonoBehaviour
 
     private void OnExitClicked()
     {
+        // 播放按钮点击音效
+        AudioManager.Instance?.PlaySfx(SoundId.ButtonClick);
+
         if (_retrospectManager != null)
             _retrospectManager.ExitRetrospect();
     }
@@ -204,6 +210,9 @@ public class RetrospectHUD : MonoBehaviour
     private void OnSpeedClicked()
     {
         if (_rewindManager == null) return;
+
+        // 播放时间线按钮音效
+        AudioManager.Instance?.PlaySfx(SoundId.TimelineButton);
 
         // 循环切换倍速
         _currentSpeedIndex = (_currentSpeedIndex + 1) % _availableSpeeds.Length;

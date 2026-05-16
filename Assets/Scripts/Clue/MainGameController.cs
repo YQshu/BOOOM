@@ -49,6 +49,9 @@ public class MainGameController : MonoBehaviour
 
     private void OnEnterClueWallButtonClick()
     {
+        // 播放按钮点击音效
+        AudioManager.Instance?.PlaySfx(SoundId.ButtonClick);
+
         if (clueWallManager != null)
             clueWallManager.OpenClueWall();
     }
@@ -66,6 +69,9 @@ public class MainGameController : MonoBehaviour
     /// </summary>
     public void OpenSettings()
     {
+        // 播放按钮点击音效
+        AudioManager.Instance?.PlaySfx(SoundId.ButtonClick);
+
         if (_settingsGroup != null)
         {
             SetGroupVisible(_settingsGroup, true);

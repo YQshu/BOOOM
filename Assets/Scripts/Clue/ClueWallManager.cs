@@ -163,6 +163,9 @@ public class ClueWallManager : MonoBehaviour
     /// <summary>关闭线索墙。</summary>
     public void CloseClueWall()
     {
+        // 播放按钮点击音效
+        AudioManager.Instance?.PlaySfx(SoundId.ButtonClick);
+
         if (_slideCoroutine != null) StopCoroutine(_slideCoroutine);
         _slideCoroutine = StartCoroutine(
             SlideAndHide(_mainPanel, new Vector2(_slideOffscreenX, 0), _slideDuration, _mainCanvasGroup));
@@ -193,6 +196,9 @@ public class ClueWallManager : MonoBehaviour
     {
         if (index < 0 || index >= _suspects.Length) return;
 
+        // 播放按钮点击音效
+        AudioManager.Instance?.PlaySfx(SoundId.ButtonClick);
+
         _currentSuspectIndex = index;
         SuspectEntry entry = _suspects[index];
         CharacterData data = entry.characterData;
@@ -218,6 +224,9 @@ public class ClueWallManager : MonoBehaviour
 
     private void BackToMainPanel()
     {
+        // 播放按钮点击音效
+        AudioManager.Instance?.PlaySfx(SoundId.ButtonClick);
+
         SetVisible(_detailCanvasGroup, false);
         SetVisible(_mainCanvasGroup, true);
         RefreshCharacterCards();
@@ -228,6 +237,9 @@ public class ClueWallManager : MonoBehaviour
     private void OnStartRetrospectClicked()
     {
         if (_currentSuspectIndex < 0 || _currentSuspectIndex >= _suspects.Length) return;
+
+        // 播放按钮点击音效
+        AudioManager.Instance?.PlaySfx(SoundId.ButtonClick);
 
         SuspectEntry entry = _suspects[_currentSuspectIndex];
         if (entry.director == null)
@@ -304,6 +316,9 @@ public class ClueWallManager : MonoBehaviour
 
     private void OnClueItemClicked(string clueId)
     {
+        // 播放线索板点击音效
+        AudioManager.Instance?.PlaySfx(SoundId.ClueWallClick);
+
         // 预留：打开第三层线索详细面板
         Debug.Log($"[ClueWall] 点击线索：{clueId}（详细面板待实装）");
     }

@@ -1,8 +1,8 @@
 using System.Collections;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using TMPro;
 
 /// <summary>
 /// 主菜单控制器。挂在 MainMenu 场景的 Canvas 根节点上。
@@ -103,6 +103,9 @@ public class MainMenuController : MonoBehaviour
     /// </summary>
     public void ShowSettings()
     {
+        // 播放按钮点击音效
+        AudioManager.Instance?.PlaySfx(SoundId.ButtonClick);
+
         if (_mainMenuGroup != null)
             SetGroupVisible(_mainMenuGroup, false);
         if (_settingsGroup != null)
@@ -144,6 +147,9 @@ public class MainMenuController : MonoBehaviour
 
     private void StartNewGame()
     {
+        // 播放按钮点击音效
+        AudioManager.Instance?.PlaySfx(SoundId.ButtonClick);
+
         // 删除旧存档
         if (SaveManager.Instance != null)
         {
@@ -161,6 +167,9 @@ public class MainMenuController : MonoBehaviour
 
     private void ContinueGame()
     {
+        // 播放按钮点击音效
+        AudioManager.Instance?.PlaySfx(SoundId.ButtonClick);
+
         // 设置加载存档标记
         GameSceneInitializer.SetLoadSaveFlag();
 
@@ -172,6 +181,9 @@ public class MainMenuController : MonoBehaviour
 
     private void QuitGame()
     {
+        // 播放按钮点击音效
+        AudioManager.Instance?.PlaySfx(SoundId.ButtonClick);
+
         Application.Quit();
 #if UNITY_EDITOR
         UnityEditor.EditorApplication.isPlaying = false;

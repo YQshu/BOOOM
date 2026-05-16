@@ -94,10 +94,13 @@ public class ClueSignalReceiver : MonoBehaviour, INotificationReceiver
     /// </summary>
     private void TriggerNarrationClue(SignalClueEntry entry)
     {
+        // 播放可交互线索音效
+        AudioManager.Instance?.PlaySfx(SoundId.ClueInteractable);
+
         // 播放旁白音频
-        if (InnsmouthCafe.Audio.AudioManager.Instance != null)
+        if (AudioManager.Instance != null)
         {
-            InnsmouthCafe.Audio.AudioManager.Instance.PlayNarration(entry.narrationClip);
+            AudioManager.Instance.PlayNarration(entry.narrationClip);
         }
         else
         {
@@ -114,12 +117,18 @@ public class ClueSignalReceiver : MonoBehaviour, INotificationReceiver
     /// </summary>
     private void TriggerDirectClue(SignalClueEntry entry)
     {
+        // 播放可交互线索音效
+        AudioManager.Instance?.PlaySfx(SoundId.ClueInteractable);
+
         ClueManager.Instance?.CollectClue(entry.clueData);
         Debug.Log($"[Rewind] 自动线索触发：{entry.clueData.clueId}");
     }
 
     private void TriggerDialogueClue(SignalClueEntry entry)
     {
+        // 播放可交互线索音效
+        AudioManager.Instance?.PlaySfx(SoundId.ClueInteractable);
+
         // Timeline 同步模式：sentenceCount > 0 时自动播放，Timeline 继续运行
         // 传统模式：sentenceCount = 0 时暂停 Timeline，手动点击继续
         bool isTimelineSyncMode = entry.sentenceCount > 0;
