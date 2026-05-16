@@ -48,6 +48,8 @@ public class EndingManager : MonoBehaviour
     [SerializeField] private GameObject _accusationPanel;
     [Tooltip("显示已收集线索数量")]
     [SerializeField] private TMP_Text _clueCountText;
+    [Tooltip("返回按钮（关闭指认面板，返回线索墙）")]
+    [SerializeField] private Button _accusationBackButton;
     [Tooltip("普通嫌疑人列表（不包括特殊选项）")]
     [SerializeField] private List<SuspectEntry> _suspects = new List<SuspectEntry>();
 
@@ -120,6 +122,7 @@ public class EndingManager : MonoBehaviour
         _accuseHackerConfig?.button?.onClick.AddListener(() => OnSpecialButtonClick("HACKER", "外域黑客", true));
 
         _warningCloseButton?.onClick.AddListener(() => SetVisible(_warningCG, false));
+        _accusationBackButton?.onClick.AddListener(OnAccusationBackClick);
         _confirmButton?.onClick.AddListener(OnConfirmAccuse);
         _cancelButton?.onClick.AddListener(OnCancelAccuse);
         _restartButton?.onClick.AddListener(RestartGame);
@@ -214,6 +217,14 @@ public class EndingManager : MonoBehaviour
     private void OnCancelAccuse()
     {
         SetVisible(_confirmCG, false);
+    }
+
+    private void OnAccusationBackClick()
+    {
+        SetVisible(_accusationCG, false);
+        // 播放按钮音效
+        AudioManager.Instance?.PlaySfx(SoundId.ButtonClick);
+        Debug.Log("[Ending] 关闭指认面板，返回线索墙");
     }
 
     private void TriggerAccusation(string suspectId)

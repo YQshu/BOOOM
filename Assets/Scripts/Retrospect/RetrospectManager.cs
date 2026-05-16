@@ -39,6 +39,8 @@ public class RetrospectManager : Singleton<RetrospectManager>
     [Header("平行世界")]
     [Tooltip("主角线世界根节点（非回溯状态时激活，进入回溯时隐藏）")]
     [SerializeField] private GameObject _mainWorldRoot;
+    [Tooltip("记忆损坏遮挡面板父节点（退出回溯时强制禁用所有子面板，防止遮挡视线）\n将所有记忆缺失面板作为子物体放在此节点下")]
+    [SerializeField] private Transform _memoryGlitchPanelsParent;
 
     private CanvasGroup _selectCanvasGroup;
     /// <summary>当前激活的嫌疑人世界根节点（退出时用于关闭）。</summary>
@@ -249,7 +251,12 @@ public class RetrospectManager : Singleton<RetrospectManager>
 
         // 停止Timeline
         if (_currentDirector != null)
+        {
             _currentDirector.Stop();
+
+            // 强制禁用所有记忆损坏遮挡组件（保险措施）
+            ForceDisableMemoryGlitchOverlays();
+        }
 
         // 解除子系统绑定
         if (_npcRoomTracker != null)
@@ -421,5 +428,29 @@ public class RetrospectManager : Singleton<RetrospectManager>
         if (_currentDirector == null) return;
         ConditionalTrackController ctrl = _currentDirector.GetComponent<ConditionalTrackController>();
         ctrl?.RestoreConditions();
+    }
+
+    /// <summary>
+    /// 强制禁用所有记忆损坏遮挡面板（保险措施）。
+    /// 防止在记忆损坏片段播放时退出回溯，导致遮挡面板依旧存活遮挡视线。
+    /// </summary>
+    private void ForceDisableMemoryGlitchOverlays()
+    {
+        if (_memoryGlitchPanelsParent == null) return;
+
+        int disabledCount = 0;
+        foreach (Transform child in _memoryGlitchPanelsParent)
+        {
+            if (child.gameObject.activeSelf)
+            {
+                child.gameObject.SetActive(false);
+                disabledCount++;
+            }
+        }
+
+        if (disabledCount > 0)
+        {
+            Debug.Log($"[Rewind] 强制禁用了 {disabledCount} 个记忆损坏遮挡面板。");
+        }
     }
 }
